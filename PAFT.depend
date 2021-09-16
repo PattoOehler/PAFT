@@ -1,0 +1,77 @@
+# depslib dependency file v1.0
+1625273870 source:c:\users\peyto-w\desktop\paft\paft\src\threads.cpp
+	"../include/Threads.h"
+	<iostream>
+
+1625273922 c:\users\peyto-w\desktop\paft\paft\include\threads.h
+
+1628723755 source:c:\users\peyto-w\desktop\paft\paft\main.cpp
+	<iostream>
+	<thread>
+	"include/MainServer.h"
+	"include/MainCLI.h"
+	"include/DHT.h"
+
+1626907054 source:c:\users\peyto-w\desktop\paft\paft\src\mainserver.cpp
+	"../include/MainServer.h"
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<iostream>
+
+1626219129 c:\users\peyto-w\desktop\paft\paft\include\mainserver.h
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+
+1625514114 c:\users\peyto-w\desktop\paft\paft\include\mainclient.h
+
+1625596173 source:c:\users\peyto-w\desktop\paft\paft\src\mainclient.cpp
+	"../include/MainClient.h"
+	"../include/Self_Tests.h"
+	<iostream>
+
+1625594975 c:\users\peyto-w\desktop\paft\paft\include\self_tests.h
+
+1626223015 source:c:\users\peyto-w\desktop\paft\paft\src\self_tests.cpp
+	"../include/Self_Tests.h"
+	<iostream>
+	<windows.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<stdlib.h>
+	<stdio.h>
+
+1626634242 c:\users\peyto-w\desktop\paft\paft\include\maincli.h
+
+1626910070 source:c:\users\peyto-w\desktop\paft\paft\src\main_client.cpp
+	"../include/Main_Client.h"
+	<iostream>
+	<winsock2.h>
+	<windows.h>
+	<ws2tcpip.h>
+	<stdlib.h>
+	<stdio.h>
+
+1626661322 c:\users\peyto-w\desktop\paft\paft\include\main_client.h
+	<winsock2.h>
+
+1626661663 source:c:\users\peyto-w\desktop\paft\paft\src\maincli.cpp
+	"../include/MainCLI.h"
+	"../include/Main_Client.h"
+	<iostream>
+
+1629345329 source:c:\users\peyto-w\desktop\paft\paft\src\dht.cpp
+	"../include/DHT.h"
+	<random>
+	<iostream>
+	<time.h>
+	<bits/stdc++.h>
+
+1629342714 c:\users\peyto-w\desktop\paft\paft\include\dht.h
+	<stdint.h>
+
