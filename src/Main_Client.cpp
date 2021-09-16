@@ -33,8 +33,8 @@ int MainClient::GetFile(char *filename)
 
     const char *sendbuf = "\x01Hello.txt\x00";  //TODO REMOVE WITH filename
 
-
-
+    Sleep(1);
+    printf("SENDING!!---------------------------------------------\n");
 
 
     // Send a buffer telling the server to send a file

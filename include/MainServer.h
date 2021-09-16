@@ -15,8 +15,8 @@ namespace paft
     {
     public:
         static int Start_Server(int a);
-        static DWORD WINAPI receive_cmds(LPVOID lpParam);
-        static int Send_File(LPVOID lpParam);
+        //static void receive_cmds(LPVOID lpParam);
+        //static int Send_File(LPVOID lpParam);
 
     };
 

@@ -75,14 +75,14 @@
 1629342714 c:\users\peyto-w\desktop\paft\paft\include\dht.h
 	<stdint.h>
 
-1631801371 source:c:\users\patto\desktop\paft\paft\main.cpp
+1631803872 source:c:\users\patto\desktop\paft\paft\main.cpp
 	<iostream>
 	<thread>
 	"include/MainServer.h"
 	"include/MainCLI.h"
 	"include/DHT.h"
 
-1631802478 c:\users\patto\desktop\paft\paft\include\mainserver.h
+1631816742 c:\users\patto\desktop\paft\paft\include\mainserver.h
 	<windows.h>
 	<stdlib.h>
 	<stdio.h>
@@ -100,7 +100,7 @@
 	<time.h>
 	<bits/stdc++.h>
 
-1631801371 source:c:\users\patto\desktop\paft\paft\src\main_client.cpp
+1631815321 source:c:\users\patto\desktop\paft\paft\src\main_client.cpp
 	"../include/Main_Client.h"
 	<iostream>
 	<winsock2.h>
@@ -112,23 +112,35 @@
 1631801371 c:\users\patto\desktop\paft\paft\include\main_client.h
 	<winsock2.h>
 
-1631801371 source:c:\users\patto\desktop\paft\paft\src\maincli.cpp
+1631815265 source:c:\users\patto\desktop\paft\paft\src\maincli.cpp
 	"../include/MainCLI.h"
 	"../include/Main_Client.h"
 	<iostream>
 
-1631801371 source:c:\users\patto\desktop\paft\paft\src\mainserver.cpp
+1631816535 source:c:\users\patto\desktop\paft\paft\src\mainserver.cpp
 	"../include/MainServer.h"
+	"../include/Connection.h"
+	<winsock2.h>
 	<windows.h>
 	<stdlib.h>
 	<stdio.h>
 	<winsock.h>
-	<winsock2.h>
 	<ws2tcpip.h>
 	<iostream>
 
-1631802272 source:c:\users\patto\desktop\paft\paft\src\connection.cpp
+1631816315 source:c:\users\patto\desktop\paft\paft\src\connection.cpp
 	"Connection.h"
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+	<ws2tcpip.h>
+	<iostream>
 
-1631802874 c:\users\patto\desktop\paft\paft\include\connection.h
+1631816303 c:\users\patto\desktop\paft\paft\include\connection.h
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
 

@@ -1,24 +1,31 @@
 #include "../include/MainServer.h"
+#include "../include/Connection.h"
 
+
+#include <winsock2.h>
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <winsock.h>
-#include <winsock2.h>
+
 #include <ws2tcpip.h>
 
 
 #include <iostream>
 
-using namespace paft;
 
+
+using namespace paft;
+/*
 // our thread for recving commands
-DWORD WINAPI MainServer::receive_cmds(LPVOID lpParam)
+//DWORD WINAPI MainServer::receive_cmds(LPVOID lpParam)
+void MainServer::receive_cmds(LPVOID lpParam)
 {
   printf("thread created\r\n");
 
   // set our socket to the socket passed in as a parameter
   SOCKET current_client = (SOCKET)lpParam;
+  printf("Current client is %i\n", (SOCKET)lpParam);
 
   // buffer to hold our recived data
   char buf[100];
@@ -31,7 +38,7 @@ DWORD WINAPI MainServer::receive_cmds(LPVOID lpParam)
   while(true)
   {
      res = recv(current_client,buf,sizeof(buf),0); // recv cmds
-     Sleep(10);
+     Sleep(15);
 
      if(res == 0)
      {
@@ -107,7 +114,7 @@ int MainServer::Send_File(LPVOID lpParam)
 
     return 0;
 }
-
+*/
 
 
 int MainServer::Start_Server(int a)
@@ -171,8 +178,14 @@ int MainServer::Start_Server(int a)
   client = accept(sock,(struct sockaddr*)&from,&fromlen);
   printf("Client connected\r\n");
 
+  paft::Connection *Connect = new paft::Connection();
+
+
   // create our recv_cmds thread and parse client socket as a parameter
-  CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&receive_cmds,(LPVOID)client, 0, &thread);
+  //CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&receive_cmds,(LPVOID)client, 0, &thread);
+  //For some reason this doesn't work with objects
+  //Going to make the connection class all static
+  CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Recv_Command,(LPVOID)client, 0, &thread);
  }
 
  // shutdown winsock

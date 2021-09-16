@@ -13,6 +13,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -22,33 +23,20 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add option="-lws2_32" />
+		</Linker>
 		<Unit filename="Main.cpp" />
+		<Unit filename="include/Connection.h" />
 		<Unit filename="include/DHT.h" />
 		<Unit filename="include/MainCLI.h" />
-		<Unit filename="include/MainClient.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="include/MainServer.h" />
 		<Unit filename="include/Main_Client.h" />
-		<Unit filename="include/Self_Tests.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="include/Threads.h">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
+		<Unit filename="src/Connection.cpp" />
 		<Unit filename="src/DHT.cpp" />
 		<Unit filename="src/MainCLI.cpp" />
-		<Unit filename="src/MainClient.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Unit filename="src/MainServer.cpp" />
 		<Unit filename="src/Main_Client.cpp" />
-		<Unit filename="src/Self_Tests.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
-		<Unit filename="src/Threads.cpp">
-			<Option target="&lt;{~None~}&gt;" />
-		</Unit>
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>
