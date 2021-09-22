@@ -29,6 +29,41 @@ int MainCli::Start_Client()
     exit(1);
 }
 
+bool MainCli::String_Compare(char* string1, const char* string2)
+{
+    for(int i = 0;;i++)
+    {
+
+        if(string1[i]  == '\n' || string1[i]  == '\0' || string1[i]  == ' ')
+        {
+            if(string2[i]  == '\n' || string2[i]  == '\0' || string2[i]  == ' ')
+            {
+                return true;
+
+            }
+            else
+            {
+                return false;
+
+            }
+
+        }
+        if(string1[i] == string2[i])
+            continue;
+        else
+            return false;
+
+
+
+
+    }
+
+
+
+    //return false;
+}
+
+
 
 int MainCli::Command_Parser(char Input[], int Input_len)
 {
@@ -38,63 +73,33 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         return 1;
     }
 
-    if(Input[0] == 'h')
-    {
-        if(Input[1] == 'e')
-        {
-            if(Input[2] == 'l')
-            {
-                if(Input[3] == 'p')
-                {
-                    if(Input[4]  == '\n' || Input[4]  == '\0' || Input[4]  == ' ')
-                    {
-                            std::cout << "Helpmessage\n";
-                            std::cout << "self\n";
-                            return 0;
-                    }
 
-                }
-            }
-        }
+    if(String_Compare(Input, "help"))
+    {
+        std::cout << "Helpmessage\n\n";
+        std::cout << "help          -- Receive this message\n";
+        std::cout << "self_get_file -- Get a file from 127.0.0.1 \n";
+        std::cout << "exit          -- Exit the program\n";
+        return 0;
     }
 
-    else if(Input[0] == 's')
-    {
-        if(Input[1] == 'e')
-        {
-            if(Input[2] == 'l')
-            {
-                if(Input[3] == 'f')
-                {
-                    if(Input[4]  == '\n' || Input[4]  == '\0' || Input[4]  == ' ')
-                    {
-                            MainClient Client("127.0.0.1", "1234");
-                            //Client.Connect("127.0.0.1", "1234");
-                            Client.GetFile("asdf");
-                            return 0;
-                    }
 
-                }
-            }
-        }
+
+
+    else if(String_Compare(Input, "self_get_file"))
+    {
+        MainClient Client("127.0.0.1", "1234");
+        //Client.Connect("127.0.0.1", "1234");
+        Client.GetFile("asdf");
+        return 0;
+
     }
-    else if(Input[0] == 'e')
-    {
-        if(Input[1] == 'x')
-        {
-            if(Input[2] == 'i')
-            {
-                if(Input[3] == 't')
-                {
-                    if(Input[4]  == '\n' || Input[4]  == '\0' || Input[4]  == ' ')
-                    {
-                            exit(0);
-                            return 0;
-                    }
 
-                }
-            }
-        }
+
+    else if(String_Compare(Input, "exit"))
+    {
+        exit(0);
+        return 0;
     }
 
 

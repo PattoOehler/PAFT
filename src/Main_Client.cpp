@@ -104,7 +104,7 @@ int MainClient::GetFile(char *filename)
     return 0;
 }
 
-MainClient::MainClient(char *addr, char *port)
+MainClient::MainClient(const char *addr, const char *port)
 {
 
     WSADATA wsaData;

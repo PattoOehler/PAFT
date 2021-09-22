@@ -144,3 +144,72 @@
 	<stdio.h>
 	<winsock.h>
 
+1632274000 source:c:\users\peyto-w\desktop\paft\github\paft\main.cpp
+	<iostream>
+	<thread>
+	"include/MainServer.h"
+	"include/MainCLI.h"
+	"include/DHT.h"
+
+1632274001 c:\users\peyto-w\desktop\paft\github\paft\include\mainserver.h
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+
+1632276164 c:\users\peyto-w\desktop\paft\github\paft\include\maincli.h
+
+1631758019 c:\users\peyto-w\desktop\paft\github\paft\include\dht.h
+	<stdint.h>
+
+1632274001 source:c:\users\peyto-w\desktop\paft\github\paft\src\connection.cpp
+	"Connection.h"
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+	<ws2tcpip.h>
+	<iostream>
+
+1632274001 c:\users\peyto-w\desktop\paft\github\paft\include\connection.h
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+
+1631758019 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht.cpp
+	"../include/DHT.h"
+	<random>
+	<iostream>
+	<time.h>
+	<bits/stdc++.h>
+
+1632274001 source:c:\users\peyto-w\desktop\paft\github\paft\src\main_client.cpp
+	"../include/Main_Client.h"
+	<iostream>
+	<winsock2.h>
+	<windows.h>
+	<ws2tcpip.h>
+	<stdlib.h>
+	<stdio.h>
+
+1632276235 c:\users\peyto-w\desktop\paft\github\paft\include\main_client.h
+	<winsock2.h>
+
+1632274001 source:c:\users\peyto-w\desktop\paft\github\paft\src\mainserver.cpp
+	"../include/MainServer.h"
+	"../include/Connection.h"
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<winsock.h>
+	<ws2tcpip.h>
+	<iostream>
+
+1632276165 source:c:\users\peyto-w\desktop\paft\github\paft\src\maincli.cpp
+	"../include/MainCLI.h"
+	"../include/Main_Client.h"
+	<iostream>
+

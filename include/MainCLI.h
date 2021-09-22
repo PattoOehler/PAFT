@@ -12,7 +12,7 @@ namespace paft
 
     private:
         static int Command_Parser(char *Input, int a);
-
+        static bool String_Compare(char* string1, const char* string2);
     };
 
 }
