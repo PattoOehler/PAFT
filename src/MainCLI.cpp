@@ -79,6 +79,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "Helpmessage\n\n";
         std::cout << "help          -- Receive this message\n";
         std::cout << "self_get_file -- Get a file from 127.0.0.1 \n";
+        std::cout << "self_ping     -- Ping self \n";
         std::cout << "exit          -- Exit the program\n";
         return 0;
     }
@@ -95,6 +96,13 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
     }
 
+    else if(String_Compare(Input, "self_ping"))
+    {
+        MainClient Client("127.0.0.1", "1234");
+        Client.Ping();
+        return 0;
+
+    }
 
     else if(String_Compare(Input, "exit"))
     {

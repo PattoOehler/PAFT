@@ -12,7 +12,9 @@ namespace paft
 
     public:
         int GetFile(char *filename);
+        int Ping();
         MainClient(const char *addr,const char *port);
+
 
 
 

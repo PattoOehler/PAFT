@@ -15,6 +15,7 @@ namespace paft{
 
             static void Recv_Command(LPVOID lpParam);
             static void Send_File(LPVOID lpParam);
+            static void Ping(LPVOID lpParam);
 
 
     };

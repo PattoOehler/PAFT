@@ -28,6 +28,18 @@ Connection::~Connection()
     //dtor
 }
 
+void Connection::Ping(LPVOID lpParam)
+{
+    SOCKET current_client = (SOCKET)lpParam;
+
+
+    char sendbuf[] = "Pinging back message\0";
+    send(current_client,sendbuf,21,0);
+
+
+}
+
+
 void Connection::Send_File(LPVOID lpParam)
 {
 
@@ -82,7 +94,6 @@ void Connection::Recv_Command(LPVOID lpParam)
     if((SOCKET)lpParam == INVALID_SOCKET)
         printf("INVALID SOCKET\n");
 
-    printf("Socket Value of %i\n", (SOCKET)lpParam);
 
     printf("Recv_Command \n");
     printf("thread created\r\n");
@@ -100,27 +111,37 @@ void Connection::Recv_Command(LPVOID lpParam)
     // our recv loop
     while(true)
     {
-        //printf("Hit the while loop\n");
+
         res = recv(current_client,buf,sizeof(buf),0); // recv cmds
         Sleep(10);
 
         if(res == 0)
         {
-            printf("Res=0!!! Error\n");
-            //MessageBox(0,"error","error",MB_OK);
+            printf("Closing the socket\n");
             closesocket(current_client);
+            //printf("%i\n", WSAGetLastError());
             ExitThread(0);
         }
 
-        printf("%i\n", WSAGetLastError());
+
+
+
         if(buf[0] == 0x01)
         {
             //Client is asking for file
-            printf("asdf\n");
+
+
             std::cout << "Client is asking for a file named " << buf +1 << std::endl; //buf[0] is the command byte
-            //strcpy(sendData,"1234567891011121314151617181920");
             Connection::Send_File((LPVOID)current_client);
             shutdown(current_client, SD_SEND);
+
+        }
+        else if(buf[0] == 0x02)
+        {
+            //Pinging
+            std::cout << "Client is asking for a ping responce " << buf +1 << std::endl;
+            Connection::Ping((LPVOID)current_client);
+
 
         }
         else

@@ -26,7 +26,56 @@ using namespace paft;
 
 
 
+int MainClient::Ping()
+{
+    const char *sendbuf = "\x02Pinging bro\0";
+    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
 
+
+    char recvbuf[DEFAULT_BUFLEN];
+
+    //Get the ping back
+    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    std::cout << "Got a ping back saying " << recvbuf << std::endl;
+
+    // shutdown the connection since no more data will be sent
+    iResult = shutdown(Socket, SD_SEND);
+    if (iResult == SOCKET_ERROR) {
+        printf("shutdown failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+
+
+    // Receive until the peer closes the connection
+    do {
+
+        iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+        if ( iResult > 0 )
+            printf("Bytes received: %d\n", iResult);
+        else if ( iResult == 0 )
+            printf("Connection closed\n");
+        else
+            printf("recv failed with error: %d\n", WSAGetLastError());
+
+    } while( iResult > 0 );
+
+    // cleanup
+    closesocket(Socket);
+    WSACleanup();
+
+
+    return 0;
+
+}
 
 int MainClient::GetFile(char *filename)
 {
