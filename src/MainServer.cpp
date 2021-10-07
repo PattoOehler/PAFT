@@ -17,6 +17,7 @@
 
 using namespace paft;
 /*
+REMOVE SOON TODO -- DEPRECIATED FUNCTION
 // our thread for recving commands
 //DWORD WINAPI MainServer::receive_cmds(LPVOID lpParam)
 void MainServer::receive_cmds(LPVOID lpParam)

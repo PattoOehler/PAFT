@@ -7,7 +7,11 @@
 
 using namespace paft;
 
-DHT::DHT(){
+DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
+_160bitnumber* DHT::SELF = new _160bitnumber;
+
+
+void DHT::Init(){
 
     //This will set the SELF
 
@@ -60,6 +64,8 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
     unsigned long long mid_distance = Entry.id.mid ^ SELF->mid;
     unsigned long bot_distance = Entry.id.bot ^ SELF->bot;
 
+    //std::cout << "Top dis= " << top_distance << " mid_dist = " << mid_distance << " bot_dist = " << bot_distance << '\n';
+
 
     if(top_distance == 0 )
     {
@@ -69,11 +75,11 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
             if(bot_distance == 0)
             {
                 //They are the same number -- log2 of 0 is -infinity
-                DHT::Insert_Entry(160, Entry); // They are the same number
+                DHT::Insert_Entry(159, Entry); // They are the same number
             }else
             {
                 unsigned int Distance = (int)(log2(bot_distance));
-                DHT::Insert_Entry(Distance+128, Entry); //+128 because the top_distance is in the first 127 the mid section starts at 128
+                DHT::Insert_Entry(Distance+127, Entry); //+128 because the top_distance is in the first 127 the mid section starts at 128
             }
 
 
@@ -103,13 +109,17 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 
 int DHT::Test_Add_Entry()
 {
+
     DHT_Single_Entry Testing;
 
     Testing.id.top = 8446744073709551615; //18446744073709551615 is max int
+    Testing.id.mid = 999999999999999999;
+    Testing.id.bot = 123123123;
+
 
     DHT::Add_Entry(Testing);
     DHT::Add_Entry(Testing);
-    DHT::Add_Entry(Testing);
+    //DHT::Add_Entry(Testing);
 
     std::random_device rd;   // non-deterministic generator
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
@@ -127,6 +137,8 @@ int DHT::Test_Add_Entry()
     DHT::Add_Entry(Testing);
 
     Testing.id.bot = tmp_bot;
+
+    // VVVV
     DHT::Add_Entry(Testing);
     DHT::Add_Entry(Testing);
 
@@ -150,7 +162,7 @@ void DHT::Print_DHT()
                 std::cout << std::hex << DHT::DHT_ALL[i*20+j].id.top <<
                              std::hex << DHT::DHT_ALL[i*20+j].id.mid <<
                              std::hex << DHT::DHT_ALL[i*20+j].id.bot;
-                std::cout << "    " << std::dec << (i) << ' ' << j << std::endl;
+                std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << std::endl;
             }
                 else
             {

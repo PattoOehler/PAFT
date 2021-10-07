@@ -101,7 +101,7 @@ int MainClient::GetFile(char *filename)
     char recvbuf[DEFAULT_BUFLEN];
     int res=0;
     FILE *fp;
-    fp = fopen("CLIENT_FILES/asdf.txt", "a+b");  // TODO remove with filename
+    fp = fopen("CLIENT_FILES/asdf.txt", "w+b");  // TODO remove with filename
     while(true)
     {
         // Getting file loop

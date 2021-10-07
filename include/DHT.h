@@ -31,23 +31,23 @@ namespace paft
     class DHT{
     private:
         //Use keyword new to put on the heap
-        DHT_Single_Entry* DHT_ALL = new DHT_Single_Entry[160*20];
+        static DHT_Single_Entry* DHT_ALL;// = new DHT_Single_Entry[160*20];
         /*
             160 is for every bit for matching (the same ID as SELF)
             20 is a server wide amount to keep that should be enough to never allow a section to go offline
             we do want to keep all 160 because there can be overlaps in nums
         */
-        _160bitnumber* SELF = new _160bitnumber;
+        static _160bitnumber* SELF;// = new _160bitnumber;
 
 
 
-        Insert_Entry(int distance, DHT_Single_Entry Entry);
+        static int Insert_Entry(int distance, DHT_Single_Entry Entry);
 
     public:
-        DHT();
-        int Add_Entry(DHT_Single_Entry Entry);
-        int Test_Add_Entry();
-        void Print_DHT();
+        static void Init();
+        static int Add_Entry(DHT_Single_Entry Entry);
+        static int Test_Add_Entry();
+        static void Print_DHT();
 
     };
 
