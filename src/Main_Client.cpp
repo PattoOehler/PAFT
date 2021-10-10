@@ -150,6 +150,7 @@ int MainClient::GetFile(char *filename)
     WSACleanup();
 
 
+    std::cout << "Exited the connection on the client side";
     return 0;
 }
 

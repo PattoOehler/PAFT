@@ -1,6 +1,7 @@
 
 #include "../include/MainCLI.h"
 #include "../include/Main_Client.h"
+#include "../include/DHT.h"
 
 #include <iostream>
 
@@ -80,6 +81,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "help          -- Receive this message\n";
         std::cout << "self_get_file -- Get a file from 127.0.0.1 \n";
         std::cout << "self_ping     -- Ping self \n";
+        std::cout << "print_dht     -- Print the dht\n";
         std::cout << "exit          -- Exit the program\n";
         return 0;
     }
@@ -90,7 +92,6 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     else if(String_Compare(Input, "self_get_file"))
     {
         MainClient Client("127.0.0.1", "1234");
-        //Client.Connect("127.0.0.1", "1234");
         Client.GetFile("asdf");
         return 0;
 
@@ -100,6 +101,12 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     {
         MainClient Client("127.0.0.1", "1234");
         Client.Ping();
+        return 0;
+
+    }
+    else if(String_Compare(Input, "print_dht"))
+    {
+        DHT::Print_DHT();
         return 0;
 
     }

@@ -11,13 +11,67 @@ DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
 _160bitnumber* DHT::SELF = new _160bitnumber;
 
 
+
+int DHT::Distance_To_Self(_160bitnumber id)
+{
+    unsigned long long top_distance = id.top ^ SELF->top;
+    unsigned long long mid_distance = id.mid ^ SELF->mid;
+    unsigned long bot_distance = id.bot ^ SELF->bot;
+
+    //This is the distance formula
+    if(top_distance != 0)
+    {
+        return log2(top_distance);
+
+    }
+    else
+    {
+        if(mid_distance != 0)
+        {
+            return 64+log2(mid_distance);
+
+        }
+        else
+        {
+            if(bot_distance != 0)
+                return 128+log2(mid_distance);
+            else
+            {
+                return  159;
+            }
+
+        }
+    }
+
+
+
+
+}
+
+
+
+
+void DHT::Update_Time(DHT_Single_Entry Update)
+{
+
+
+    int distance = 0;
+
+
+
+
+
+
+}
+
+
+
 void DHT::Init(){
 
     //This will set the SELF
 
 
     //First check if the number is already set - if so should keep probs TODO
-        //Ya know do stuff - gonna just set it for now
 
     std::random_device rd;   // non-deterministic generator
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
@@ -43,6 +97,7 @@ int DHT::Insert_Entry(int distance, DHT_Single_Entry Entry)
         {
             DHT::DHT_ALL[(distance*20)+i] = Entry;
             DHT::DHT_ALL[(distance*20)+i].is_set = true;
+            DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0);
             std::cout << "Inserted Entry in " << distance << std::endl;
             break;
         }
@@ -60,48 +115,15 @@ int DHT::Insert_Entry(int distance, DHT_Single_Entry Entry)
 
 int DHT::Add_Entry(DHT_Single_Entry Entry)
 {
+
     unsigned long long top_distance = Entry.id.top ^ SELF->top;
     unsigned long long mid_distance = Entry.id.mid ^ SELF->mid;
     unsigned long bot_distance = Entry.id.bot ^ SELF->bot;
 
-    //std::cout << "Top dis= " << top_distance << " mid_dist = " << mid_distance << " bot_dist = " << bot_distance << '\n';
+    int distance = DHT::Distance_To_Self(Entry.id);
+    Insert_Entry(distance, Entry);
 
 
-    if(top_distance == 0 )
-    {
-        //Distance is less then the top 64 bits
-        if(mid_distance == 0)
-        {
-            if(bot_distance == 0)
-            {
-                //They are the same number -- log2 of 0 is -infinity
-                DHT::Insert_Entry(159, Entry); // They are the same number
-            }else
-            {
-                unsigned int Distance = (int)(log2(bot_distance));
-                DHT::Insert_Entry(Distance+127, Entry); //+128 because the top_distance is in the first 127 the mid section starts at 128
-            }
-
-
-        }else
-        {
-
-            int Distance = (int)(log2(mid_distance));
-            DHT::Insert_Entry(Distance+64, Entry); //+64 because the top_distance is in the first 63 the mid section starts at 64
-            //std::cout << Distance << " is the mid_distance " << mid_distance << std::endl;
-        }
-
-
-
-
-    }else
-    {
-        //Distance is in the top 64 bits
-        int Distance = (int)(log2(top_distance));
-        //std::cout << "Distance is == " << top_distance << " (log of)\n";
-        DHT::Insert_Entry(Distance, Entry);
-
-    }
 
     return 0;
 }
@@ -153,7 +175,7 @@ int DHT::Test_Add_Entry()
 void DHT::Print_DHT()
 {
 
-    for(int i=0;i<161;i++)
+    for(int i=0;i<160;i++)
     {
         for(int j=0;j<20;j++)
         {
@@ -162,7 +184,8 @@ void DHT::Print_DHT()
                 std::cout << std::hex << DHT::DHT_ALL[i*20+j].id.top <<
                              std::hex << DHT::DHT_ALL[i*20+j].id.mid <<
                              std::hex << DHT::DHT_ALL[i*20+j].id.bot;
-                std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << std::endl;
+                std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time "<<
+                ctime(&DHT::DHT_ALL[i*20+j].time_To_Timeout ); //ctime has a \n at the end
             }
                 else
             {

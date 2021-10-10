@@ -179,7 +179,7 @@ int MainServer::Start_Server(int a)
   client = accept(sock,(struct sockaddr*)&from,&fromlen);
   printf("Client connected\r\n");
 
-  paft::Connection *Connect = new paft::Connection();
+  //paft::Connection *Connect = new paft::Connection();
 
 
   // create our recv_cmds thread and parse client socket as a parameter

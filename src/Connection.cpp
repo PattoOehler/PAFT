@@ -74,8 +74,7 @@ void Connection::Send_File(LPVOID lpParam)
         counter++;
         std::cout << "filesize = " << filesize << " and counter*512 = " << 512*counter << std::endl;
         Sleep(10);
-        if(filesize > 512*counter)
-            std::cout << "Hurray we going again in the server\n";
+
 
     }
 

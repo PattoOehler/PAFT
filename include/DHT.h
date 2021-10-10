@@ -20,8 +20,9 @@ typedef struct
     unsigned short int port =0;//Port
     _160bitnumber id;//160bit ID
     bool is_set = false;
+    time_t time_To_Timeout;
+    //Timeout ~1h
 
-    //Need to include timestamp for timeout ~1h
 
 } DHT_Single_Entry;
 
@@ -39,15 +40,16 @@ namespace paft
         */
         static _160bitnumber* SELF;// = new _160bitnumber;
 
-
-
+        static int Distance_To_Self(_160bitnumber id);
         static int Insert_Entry(int distance, DHT_Single_Entry Entry);
+        //static int Distance_To_Self(_160bitnumber* id);
 
     public:
         static void Init();
         static int Add_Entry(DHT_Single_Entry Entry);
         static int Test_Add_Entry();
         static void Print_DHT();
+        static void Update_Time(DHT_Single_Entry Update);
 
     };
 
