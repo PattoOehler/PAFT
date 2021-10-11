@@ -27,6 +27,14 @@ typedef struct
 } DHT_Single_Entry;
 
 
+typedef struct
+{
+    DHT_Single_Entry entry[3];
+
+
+} three_DHT;
+
+
 namespace paft
 {
     class DHT{
@@ -40,16 +48,19 @@ namespace paft
         */
         static _160bitnumber* SELF;// = new _160bitnumber;
 
-        static int Distance_To_Self(_160bitnumber id);
-        static int Insert_Entry(int distance, DHT_Single_Entry Entry);
-        //static int Distance_To_Self(_160bitnumber* id);
+        static int Distance(_160bitnumber id, _160bitnumber id2);
+        static int Add_Entry(DHT_Single_Entry Entry);
+        static three_DHT Lookup_One_Bucket(_160bitnumber id, int bucket);
 
     public:
         static void Init();
-        static int Add_Entry(DHT_Single_Entry Entry);
+
         static int Test_Add_Entry();
         static void Print_DHT();
         static void Update_Time(DHT_Single_Entry Update);
+        //static void Lookup  //Should return 3 Ip addrs +
+        static three_DHT Lookup(_160bitnumber id);
+
 
     };
 

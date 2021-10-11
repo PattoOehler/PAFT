@@ -11,12 +11,131 @@ DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
 _160bitnumber* DHT::SELF = new _160bitnumber;
 
 
-
-int DHT::Distance_To_Self(_160bitnumber id)
+three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 {
-    unsigned long long top_distance = id.top ^ SELF->top;
-    unsigned long long mid_distance = id.mid ^ SELF->mid;
-    unsigned long bot_distance = id.bot ^ SELF->bot;
+    /*
+    three_DHT closest;
+    int closest_counter=0;
+    for(int i=0;i<3;i++)
+        closest.entry[i].is_set =false;
+
+
+    int counter=0;
+    for(int i=0;i<20;i++)
+    {
+        if(DHT::DHT_ALL[bucket*20+i].is_set)
+            counter++;
+
+    }
+
+    if(counter <= 3)
+    {
+        //There are less then 3 entries in the k-bucket to return
+        for(int i=0;i<20;i++)
+        {
+            if(DHT::DHT_ALL[distance*20+i].is_set)
+            {
+                closest.entry[closest_counter] = DHT::DHT_ALL[distance*20+i];
+                closest_counter++;
+            }
+
+
+        }
+
+    }
+    else
+    {
+
+        bool set_first=false;
+        //There are more then 3 entries in the k-bucket
+        for(int i=0;i<20;i++)
+        {
+            if(DHT::DHT_ALL[distance*20+i].is_set)
+            {
+                if(set_first)
+                    closest.entry[0] = DHT::DHT_ALL[distance*20+i];
+                else
+                {
+                    //The first entry is already set
+                    int distance_checking = Distance(DHT::DHT_ALL[distance*20+i].id, id);
+                    int distance_first = Distance(closest.entry[0], id);
+                    if(distance_checking < distance_first)
+                    {
+                        //The distance is less in the
+                        DHT_Single_Entry tmp;
+                        tmp =
+
+                    }
+
+
+                }
+
+            }
+
+
+
+        }
+
+    }
+    */
+
+}
+
+
+
+three_DHT DHT::Lookup(_160bitnumber id)
+{
+    three_DHT closest;
+    int closest_counter=0;
+
+    int distance = Distance(id, *SELF);
+
+    int counter=0;
+    for(int i=0;i<20;i++)
+    {
+        if(DHT::DHT_ALL[distance*20+i].is_set)
+            counter++;
+
+    }
+
+
+    if(counter <= 3)
+    {
+        //There are less then 3 entries in the k-bucket to return
+        for(int i=0;i<20;i++)
+        {
+            if(DHT::DHT_ALL[distance*20+i].is_set)
+            {
+                closest.entry[closest_counter] = DHT::DHT_ALL[distance*20+i];
+                closest_counter++;
+            }
+
+
+        }
+    }
+    else
+    {
+    //There are enough to fill up the closest
+
+
+    }
+
+    return closest;
+
+}
+
+
+
+
+
+
+
+
+int DHT::Distance(_160bitnumber id, _160bitnumber id2)
+{
+    unsigned long long top_distance = id.top ^ id2.top;
+    unsigned long long mid_distance = id.mid ^ id2.mid;
+    unsigned long bot_distance = id.bot ^ id2.bot;
 
     //This is the distance formula
     if(top_distance != 0)
@@ -55,9 +174,24 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 {
 
 
-    int distance = 0;
+    int distance = Distance(Update.id, *SELF);
 
+    for(int i=0; i<20; i++)
+    {
 
+        if(DHT::DHT_ALL[(distance*20)+i].is_set == true)
+        {
+            if(DHT::DHT_ALL[(distance*20)+i].id.top == Update.id.top && DHT::DHT_ALL[(distance*20)+i].id.mid == Update.id.mid && DHT::DHT_ALL[(distance*20)+i].id.bot == Update.id.bot)
+            {
+                DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0)+60*60; // 1 hour
+                return;
+            }
+
+        }
+
+    }
+
+    DHT::Add_Entry(Update);
 
 
 
@@ -88,16 +222,22 @@ void DHT::Init(){
     return;
 }
 
-int DHT::Insert_Entry(int distance, DHT_Single_Entry Entry)
+
+
+int DHT::Add_Entry(DHT_Single_Entry Entry)
 {
+
+    int distance = DHT::Distance(Entry.id, *SELF);
+
+
     for(int i=0; i<20; i++)
     {
 
         if(DHT::DHT_ALL[(distance*20)+i].is_set == false)
         {
             DHT::DHT_ALL[(distance*20)+i] = Entry;
-            DHT::DHT_ALL[(distance*20)+i].is_set = true;
             DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0);
+            DHT::DHT_ALL[(distance*20)+i].is_set = true;
             std::cout << "Inserted Entry in " << distance << std::endl;
             break;
         }
@@ -107,22 +247,6 @@ int DHT::Insert_Entry(int distance, DHT_Single_Entry Entry)
         }
 
     }
-
-
-    return 0;
-}
-
-
-int DHT::Add_Entry(DHT_Single_Entry Entry)
-{
-
-    unsigned long long top_distance = Entry.id.top ^ SELF->top;
-    unsigned long long mid_distance = Entry.id.mid ^ SELF->mid;
-    unsigned long bot_distance = Entry.id.bot ^ SELF->bot;
-
-    int distance = DHT::Distance_To_Self(Entry.id);
-    Insert_Entry(distance, Entry);
-
 
 
     return 0;
@@ -139,8 +263,8 @@ int DHT::Test_Add_Entry()
     Testing.id.bot = 123123123;
 
 
-    DHT::Add_Entry(Testing);
-    DHT::Add_Entry(Testing);
+    DHT::Update_Time(Testing);
+    DHT::Update_Time(Testing);
     //DHT::Add_Entry(Testing);
 
     std::random_device rd;   // non-deterministic generator
@@ -151,18 +275,18 @@ int DHT::Test_Add_Entry()
     long unsigned int tmp_bot = gen() >> 32;
 
     Testing.id.top = tmp_top;
-    DHT::Add_Entry(Testing);
-    DHT::Add_Entry(Testing);
+    DHT::Update_Time(Testing);
+    DHT::Update_Time(Testing);
 
     Testing.id.mid = tmp_mid;
-    DHT::Add_Entry(Testing);
-    DHT::Add_Entry(Testing);
+    DHT::Update_Time(Testing);
+    DHT::Update_Time(Testing);
 
     Testing.id.bot = tmp_bot;
 
     // VVVV
-    DHT::Add_Entry(Testing);
-    DHT::Add_Entry(Testing);
+    DHT::Update_Time(Testing);
+    DHT::Update_Time(Testing);
 
 
     //std::cout << "Hello";
