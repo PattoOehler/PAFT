@@ -51,8 +51,10 @@ namespace paft
         static int Distance(_160bitnumber id, _160bitnumber id2);
         static int Add_Entry(DHT_Single_Entry Entry);
         static three_DHT Lookup_One_Bucket(_160bitnumber id, int bucket);
+        static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);
 
     public:
+        static int Log2(unsigned long long int n);
         static void Init();
 
         static int Test_Add_Entry();

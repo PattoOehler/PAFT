@@ -11,73 +11,99 @@ DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
 _160bitnumber* DHT::SELF = new _160bitnumber;
 
 
-three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
+//Returns true if the first id is closer to the compare_To false otherwise
+bool DHT::Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To)
 {
-    /*
-    three_DHT closest;
-    int closest_counter=0;
-    for(int i=0;i<3;i++)
-        closest.entry[i].is_set =false;
+    unsigned long long top_distance1 = id.top ^ compare_To.top;
+    unsigned long long mid_distance1 = id.mid ^ compare_To.mid;
+    unsigned long bot_distance1 = id.bot ^ compare_To.bot;
+
+    unsigned long long top_distance2 = id2.top ^ compare_To.top;
+    unsigned long long mid_distance2 = id2.mid ^ compare_To.mid;
+    unsigned long bot_distance2 = id2.bot ^ compare_To.bot;
 
 
-    int counter=0;
-    for(int i=0;i<20;i++)
+    if(top_distance1 != top_distance2)
     {
-        if(DHT::DHT_ALL[bucket*20+i].is_set)
-            counter++;
+        return top_distance1 < top_distance2 ? true : false;
 
     }
-
-    if(counter <= 3)
+    else if(mid_distance1 != mid_distance2)
     {
-        //There are less then 3 entries in the k-bucket to return
-        for(int i=0;i<20;i++)
-        {
-            if(DHT::DHT_ALL[distance*20+i].is_set)
-            {
-                closest.entry[closest_counter] = DHT::DHT_ALL[distance*20+i];
-                closest_counter++;
-            }
+        return mid_distance1 < mid_distance2 ? true : false;
 
-
-        }
+    }
+    else if(bot_distance1 != bot_distance2)
+    {
+        return bot_distance1 < bot_distance2 ? true : false;
 
     }
     else
     {
+        //Should not happen unless they are the same
+        std::cout << "Error in DHT::Compare - they are the same";
+        return false;
+    }
 
-        bool set_first=false;
-        //There are more then 3 entries in the k-bucket
-        for(int i=0;i<20;i++)
+
+}
+
+
+
+
+three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
+{
+
+    three_DHT closest;
+    for(int i=0;i<3;i++)
+        closest.entry[i].is_set =false;
+
+
+    DHT_Single_Entry tmp, tmp2;
+    for(int i=0;i<20;i++)
+    {
+        if(DHT::DHT_ALL[bucket*20+i].is_set)
         {
-            if(DHT::DHT_ALL[distance*20+i].is_set)
+            if(closest.entry[0].is_set)
             {
-                if(set_first)
-                    closest.entry[0] = DHT::DHT_ALL[distance*20+i];
-                else
+                if(Compare(DHT::DHT_ALL[bucket*20+i].id,closest.entry[0].id, id))
                 {
-                    //The first entry is already set
-                    int distance_checking = Distance(DHT::DHT_ALL[distance*20+i].id, id);
-                    int distance_first = Distance(closest.entry[0], id);
-                    if(distance_checking < distance_first)
-                    {
-                        //The distance is less in the
-                        DHT_Single_Entry tmp;
-                        tmp =
+                    //The new DHT_ALL is closer then closest.entry[0]
+                    //Move set the closest[0] and move the rest down
+                    tmp = closest.entry[0];
+                    closest.entry[0] = DHT::DHT_ALL[bucket*20+i];
+                    tmp2 = closest.entry[1];
+                    closest.entry[1] = tmp;
+                    closest.entry[2] = tmp2;
+                }
+                else if(Compare(DHT::DHT_ALL[bucket*20+i].id,closest.entry[1].id, id))
+                {
+                    tmp = closest.entry[1];
+                    closest.entry[1] = DHT::DHT_ALL[bucket*20+i];
+                    closest.entry[2] = tmp;
 
-                    }
-
+                }
+                else if(Compare(DHT::DHT_ALL[bucket*20+i].id,closest.entry[2].id, id))
+                {
+                    closest.entry[2] = DHT::DHT_ALL[bucket*20+i];
 
                 }
 
             }
+            else
+            {
+                closest.entry[0] = DHT::DHT_ALL[bucket*20+i];
 
+            }
 
 
         }
 
     }
-    */
+
+    return closest;
+
+
 
 }
 
@@ -85,46 +111,178 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 
 three_DHT DHT::Lookup(_160bitnumber id)
 {
-    three_DHT closest;
-    int closest_counter=0;
-
     int distance = Distance(id, *SELF);
+    three_DHT closest = Lookup_One_Bucket(id, distance);
 
-    int counter=0;
-    for(int i=0;i<20;i++)
+    if(closest.entry[2].is_set)
+        return closest;
+
+    three_DHT next_Buckets[2];
+
+    bool run=true;
+
+
+    int distance_Counter = 1;
+    while(run)
     {
-        if(DHT::DHT_ALL[distance*20+i].is_set)
-            counter++;
+        if(closest.entry[2].is_set)
+            return closest;
 
-    }
-
-
-    if(counter <= 3)
-    {
-        //There are less then 3 entries in the k-bucket to return
-        for(int i=0;i<20;i++)
+        //Test for the Buckets bounds and if both are out of range exit
+        //If its just one it should not be set and the other will work
+        if(distance-distance_Counter >= 0)
+            next_Buckets[0] = Lookup_One_Bucket(id, distance-distance_Counter);
+        else
         {
-            if(DHT::DHT_ALL[distance*20+i].is_set)
-            {
-                closest.entry[closest_counter] = DHT::DHT_ALL[distance*20+i];
-                closest_counter++;
-            }
+            next_Buckets[0].entry[0].is_set = false;
+            next_Buckets[0].entry[1].is_set = false;
+            next_Buckets[0].entry[2].is_set = false;
 
+        }
+        if(distance+distance_Counter <= 159)
+            next_Buckets[1] = Lookup_One_Bucket(id, distance+distance_Counter);
+        else
+        {
+            next_Buckets[1].entry[0].is_set = false;
+            next_Buckets[1].entry[1].is_set = false;
+            next_Buckets[1].entry[2].is_set = false;
+
+        }
+
+        if((distance+distance_Counter > 159) & (distance-distance_Counter < 0))
+        {
+            //Ran through the whole DHT and not all were found
+            return closest;
+
+        }
+        distance_Counter++;
+
+        //It should run a maximum of three times
+        for(int three=0; three<3;three++)
+        {
+
+            if(next_Buckets[0].entry[0].is_set && next_Buckets[1].entry[0].is_set)
+            {
+                if(Compare(next_Buckets[0].entry[0].id, next_Buckets[1].entry[0].id, id))
+                {
+                    for(int i=0;i<3;i++)
+                    {
+                        if(!closest.entry[i].is_set)
+                        {
+                            closest.entry[i] = next_Buckets[0].entry[0];
+                            next_Buckets[0].entry[0] = next_Buckets[0].entry[1];
+                            next_Buckets[0].entry[1] = next_Buckets[0].entry[2];
+                            next_Buckets[0].entry[2].is_set = false;
+                            break;
+
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    for(int i=0;i<3;i++)
+                    {
+                        if(!closest.entry[i].is_set)
+                        {
+                            closest.entry[i] = next_Buckets[1].entry[0];
+                            next_Buckets[1].entry[0] = next_Buckets[1].entry[1];
+                            next_Buckets[1].entry[1] = next_Buckets[1].entry[2];
+                            next_Buckets[1].entry[2].is_set = false;
+                            break;
+
+                        }
+
+                    }
+
+                }
+
+
+            }
+            else if(next_Buckets[0].entry[0].is_set | next_Buckets[1].entry[0].is_set)
+            {
+
+
+                if(next_Buckets[0].entry[0].is_set)
+                {
+
+                    for(int i=0;i<3;i++)
+                    {
+                        if(!closest.entry[i].is_set)
+                        {
+                            closest.entry[i] = next_Buckets[0].entry[0];
+                            next_Buckets[0].entry[0] = next_Buckets[0].entry[1];
+                            next_Buckets[0].entry[1] = next_Buckets[0].entry[2];
+                            next_Buckets[0].entry[2].is_set = false;
+                            break;
+
+                        }
+
+                    }
+
+
+                }
+                else
+                {
+                    //next_Buckets[1].entry[0].is_set = true so set it to the most first possible place
+                    for(int i=0;i<3;i++)
+                    {
+                        if(!closest.entry[i].is_set)
+                        {
+                            closest.entry[i] = next_Buckets[1].entry[0];
+                            next_Buckets[1].entry[0] = next_Buckets[1].entry[1];
+                            next_Buckets[1].entry[1] = next_Buckets[1].entry[2];
+                            next_Buckets[1].entry[2].is_set = false;
+                            break;
+
+                        }
+
+                    }
+
+
+                }
+
+            }
+            else
+            {
+                //Breaks out of the 3 loops - not necessary but increases runtime
+                break;
+            }
 
         }
     }
-    else
-    {
-    //There are enough to fill up the closest
 
 
-    }
+
 
     return closest;
 
 }
 
 
+
+int DHT::Log2(unsigned long long int n)
+{
+
+    if (n == 0) //throw ...
+    {
+        //Here we have error
+        //you can use exception to handle this error or return Zero
+        //throw  new exception(std::out_of_range("fault we don't have log2 0"));
+        return 0;
+    }
+
+    int logValue = -1;
+    while (n) {//
+        logValue++;
+        n >>= 1;
+    }
+    //std::cout << "Log value is " << logValue << std::endl;
+    return logValue;
+
+
+}
 
 
 
@@ -140,20 +298,20 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
     //This is the distance formula
     if(top_distance != 0)
     {
-        return log2(top_distance);
+        return Log2(top_distance);
 
     }
     else
     {
         if(mid_distance != 0)
         {
-            return 64+log2(mid_distance);
+            return 64+Log2(mid_distance);
 
         }
         else
         {
             if(bot_distance != 0)
-                return 128+log2(mid_distance);
+                return 128+Log2((unsigned long long int)bot_distance);
             else
             {
                 return  159;
