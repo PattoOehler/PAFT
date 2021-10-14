@@ -273,9 +273,11 @@ int DHT::Log2(unsigned long long int n)
         return 0;
     }
 
+    //std::cout << "log is receiving " << n << std::endl;
     int logValue = -1;
-    while (n) {//
+    while (n!=0) {//
         logValue++;
+
         n >>= 1;
     }
     //std::cout << "Log value is " << logValue << std::endl;
@@ -291,9 +293,9 @@ int DHT::Log2(unsigned long long int n)
 
 int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 {
-    unsigned long long top_distance = id.top ^ id2.top;
-    unsigned long long mid_distance = id.mid ^ id2.mid;
-    unsigned long bot_distance = id.bot ^ id2.bot;
+    unsigned long long int top_distance = id.top ^ id2.top;
+    unsigned long long int mid_distance = id.mid ^ id2.mid;
+    unsigned long int bot_distance = id.bot ^ id2.bot;
 
     //This is the distance formula
     if(top_distance != 0)
@@ -342,6 +344,7 @@ void DHT::Update_Time(DHT_Single_Entry Update)
             if(DHT::DHT_ALL[(distance*20)+i].id.top == Update.id.top && DHT::DHT_ALL[(distance*20)+i].id.mid == Update.id.mid && DHT::DHT_ALL[(distance*20)+i].id.bot == Update.id.bot)
             {
                 DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0)+60*60; // 1 hour
+                //std::cout << "Duplicate " << distance << "\n";
                 return;
             }
 
@@ -414,16 +417,12 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 int DHT::Test_Add_Entry()
 {
 
-    DHT_Single_Entry Testing;
+    DHT_Single_Entry Testing, ard;
 
     Testing.id.top = 8446744073709551615; //18446744073709551615 is max int
     Testing.id.mid = 999999999999999999;
     Testing.id.bot = 123123123;
 
-
-    DHT::Update_Time(Testing);
-    DHT::Update_Time(Testing);
-    //DHT::Add_Entry(Testing);
 
     std::random_device rd;   // non-deterministic generator
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
@@ -432,23 +431,59 @@ int DHT::Test_Add_Entry()
     long long unsigned int tmp_mid = gen();
     long unsigned int tmp_bot = gen() >> 32;
 
-    Testing.id.top = tmp_top;
-    DHT::Update_Time(Testing);
-    DHT::Update_Time(Testing);
+    //tmp_top = SELF.top;
+    //tmp_mid = SELF.mid;
+    //tmp_bot = SELF.bot;
 
-    Testing.id.mid = tmp_mid;
-    DHT::Update_Time(Testing);
-    DHT::Update_Time(Testing);
+    Testing.id.top = SELF->top;
+    Testing.id.mid = SELF->mid;
+    Testing.id.bot = SELF->bot;
 
-    Testing.id.bot = tmp_bot;
+    tmp_top = 1;
+    for(int i=0; i<64; i++)
+    {
+        Testing.id.top = SELF->top ^ (tmp_top);
+        tmp_top = tmp_top<<1;
+        std::cout << tmp_top << " is what we are sending\n";
+        Update_Time(Testing);
 
-    // VVVV
-    DHT::Update_Time(Testing);
-    DHT::Update_Time(Testing);
+    }
+    ard = Testing;
+    Testing.id.top = SELF->top;
+    tmp_mid = 1;
+    for(int i=0; i<64; i++)
+    {
+        Testing.id.mid = SELF->mid ^ (tmp_mid);
+        tmp_mid = tmp_mid<<1;
+        //std::cout << tmp_top << " is what we are sending\n";
+        Update_Time(Testing);
+
+    }
+
+    Testing.id.mid = SELF->mid;
+    tmp_bot = 1;
+    for(int i=0; i<32; i++)
+    {
+        Testing.id.bot = SELF->bot ^ (tmp_bot);
+        tmp_bot = tmp_bot<<1;
+        //std::cout << tmp_top << " is what we are sending\n";
+        Update_Time(Testing);
+
+    }
+        //^^^^^^
+    //This puts one entry into every k-bucket
 
 
-    //std::cout << "Hello";
-    //DHT::Print_DHT();
+    three_DHT asdf = Lookup(ard.id);
+    for(int i=0;i<3;i++)
+    {
+
+        std::cout << "Lookup \n";
+        std::cout << std::hex << asdf.entry[i].id.top <<
+                             std::hex << asdf.entry[i].id.mid <<
+                             std::hex << asdf.entry[i].id.bot << std::endl;
+
+    }
 
 
     return 0;
