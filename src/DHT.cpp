@@ -4,11 +4,45 @@
 #include <iostream>
 #include <time.h>
 #include <bits/stdc++.h>
+#include <mutex>
+
 
 using namespace paft;
 
 DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
 _160bitnumber* DHT::SELF = new _160bitnumber;
+std::mutex* DHT::mutex_All = new std::mutex[160*20];
+
+
+
+DHT_Single_Entry DHT::Access_DHT(int position)
+{
+    if((position >= 160*20) | (position<0))
+    {
+        std::cout << "Position " << position << " is not valid!!!\n";
+        throw std::invalid_argument( "Position is not valid" );
+    }
+
+    mutex_All[position].lock();
+    DHT_Single_Entry tmp = DHT_ALL[position];
+    mutex_All[position].unlock();
+
+    return tmp;
+}
+
+void DHT::Write_To_DHT(DHT_Single_Entry write, int position)
+{
+    if((position >= 160*20) | (position<0))
+    {
+        std::cout << "Position " << position << " is not valid!!!\n";
+        throw std::invalid_argument( "Position is not valid" );
+    }
+
+    mutex_All[position].lock();
+    DHT_ALL[position] = write;
+    mutex_All[position].unlock();
+}
+
 
 
 //Returns true if the first id is closer to the compare_To false otherwise
@@ -60,39 +94,41 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 
 
     DHT_Single_Entry tmp, tmp2;
+    DHT_Single_Entry access;
     for(int i=0;i<20;i++)
     {
-        if(DHT::DHT_ALL[bucket*20+i].is_set)
+        access = Access_DHT(bucket*20+i);
+        if(access.is_set)
         {
             if(closest.entry[0].is_set)
             {
-                if(Compare(DHT::DHT_ALL[bucket*20+i].id,closest.entry[0].id, id))
+                if(Compare(access.id,closest.entry[0].id, id))
                 {
                     //The new DHT_ALL is closer then closest.entry[0]
                     //Move set the closest[0] and move the rest down
                     tmp = closest.entry[0];
-                    closest.entry[0] = DHT::DHT_ALL[bucket*20+i];
+                    closest.entry[0] = access;
                     tmp2 = closest.entry[1];
                     closest.entry[1] = tmp;
                     closest.entry[2] = tmp2;
                 }
-                else if(Compare(DHT::DHT_ALL[bucket*20+i].id,closest.entry[1].id, id))
+                else if(Compare(access.id,closest.entry[1].id, id))
                 {
                     tmp = closest.entry[1];
-                    closest.entry[1] = DHT::DHT_ALL[bucket*20+i];
+                    closest.entry[1] = access;
                     closest.entry[2] = tmp;
 
                 }
-                else if(Compare(DHT::DHT_ALL[bucket*20+i].id,closest.entry[2].id, id))
+                else if(Compare(access.id,closest.entry[2].id, id))
                 {
-                    closest.entry[2] = DHT::DHT_ALL[bucket*20+i];
+                    closest.entry[2] = access;
 
                 }
 
             }
             else
             {
-                closest.entry[0] = DHT::DHT_ALL[bucket*20+i];
+                closest.entry[0] = access;
 
             }
 
@@ -338,12 +374,15 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
     for(int i=0; i<20; i++)
     {
+        DHT_Single_Entry tmp = Access_DHT(distance*20+i);
 
-        if(DHT::DHT_ALL[(distance*20)+i].is_set == true)
+        if(tmp.is_set == true)
         {
-            if(DHT::DHT_ALL[(distance*20)+i].id.top == Update.id.top && DHT::DHT_ALL[(distance*20)+i].id.mid == Update.id.mid && DHT::DHT_ALL[(distance*20)+i].id.bot == Update.id.bot)
+            if(tmp.id.top == Update.id.top && tmp.id.mid == Update.id.mid && tmp.id.bot == Update.id.bot)
             {
-                DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0)+60*60; // 1 hour
+                Update.time_To_Timeout = time(0)+60*60; // 1 hour
+                Write_To_DHT(tmp, distance*20+i);
+                //DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0)+60*60; // 1 hour
                 //std::cout << "Duplicate " << distance << "\n";
                 return;
             }
@@ -393,12 +432,16 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 
     for(int i=0; i<20; i++)
     {
+        DHT_Single_Entry tmp = Access_DHT(distance*20+i);
 
-        if(DHT::DHT_ALL[(distance*20)+i].is_set == false)
+        if(tmp.is_set == false)
         {
-            DHT::DHT_ALL[(distance*20)+i] = Entry;
-            DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0);
-            DHT::DHT_ALL[(distance*20)+i].is_set = true;
+            //DHT::DHT_ALL[(distance*20)+i] = Entry;
+            //DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0);
+            //DHT::DHT_ALL[(distance*20)+i].is_set = true;
+            Entry.is_set = true;
+            Entry.time_To_Timeout = time(0)+60*60; //1 Hour
+            Write_To_DHT(Entry, distance*20+i);
             std::cout << "Inserted Entry in " << distance << std::endl;
             break;
         }
@@ -446,6 +489,8 @@ int DHT::Test_Add_Entry()
         tmp_top = tmp_top<<1;
         std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
+        //Testing.id.top += 1;
+        //Update_Time(Testing);
 
     }
     ard = Testing;
@@ -457,6 +502,8 @@ int DHT::Test_Add_Entry()
         tmp_mid = tmp_mid<<1;
         //std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
+        //Testing.id.mid +=1;
+        //Update_Time(Testing);
 
     }
 
@@ -468,6 +515,8 @@ int DHT::Test_Add_Entry()
         tmp_bot = tmp_bot<<1;
         //std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
+        //Testing.id.bot += 1;
+        //Update_Time(Testing);
 
     }
         //^^^^^^
@@ -496,13 +545,14 @@ void DHT::Print_DHT()
     {
         for(int j=0;j<20;j++)
         {
-            if(DHT::DHT_ALL[i*20+j].is_set)
+            DHT_Single_Entry tmp = Access_DHT(20*i+j);
+            if(tmp.is_set)
             {
-                std::cout << std::hex << DHT::DHT_ALL[i*20+j].id.top <<
-                             std::hex << DHT::DHT_ALL[i*20+j].id.mid <<
-                             std::hex << DHT::DHT_ALL[i*20+j].id.bot;
+                std::cout << std::hex << tmp.id.top <<
+                             std::hex << tmp.id.mid <<
+                             std::hex << tmp.id.bot;
                 std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time "<<
-                ctime(&DHT::DHT_ALL[i*20+j].time_To_Timeout ); //ctime has a \n at the end
+                ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
             }
                 else
             {
@@ -514,8 +564,6 @@ void DHT::Print_DHT()
         }
 
     }
-
-    //DHT::DHT_ALL[(distance*20)+i]
 
 
     return;

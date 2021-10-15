@@ -2,6 +2,7 @@
 #define __PAFT_DHT_H
 
 #include <stdint.h>
+#include <mutex>
 
 
 typedef struct
@@ -41,6 +42,7 @@ namespace paft
     private:
         //Use keyword new to put on the heap
         static DHT_Single_Entry* DHT_ALL;// = new DHT_Single_Entry[160*20];
+        static std::mutex* mutex_All;
         /*
             160 is for every bit for matching (the same ID as SELF)
             20 is a server wide amount to keep that should be enough to never allow a section to go offline
@@ -54,6 +56,8 @@ namespace paft
         static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);
 
     public:
+        static void Write_To_DHT(DHT_Single_Entry write, int position);
+        static DHT_Single_Entry Access_DHT(int position);
         static int Log2(unsigned long long int n);
         static void Init();
 
