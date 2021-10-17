@@ -10,8 +10,152 @@
 using namespace paft;
 
 DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
+DHT_Single_Entry* DHT::FileIds = new DHT_Single_Entry[100]; //Temporarily as 100, might need to change later
 _160bitnumber* DHT::SELF = new _160bitnumber;
 std::mutex* DHT::mutex_All = new std::mutex[160*20];
+std::mutex* DHT::mutex_FileIds = new std::mutex[100];
+
+
+
+void DHT::Store_FileId(DHT_Single_Entry entry)
+{
+    //This stores the FileId if there is less then 3 entries already for that ID
+    //And does not write anything otherwise-or if its full
+
+
+    int i=0;
+    int counter=0;
+    int first_pos=-1;
+    while(i<100 & counter<3)
+    {
+        DHT_Single_Entry tmp = entry;
+        if(tmp.is_set)
+        {
+            if(IsEqual(tmp.id, entry.id))
+            {
+                counter++;
+            }
+
+        }
+        else
+        {
+            if(first_pos == -1)
+            {
+                first_pos=i;
+            }
+        }
+        i++;
+
+
+    }
+    if(counter >= 3)
+    {
+        return;
+    }
+    if(first_pos != 1)
+        Write_To_FileIds(entry,first_pos);
+
+}
+
+
+
+DHT_Single_Entry DHT::Access_FileIds(int position)
+{
+    if((position >= 100) | (position<0))
+    {
+        std::cout << "Position " << position << " is not valid!!!\n";
+        throw std::invalid_argument( "Position is not valid" );
+    }
+
+    mutex_FileIds[position].lock();
+    DHT_Single_Entry tmp = FileIds[position];
+    mutex_FileIds[position].unlock();
+
+    return tmp;
+}
+
+void DHT::Write_To_FileIds(DHT_Single_Entry write, int position)
+{
+    if((position >= 100) | (position<0))
+    {
+        std::cout << "Position " << position << " is not valid!!!\n";
+        throw std::invalid_argument( "Position is not valid" );
+    }
+
+    mutex_FileIds[position].lock();
+    FileIds[position] = write;
+    mutex_FileIds[position].unlock();
+}
+
+
+
+
+
+
+bool DHT::IsEqual(_160bitnumber id,_160bitnumber id2)
+{
+    if(id.top == id2.top)
+    {
+        if(id.mid == id2.mid)
+        {
+
+            if(id.bot == id2.bot)
+            {
+                return true;
+            }
+        }
+
+    }
+    return false;
+
+
+}
+
+three_DHT DHT::Find_Value(_160bitnumber id)
+{
+    //Returns a three_DHT either an exact match in the FileIds or the closest peers
+    //(In that order)
+
+    three_DHT closest;
+    int closest_counter=0;
+
+    for(int i=0;i<100;i++)
+    {
+        DHT_Single_Entry tmp = Access_FileIds(i);
+        if(tmp.is_set)
+        {
+            if(IsEqual(id, tmp.id))
+            {
+                closest.entry[closest_counter] = tmp;
+                closest_counter++;
+
+            }
+
+        }
+
+    }
+
+    if(closest_counter == 0)
+        return Lookup(id);
+    else if(closest_counter >=3)
+        return closest;
+    else
+    {
+        int tmp_counter=0;
+        three_DHT tmp = Lookup(id);
+        while(closest_counter<3)
+        {
+            closest.entry[closest_counter] = tmp.entry[tmp_counter];
+            tmp_counter++;
+            closest_counter++;
+
+        }
+    }
+    return closest;
+
+
+
+}
 
 
 
@@ -416,6 +560,7 @@ void DHT::Init(){
     SELF->bot = gen() >> 32;
 
     std::cout << SELF->top << "  "<< SELF->mid << "  "<< SELF->bot << "  "<<std::endl;
+
 
 
 

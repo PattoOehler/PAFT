@@ -43,6 +43,8 @@ namespace paft
         //Use keyword new to put on the heap
         static DHT_Single_Entry* DHT_ALL;// = new DHT_Single_Entry[160*20];
         static std::mutex* mutex_All;
+        static std::mutex* mutex_FileIds;
+        static DHT_Single_Entry* FileIds;
         /*
             160 is for every bit for matching (the same ID as SELF)
             20 is a server wide amount to keep that should be enough to never allow a section to go offline
@@ -54,8 +56,13 @@ namespace paft
         static int Add_Entry(DHT_Single_Entry Entry);
         static three_DHT Lookup_One_Bucket(_160bitnumber id, int bucket);
         static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);
+        static DHT_Single_Entry Access_FileIds(int position);
+        static void Write_To_FileIds(DHT_Single_Entry write, int position);
 
     public:
+        static void Store_FileId(DHT_Single_Entry entry);
+        static three_DHT Find_Value(_160bitnumber id);
+        static bool IsEqual(_160bitnumber id,_160bitnumber id2);
         static void Write_To_DHT(DHT_Single_Entry write, int position);
         static DHT_Single_Entry Access_DHT(int position);
         static int Log2(unsigned long long int n);
