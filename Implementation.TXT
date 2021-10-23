@@ -1,0 +1,2 @@
+The only times the DHT should be updated are when receiving a command( Connection::Recv_Command ),
+or when sending a command and getting a responce with their 160Bit ID within.

@@ -1,10 +1,13 @@
 #ifndef __PAFT_CONNECTION_H
 #define __PAFT_CONNECTION_H
 
+
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <winsock.h>
+
+
 
 namespace paft{
     class Connection

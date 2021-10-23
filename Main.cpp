@@ -10,8 +10,8 @@ int main()
     //paft::DHT dht;
 
     paft::DHT::Init();
-    paft::DHT::Test_Add_Entry();
-    paft::DHT::Print_DHT();
+    //paft::DHT::Test_Add_Entry();
+    //paft::DHT::Print_DHT();
 
     //dht.Test_Add_Entry();
 

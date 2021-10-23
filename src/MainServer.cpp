@@ -16,106 +16,6 @@
 
 
 using namespace paft;
-/*
-REMOVE SOON TODO -- DEPRECIATED FUNCTION
-// our thread for recving commands
-//DWORD WINAPI MainServer::receive_cmds(LPVOID lpParam)
-void MainServer::receive_cmds(LPVOID lpParam)
-{
-  printf("thread created\r\n");
-
-  // set our socket to the socket passed in as a parameter
-  SOCKET current_client = (SOCKET)lpParam;
-  printf("Current client is %i\n", (SOCKET)lpParam);
-
-  // buffer to hold our recived data
-  char buf[100];
-  // buffer to hold our sent data
-  char sendData[100];
-  // for error checking
-  int res;
-
-  // our recv loop
-  while(true)
-  {
-     res = recv(current_client,buf,sizeof(buf),0); // recv cmds
-     Sleep(15);
-
-     if(res == 0)
-     {
-      //MessageBox(0,"error","error",MB_OK);
-      closesocket(current_client);
-      ExitThread(0);
-     }
-
-
-    if(buf[0] == 0x01)
-    {
-        //Client is asking for file
-        std::cout << "Client is asking for a file named " << buf +1 << std::endl; //buf[0] is the command byte
-        //strcpy(sendData,"1234567891011121314151617181920");
-        MainServer::Send_File((LPVOID)current_client);
-        shutdown(current_client, SD_SEND);
-
-    }
-    else
-     {
-       strcpy(sendData,"Invalid cmd\n");
-       Sleep(10);
-       send(current_client,sendData,sizeof(sendData),0);
-
-     }
-
-     // clear buffers
-       strcpy(sendData,"");
-       strcpy(buf,"");
-   }
-}
-
-int MainServer::Send_File(LPVOID lpParam)
-{
-    // set our socket to the socket passed in as a parameter
-    SOCKET current_client = (SOCKET)lpParam;
-
-    static char FileName[] = "SERVER_FILES/asdf.txt";  //TODO replace with the file gathered in MainServer::receive_cmds()
-
-    char Filebuf[512];
-    FILE *asdf = fopen( FileName, "rb" );
-
-
-    fseek(asdf, 0L, SEEK_END);
-    int filesize = ftell(asdf);
-
-    int counter=0;
-    while(filesize > 512*counter)
-    {
-
-        if(counter == 0)
-            fseek(asdf, 0, SEEK_SET);
-        //fgets(Filebuf, 512, (FILE*)asdf);
-        fread(Filebuf, 512, 1, (FILE*)asdf);
-
-
-        //Calculate how many bytes are going to be sent
-        int Bytes_To_Send=512;
-        if(filesize-512 < 512*counter)
-            Bytes_To_Send = filesize - (512*counter);
-
-        send(current_client,Filebuf,Bytes_To_Send,0);
-        counter++;
-        std::cout << "filesize = " << filesize << " and counter*512 = " << 512*counter << std::endl;
-        Sleep(10);
-        if(filesize > 512*counter)
-            std::cout << "HuRRay we going again in the server\n";
-
-    }
-
-    Sleep(20);
-    fclose(asdf);
-
-    return 0;
-}
-*/
 
 
 int MainServer::Start_Server(int a)
@@ -178,7 +78,9 @@ int MainServer::Start_Server(int a)
   // accept connections
   client = accept(sock,(struct sockaddr*)&from,&fromlen);
   printf("Client connected\r\n");
-
+  longsocket *a = new longsocket;
+  a->client = client;
+  a->from = from;
   //paft::Connection *Connect = new paft::Connection();
 
 
@@ -186,7 +88,7 @@ int MainServer::Start_Server(int a)
   //CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&receive_cmds,(LPVOID)client, 0, &thread);
   //For some reason this doesn't work with objects
   //Going to make the connection class all static
-  CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Recv_Command,(LPVOID)client, 0, &thread);
+  CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Recv_Command,(LPVOID)a, 0, &thread);
  }
 
  // shutdown winsock

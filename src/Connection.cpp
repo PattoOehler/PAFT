@@ -1,4 +1,6 @@
 #include "Connection.h"
+#include "MainServer.h"
+#include "../include/dht.h"
 
 #include <winsock2.h>
 #include <windows.h>
@@ -72,7 +74,7 @@ void Connection::Send_File(LPVOID lpParam)
 
         send(current_client,Filebuf,Bytes_To_Send,0);
         counter++;
-        std::cout << "filesize = " << filesize << " and counter*512 = " << 512*counter << std::endl;
+        //std::cout << "filesize = " << filesize << " and counter*512 = " << 512*counter << std::endl;
         Sleep(10);
 
 
@@ -89,16 +91,22 @@ void Connection::Send_File(LPVOID lpParam)
 
 void Connection::Recv_Command(LPVOID lpParam)
 {
+    //This method should always update the DHT
 
-    if((SOCKET)lpParam == INVALID_SOCKET)
+
+    //casting to longclient
+    longsocket long_client = *(longsocket *)(lpParam);
+
+    SOCKET current_client = long_client.client;
+
+    if((current_client == INVALID_SOCKET))
         printf("INVALID SOCKET\n");
 
 
     printf("Recv_Command \n");
     printf("thread created\r\n");
 
-    // set our socket to the socket passed in as a parameter
-    SOCKET current_client = (SOCKET)lpParam;
+
 
     // buffer to hold our recived data
     char buf[100];
@@ -111,7 +119,7 @@ void Connection::Recv_Command(LPVOID lpParam)
     while(true)
     {
 
-        res = recv(current_client,buf,sizeof(buf),0); // recv cmds
+        res = recv(current_client,buf,sizeof(buf) ,0); // recv cmds
         Sleep(10);
 
         if(res == 0)
@@ -123,14 +131,31 @@ void Connection::Recv_Command(LPVOID lpParam)
         }
 
 
+        _160bitnumber a;
+        if(res >= 21)
+        {
+            memcpy((void*)&a, buf+1, 20);
+        }
+        else
+        {
+            std::cout << "Sender did not send both their command and id. Exiting...\n";
+            strcpy(sendData,"Invalid cmd\n");
+            shutdown(current_client, SD_SEND);
+            ExitThread(0);
+
+        }
+
 
 
         if(buf[0] == 0x01)
         {
             //Client is asking for file
+            _160bitnumber a;
+            memcpy((void*)&a, buf+1, 20);
+            std::cout << a.top << ' ' << a.mid << ' ' << a.bot << '\n';
 
 
-            std::cout << "Client is asking for a file named " << buf +1 << std::endl; //buf[0] is the command byte
+            //std::cout << "Client is asking for a file named " << buf +1 << std::endl; //buf[0] is the command byte
             Connection::Send_File((LPVOID)current_client);
             shutdown(current_client, SD_SEND);
 
@@ -138,7 +163,7 @@ void Connection::Recv_Command(LPVOID lpParam)
         else if(buf[0] == 0x02)
         {
             //Pinging
-            std::cout << "Client is asking for a ping responce " << buf +1 << std::endl;
+            std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
             Connection::Ping((LPVOID)current_client);
 
 
@@ -156,4 +181,5 @@ void Connection::Recv_Command(LPVOID lpParam)
         strcpy(sendData,"");
         strcpy(buf,"");
    }
+
 }

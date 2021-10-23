@@ -26,7 +26,7 @@ void DHT::Store_FileId(DHT_Single_Entry entry)
     int i=0;
     int counter=0;
     int first_pos=-1;
-    while(i<100 & counter<3)
+    while((i<100) & (counter<3))
     {
         DHT_Single_Entry tmp = entry;
         if(tmp.is_set)
@@ -559,7 +559,7 @@ void DHT::Init(){
 
     SELF->bot = gen() >> 32;
 
-    std::cout << SELF->top << "  "<< SELF->mid << "  "<< SELF->bot << "  "<<std::endl;
+    std::cout << SELF->top << " "<< SELF->mid << " "<< SELF->bot << std::endl;
 
 
 
@@ -567,6 +567,13 @@ void DHT::Init(){
     return;
 }
 
+
+
+_160bitnumber DHT::Get_SELF()
+{
+    return *SELF;
+
+}
 
 
 int DHT::Add_Entry(DHT_Single_Entry Entry)

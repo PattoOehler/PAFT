@@ -1,5 +1,6 @@
 
 #include "../include/Main_Client.h"
+#include "../include/DHT.h"
 
 #include <iostream>
 
@@ -42,7 +43,9 @@ int MainClient::Ping()
 
     //Get the ping back
     iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
-    std::cout << "Got a ping back saying " << recvbuf << std::endl;
+
+    if(iResult != 0)
+        std::cout << "Got a ping back saying " << recvbuf << std::endl;
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(Socket, SD_SEND);
@@ -79,15 +82,23 @@ int MainClient::Ping()
 
 int MainClient::GetFile(char *filename)
 {
+    // \x01 is the command byte
+    //const char *sendbuf = "\x01Hello.txt\x00";  //TODO REMOVE WITH filename
 
-    const char *sendbuf = "\x01Hello.txt\x00";  //TODO REMOVE WITH filename
+    char command[21];
+    command[0] = '\x01';
+    _160bitnumber self = DHT::Get_SELF();
+    memcpy(command+1, (char*)&self, 20); // 160/8=20
+
+    std::cout << self.top << ' ' << self.mid << ' ' << self.bot << '\n';
+
 
     Sleep(1);
     printf("SENDING!!---------------------------------------------\n");
 
 
     // Send a buffer telling the server to send a file
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    int iResult = send( Socket, command, (int)strlen(command), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
         closesocket(Socket);

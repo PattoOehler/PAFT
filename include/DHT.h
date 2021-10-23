@@ -60,6 +60,7 @@ namespace paft
         static void Write_To_FileIds(DHT_Single_Entry write, int position);
 
     public:
+        static _160bitnumber Get_SELF();
         static void Store_FileId(DHT_Single_Entry entry);
         static three_DHT Find_Value(_160bitnumber id);
         static bool IsEqual(_160bitnumber id,_160bitnumber id2);
