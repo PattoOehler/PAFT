@@ -82,89 +82,26 @@ void Connection::Send_File(LPVOID lpParam)
 
     Sleep(20);
     fclose(asdf);
-
-    //return 0;
 }
 
 
-
-
-void Connection::Recv_Command(LPVOID lpParam)
+void Connection::Run_Proper_Command(char *buf, longsocket long_client)
 {
-    //This method should always update the DHT
-
-
-    //casting to longclient
-    longsocket long_client = *(longsocket *)(lpParam);
-
-    SOCKET current_client = long_client.client;
-
-    if((current_client == INVALID_SOCKET))
-        printf("INVALID SOCKET\n");
-
-
-    printf("Recv_Command \n");
-    printf("thread created\r\n");
-
-
-
-    // buffer to hold our recived data
-    char buf[100];
-    // buffer to hold our sent data
     char sendData[100];
-    // for error checking
-    int res;
 
-    // our recv loop
-    while(true)
-    {
-
-        res = recv(current_client,buf,sizeof(buf) ,0); // recv cmds
-        Sleep(10);
-
-        if(res == 0)
-        {
-            printf("Closing the socket\n");
-            closesocket(current_client);
-            //printf("%i\n", WSAGetLastError());
-            ExitThread(0);
-        }
-
-
-        _160bitnumber a;
-        if(res >= 21)
-        {
-            memcpy((void*)&a, buf+1, 20);
-        }
-        else
-        {
-            std::cout << "Sender did not send both their command and id. Exiting...\n";
-            strcpy(sendData,"Invalid cmd\n");
-            shutdown(current_client, SD_SEND);
-            ExitThread(0);
-
-        }
-
-
-
-        if(buf[0] == 0x01)
+    if(buf[0] == 0x01)
         {
             //Client is asking for file
-            _160bitnumber a;
-            memcpy((void*)&a, buf+1, 20);
-            std::cout << a.top << ' ' << a.mid << ' ' << a.bot << '\n';
 
-
-            //std::cout << "Client is asking for a file named " << buf +1 << std::endl; //buf[0] is the command byte
-            Connection::Send_File((LPVOID)current_client);
-            shutdown(current_client, SD_SEND);
+            Connection::Send_File((LPVOID)long_client.client);
+            shutdown(long_client.client, SD_SEND);
 
         }
         else if(buf[0] == 0x02)
         {
             //Pinging
-            std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
-            Connection::Ping((LPVOID)current_client);
+            //std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
+            Connection::Ping((LPVOID)long_client.client);
 
 
         }
@@ -173,13 +110,54 @@ void Connection::Recv_Command(LPVOID lpParam)
             printf("Invalid cmd %x\n", buf[1]);
             strcpy(sendData,"Invalid cmd\n");
             Sleep(10);
-            send(current_client,sendData,sizeof(sendData),0);
+            send(long_client.client,sendData,sizeof(sendData),0);
 
         }
 
+
+}
+
+void Connection::Handle_Client(LPVOID lpParam)
+{
+    //This method should always update the DHT
+
+    //casting to longsocket
+    longsocket long_client = *(longsocket *)(lpParam);
+
+    if((long_client.client == INVALID_SOCKET))
+        printf("INVALID SOCKET\n");
+
+    char receivedData[100];
+    int res;
+    while(true)
+    {
+
+        res = recv(long_client.client,receivedData,sizeof(receivedData) ,0); // recv cmds
+        Sleep(10);
+
+        if(res == 0)
+        {
+            closesocket(long_client.client);
+            ExitThread(0);
+        }
+
+
+        _160bitnumber a;
+        if(res >= 21)
+        {
+            memcpy((void*)&a, receivedData+1, 20);
+        }
+        else
+        {
+            std::cout << "Sender did not send both their command and id. Exiting...\n";
+            shutdown(long_client.client, SD_SEND);
+            ExitThread(0);
+
+        }
+        Run_Proper_Command( receivedData, long_client);
+
         // clear buffers
-        strcpy(sendData,"");
-        strcpy(buf,"");
+        strcpy(receivedData,"");
    }
 
 }

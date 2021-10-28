@@ -166,7 +166,7 @@
 	<stdint.h>
 	<mutex>
 
-1634953280 source:c:\users\peyto-w\desktop\paft\github\paft\src\connection.cpp
+1635393002 source:c:\users\peyto-w\desktop\paft\github\paft\src\connection.cpp
 	"Connection.h"
 	"MainServer.h"
 	"../include/dht.h"
@@ -178,13 +178,14 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1634950902 c:\users\peyto-w\desktop\paft\github\paft\include\connection.h
+1635391528 c:\users\peyto-w\desktop\paft\github\paft\include\connection.h
 	<windows.h>
 	<stdlib.h>
 	<stdio.h>
 	<winsock.h>
+	"MainServer.h"
 
-1634950466 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht.cpp
+1634954831 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht.cpp
 	"../include/DHT.h"
 	<random>
 	<iostream>
@@ -205,7 +206,7 @@
 1633486286 c:\users\peyto-w\desktop\paft\github\paft\include\main_client.h
 	<winsock2.h>
 
-1634864236 source:c:\users\peyto-w\desktop\paft\github\paft\src\mainserver.cpp
+1635390813 source:c:\users\peyto-w\desktop\paft\github\paft\src\mainserver.cpp
 	"../include/MainServer.h"
 	"../include/Connection.h"
 	<winsock2.h>

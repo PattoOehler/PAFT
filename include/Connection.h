@@ -6,19 +6,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <winsock.h>
+#include "MainServer.h"
 
 
 
 namespace paft{
     class Connection
     {
-        public:
-            Connection();
-            virtual ~Connection();
+    private:
+        static void Run_Proper_Command(char *buf, longsocket long_client);
 
-            static void Recv_Command(LPVOID lpParam);
-            static void Send_File(LPVOID lpParam);
-            static void Ping(LPVOID lpParam);
+
+    public:
+        Connection();
+        virtual ~Connection();
+
+        static void Handle_Client(LPVOID lpParam);
+        static void Send_File(LPVOID lpParam);
+        static void Ping(LPVOID lpParam);
 
 
     };

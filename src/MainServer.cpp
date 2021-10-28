@@ -88,7 +88,7 @@ int MainServer::Start_Server(int a)
   //CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&receive_cmds,(LPVOID)client, 0, &thread);
   //For some reason this doesn't work with objects
   //Going to make the connection class all static
-  CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Recv_Command,(LPVOID)a, 0, &thread);
+  CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Handle_Client,(LPVOID)a, 0, &thread);
  }
 
  // shutdown winsock
