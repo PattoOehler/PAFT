@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include <mutex>
+#include <winsock.h>
+
 
 
 typedef struct
@@ -17,7 +19,7 @@ typedef struct
 }_160bitnumber;
 typedef struct
 {
-    uint32_t addr;//IP Addr
+    in_addr addr;//IP Addr
     unsigned short int port =0;//Port
     _160bitnumber id;//160bit ID
     bool is_set = false;

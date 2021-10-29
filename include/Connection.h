@@ -15,7 +15,7 @@ namespace paft{
     {
     private:
         static void Run_Proper_Command(char *buf, longsocket long_client);
-
+        static void Update_DHT(longsocket client, char *recvdata);
 
     public:
         Connection();

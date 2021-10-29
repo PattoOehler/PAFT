@@ -117,6 +117,23 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client)
 
 }
 
+void Connection::Update_DHT(longsocket client, char *recvdata)
+{
+    _160bitnumber sender_Id;
+    memcpy((void*)&sender_Id, recvdata+1, 20);
+
+    DHT_Single_Entry sender_DHT_Entry;
+    sender_DHT_Entry.addr = client.from.sin_addr;
+    sender_DHT_Entry.id = sender_Id;
+    sender_DHT_Entry.port = 1234;
+    sender_DHT_Entry.is_set = true;
+
+
+    DHT::Update_Time(sender_DHT_Entry);
+
+}
+
+
 void Connection::Handle_Client(LPVOID lpParam)
 {
     //This method should always update the DHT
@@ -128,36 +145,17 @@ void Connection::Handle_Client(LPVOID lpParam)
         printf("INVALID SOCKET\n");
 
     char receivedData[100];
-    int res;
-    while(true)
+    int res = recv(long_client.client,receivedData,sizeof(receivedData) ,0); // recv cmds
+
+    if(res <= 20)
     {
+        std::cout << "Error with message. Exiting...\n";
+        closesocket(long_client.client);
+        ExitThread(0);
+    }
 
-        res = recv(long_client.client,receivedData,sizeof(receivedData) ,0); // recv cmds
-        Sleep(10);
+    Update_DHT(long_client, receivedData);
+    Run_Proper_Command( receivedData, long_client);
 
-        if(res == 0)
-        {
-            closesocket(long_client.client);
-            ExitThread(0);
-        }
-
-
-        _160bitnumber a;
-        if(res >= 21)
-        {
-            memcpy((void*)&a, receivedData+1, 20);
-        }
-        else
-        {
-            std::cout << "Sender did not send both their command and id. Exiting...\n";
-            shutdown(long_client.client, SD_SEND);
-            ExitThread(0);
-
-        }
-        Run_Proper_Command( receivedData, long_client);
-
-        // clear buffers
-        strcpy(receivedData,"");
-   }
 
 }

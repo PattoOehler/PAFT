@@ -525,9 +525,8 @@ void DHT::Update_Time(DHT_Single_Entry Update)
             if(tmp.id.top == Update.id.top && tmp.id.mid == Update.id.mid && tmp.id.bot == Update.id.bot)
             {
                 Update.time_To_Timeout = time(0)+60*60; // 1 hour
-                Write_To_DHT(tmp, distance*20+i);
-                //DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0)+60*60; // 1 hour
-                //std::cout << "Duplicate " << distance << "\n";
+                Write_To_DHT(Update, distance*20+i);
+
                 return;
             }
 
