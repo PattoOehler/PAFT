@@ -29,7 +29,14 @@ using namespace paft;
 
 int MainClient::Ping()
 {
-    const char *sendbuf = "\x02Pinging bro\0";
+
+    char sendbuf[21];
+    sendbuf[0] = 0x02;
+
+    _160bitnumber self = DHT::Get_SELF();
+    memcpy(sendbuf+1, (char*)&self, 20); // 160/8=20
+
+
     int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
@@ -40,12 +47,13 @@ int MainClient::Ping()
 
 
     char recvbuf[DEFAULT_BUFLEN];
-
+    Sleep(10);
     //Get the ping back
     iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
 
     if(iResult != 0)
         std::cout << "Got a ping back saying " << recvbuf << std::endl;
+
 
     // shutdown the connection since no more data will be sent
     iResult = shutdown(Socket, SD_SEND);
@@ -60,7 +68,6 @@ int MainClient::Ping()
 
     // Receive until the peer closes the connection
     do {
-
         iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
         if ( iResult > 0 )
             printf("Bytes received: %d\n", iResult);

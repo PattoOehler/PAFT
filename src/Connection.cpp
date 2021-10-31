@@ -102,22 +102,40 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client)
             //Pinging
             //std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
             Connection::Ping((LPVOID)long_client.client);
+            shutdown(long_client.client, SD_SEND);
+
+        }
+        else if(buf[0] == 0x03)
+        {
+            //Lookup Peer
+            std::cout << "Client is asking to lookup a peer \n";
+            std::cout << "NOT IMPLEMTNED YET \n";
+
+
+        }
+        else if(buf[0] == 0x04)
+        {
+            //Lookup File
+            std::cout << "Client is asking to lookup a file \n";
+
+            std::cout << "NOT IMPLEMTNED YET \n";
 
 
         }
         else
         {
-            printf("Invalid cmd %x\n", buf[1]);
+            printf("Invalid cmd %x\n", buf[0]);
             strcpy(sendData,"Invalid cmd\n");
             Sleep(10);
             send(long_client.client,sendData,sizeof(sendData),0);
+            shutdown(long_client.client, SD_SEND);
 
         }
 
 
 }
 
-void Connection::Update_DHT(longsocket client, char *recvdata)
+void Connection::Update_DHT(longsocket client, char recvdata[])
 {
     _160bitnumber sender_Id;
     memcpy((void*)&sender_Id, recvdata+1, 20);
