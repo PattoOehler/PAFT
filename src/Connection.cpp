@@ -3,10 +3,11 @@
 #include "../include/dht.h"
 
 #include <winsock2.h>
+#include <winsock.h>
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <winsock.h>
+
 
 #include <ws2tcpip.h>
 
@@ -35,8 +36,16 @@ void Connection::Ping(LPVOID lpParam)
     SOCKET current_client = (SOCKET)lpParam;
 
 
-    char sendbuf[] = "Pinging back message\0";
-    send(current_client,sendbuf,21,0);
+    char sendbuf[22];
+    _160bitnumber self = DHT::Get_SELF();
+    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+    short unsigned int port = DHT::Get_Self_Port();
+    memcpy(sendbuf+20, (char*)&port, 2);
+
+    //std::cout << "The port to be sent(from DHT::Get_Self_Port) is " << std::dec << port << "\n";
+
+    send(current_client,sendbuf,22,0);
+
 
 
 }
@@ -94,7 +103,6 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client)
             //Client is asking for file
 
             Connection::Send_File((LPVOID)long_client.client);
-            shutdown(long_client.client, SD_SEND);
 
         }
         else if(buf[0] == 0x02)
@@ -102,7 +110,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client)
             //Pinging
             //std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
             Connection::Ping((LPVOID)long_client.client);
-            shutdown(long_client.client, SD_SEND);
+
 
         }
         else if(buf[0] == 0x03)
@@ -128,9 +136,10 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client)
             strcpy(sendData,"Invalid cmd\n");
             Sleep(10);
             send(long_client.client,sendData,sizeof(sendData),0);
-            shutdown(long_client.client, SD_SEND);
 
         }
+
+        shutdown(long_client.client, SD_SEND);
 
 
 }
@@ -146,7 +155,6 @@ void Connection::Update_DHT(longsocket client, char recvdata[])
     sender_DHT_Entry.port = 1234;
     sender_DHT_Entry.is_set = true;
 
-
     DHT::Update_Time(sender_DHT_Entry);
 
 }
@@ -160,14 +168,18 @@ void Connection::Handle_Client(LPVOID lpParam)
     longsocket long_client = *(longsocket *)(lpParam);
 
     if((long_client.client == INVALID_SOCKET))
-        printf("INVALID SOCKET\n");
+    {
+        std::cout << "INVALID SOCKET IN Connection::Handle_Client";
+        ExitThread(7);
+    }
+
 
     char receivedData[100];
     int res = recv(long_client.client,receivedData,sizeof(receivedData) ,0); // recv cmds
 
-    if(res <= 20)
+    if(res <= 22)
     {
-        std::cout << "Error with message. Exiting...\n";
+        std::cout << "Message length = " << res << ". Exiting...\n";
         closesocket(long_client.client);
         ExitThread(0);
     }

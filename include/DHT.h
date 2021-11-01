@@ -53,6 +53,7 @@ namespace paft
             we do want to keep all 160 because there can be overlaps in nums
         */
         static _160bitnumber* SELF;// = new _160bitnumber;
+        static unsigned short int SELF_PORT;
 
         static int Distance(_160bitnumber id, _160bitnumber id2);
         static int Add_Entry(DHT_Single_Entry Entry);
@@ -76,6 +77,9 @@ namespace paft
         static void Update_Time(DHT_Single_Entry Update);
         //static void Lookup  //Should return 3 Ip addrs +
         static three_DHT Lookup(_160bitnumber id);
+
+        static void Set_Self_Port(unsigned short int port);
+        static unsigned short int Get_Self_Port();
 
 
     };

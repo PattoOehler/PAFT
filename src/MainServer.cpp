@@ -1,12 +1,13 @@
 #include "../include/MainServer.h"
 #include "../include/Connection.h"
+#include "../include/DHT.h"
 
-
+#include <winsock.h>
 #include <winsock2.h>
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <winsock.h>
+
 
 #include <ws2tcpip.h>
 
@@ -42,6 +43,10 @@ int MainServer::Start_Server(int a)
  // fill in winsock struct ...
  server.sin_family=AF_INET;
  server.sin_addr.s_addr=INADDR_ANY;
+
+ unsigned short int b = 1234;
+ DHT::Set_Self_Port(b);
+ std::cout << "Get self port --->" << std::dec << DHT::Get_Self_Port() << "\n";
  server.sin_port=htons(1234); // listen on port
 
  // create our socket
@@ -81,13 +86,7 @@ int MainServer::Start_Server(int a)
   longsocket *a = new longsocket;
   a->client = client;
   a->from = from;
-  //paft::Connection *Connect = new paft::Connection();
 
-
-  // create our recv_cmds thread and parse client socket as a parameter
-  //CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&receive_cmds,(LPVOID)client, 0, &thread);
-  //For some reason this doesn't work with objects
-  //Going to make the connection class all static
   CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Handle_Client,(LPVOID)a, 0, &thread);
  }
 

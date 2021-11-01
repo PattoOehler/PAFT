@@ -9,6 +9,7 @@ namespace paft
     class MainClient{
     private:
         SOCKET Socket;
+        in_addr Server_IP;
 
     public:
         int GetFile(char *filename);

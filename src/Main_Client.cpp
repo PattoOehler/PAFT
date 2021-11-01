@@ -30,14 +30,17 @@ using namespace paft;
 int MainClient::Ping()
 {
 
-    char sendbuf[21];
+    char sendbuf[23];
     sendbuf[0] = 0x02;
 
     _160bitnumber self = DHT::Get_SELF();
     memcpy(sendbuf+1, (char*)&self, 20); // 160/8=20
-
+    short unsigned int port = DHT::Get_Self_Port();
+    memcpy(sendbuf+21, (char*)&port, 2);
 
     int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+
+
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
         closesocket(Socket);
@@ -50,9 +53,29 @@ int MainClient::Ping()
     Sleep(10);
     //Get the ping back
     iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    Sleep(10);
 
-    if(iResult != 0)
-        std::cout << "Got a ping back saying " << recvbuf << std::endl;
+    if(iResult >= 22)
+    //std::cout << "Got a ping back saying " << recvbuf << std::endl;
+    {
+        //std::cout << "Length " << std::dec << iResult << " good!!\n";
+        _160bitnumber sender_Id;
+        short unsigned int port;
+        memcpy((void*)&sender_Id, recvbuf, 20);
+        memcpy((void*)&port, recvbuf+20, 2);
+
+        //std::cout << "The port received is " << port << "\n";
+
+        DHT_Single_Entry sender_DHT_Entry;
+        sender_DHT_Entry.addr = Server_IP;
+        sender_DHT_Entry.id = sender_Id;
+        sender_DHT_Entry.port = port;
+        sender_DHT_Entry.is_set = true;
+
+
+        DHT::Update_Time(sender_DHT_Entry);
+    }
+
 
 
     // shutdown the connection since no more data will be sent
@@ -87,6 +110,7 @@ int MainClient::Ping()
 
 }
 
+//DEPRECIATED
 int MainClient::GetFile(char *filename)
 {
     // \x01 is the command byte
@@ -233,6 +257,11 @@ MainClient::MainClient(const char *addr, const char *port)
         exit(1);
     }
     MainClient::Socket = ConnectSocket;
+
+    unsigned long tmpa  = inet_addr(addr);
+    Server_IP = (in_addr&)tmpa;
+
+
 
 
 }

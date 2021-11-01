@@ -12,6 +12,7 @@ using namespace paft;
 DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
 DHT_Single_Entry* DHT::FileIds = new DHT_Single_Entry[100]; //Temporarily as 100, might need to change later
 _160bitnumber* DHT::SELF = new _160bitnumber;
+unsigned short int DHT::SELF_PORT = 1234; //Default value- should be set before accessed
 std::mutex* DHT::mutex_All = new std::mutex[160*20];
 std::mutex* DHT::mutex_FileIds = new std::mutex[100];
 
@@ -513,6 +514,7 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 void DHT::Update_Time(DHT_Single_Entry Update)
 {
 
+    std::cout << "Updating DHT with "  << inet_ntoa(Update.addr) <<":" << Update.port << "\n";
 
     int distance = Distance(Update.id, *SELF);
 
@@ -540,6 +542,18 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
 
 }
+
+void DHT::Set_Self_Port(unsigned short int port)
+{
+    SELF_PORT = port;
+
+}
+unsigned short int DHT::Get_Self_Port()
+{
+    return SELF_PORT;
+
+}
+
 
 
 
@@ -593,7 +607,6 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
             Entry.is_set = true;
             Entry.time_To_Timeout = time(0)+60*60; //1 Hour
             Write_To_DHT(Entry, distance*20+i);
-            std::cout << "Inserted Entry in " << distance << std::endl;
             break;
         }
         else

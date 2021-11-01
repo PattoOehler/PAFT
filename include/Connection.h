@@ -1,11 +1,10 @@
 #ifndef __PAFT_CONNECTION_H
 #define __PAFT_CONNECTION_H
 
-
+#include <winsock.h>
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <winsock.h>
 #include "MainServer.h"
 
 
