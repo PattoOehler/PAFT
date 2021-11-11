@@ -186,7 +186,7 @@
 	<stdio.h>
 	"MainServer.h"
 
-1635784669 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht.cpp
+1635785674 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht.cpp
 	"../include/DHT.h"
 	<random>
 	<iostream>
@@ -194,7 +194,7 @@
 	<bits/stdc++.h>
 	<mutex>
 
-1635785604 source:c:\users\peyto-w\desktop\paft\github\paft\src\main_client.cpp
+1636597770 source:c:\users\peyto-w\desktop\paft\github\paft\src\main_client.cpp
 	"../include/Main_Client.h"
 	"../include/DHT.h"
 	<iostream>
@@ -204,8 +204,9 @@
 	<stdlib.h>
 	<stdio.h>
 
-1635720523 c:\users\peyto-w\desktop\paft\github\paft\include\main_client.h
+1636597692 c:\users\peyto-w\desktop\paft\github\paft\include\main_client.h
 	<winsock2.h>
+	"DHT.h"
 
 1635722859 source:c:\users\peyto-w\desktop\paft\github\paft\src\mainserver.cpp
 	"../include/MainServer.h"

@@ -36,21 +36,19 @@ void Connection::Ping(LPVOID lpParam)
     SOCKET current_client = (SOCKET)lpParam;
 
 
-    char sendbuf[22];
+    char sendbuf[20];
     _160bitnumber self = DHT::Get_SELF();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
-    short unsigned int port = DHT::Get_Self_Port();
-    memcpy(sendbuf+20, (char*)&port, 2);
 
-    //std::cout << "The port to be sent(from DHT::Get_Self_Port) is " << std::dec << port << "\n";
 
-    send(current_client,sendbuf,22,0);
+    send(current_client,sendbuf,20,0);
 
 
 
 }
 
 
+//DEPRECIATED
 void Connection::Send_File(LPVOID lpParam)
 {
 
