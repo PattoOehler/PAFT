@@ -16,6 +16,7 @@ namespace paft
         int GetFile(char *filename);
         int Ping();
         MainClient(const char *addr,const char *port);
+        MainClient(in_addr addr, unsigned short int port);
         int Find_Node(_160bitnumber node);
         void Add_Self(char buf[]);
         void Shutdown_Connection_Gracefully();

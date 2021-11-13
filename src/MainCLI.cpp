@@ -83,6 +83,8 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "self_ping     -- Ping self \n";
         std::cout << "print_dht     -- Print the dht\n";
         std::cout << "exit          -- Exit the program\n";
+        std::cout << "test_dht      -- pings the DHT at position 159*20\n";
+        std::cout << "self_find_peer-- finds the closest 3 peers to a random id in own DHT\n";
         return 0;
     }
 
@@ -109,6 +111,26 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         DHT::Print_DHT();
         return 0;
 
+    }
+    else if(String_Compare(Input, "test_dht"))
+    {
+        DHT_Single_Entry a = DHT::Access_DHT(159*20);
+        if(a.is_set)
+        {   MainClient Client(a.addr, a.port);
+            Client.Ping();
+        }
+        else
+            printf("The DHT at position 159*20 is not set\n");
+
+
+        return 0;
+    }
+
+    else if(String_Compare(Input, "self_find_peer"))
+    {
+        printf("Not implemented yet");
+
+        return 0;
     }
 
     else if(String_Compare(Input, "exit"))

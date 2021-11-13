@@ -165,11 +165,11 @@ void Connection::Handle_Client(LPVOID lpParam)
     //casting to longsocket
     longsocket long_client = *(longsocket *)(lpParam);
 
-    if((long_client.client == INVALID_SOCKET))
-    {
-        std::cout << "INVALID SOCKET IN Connection::Handle_Client";
-        ExitThread(7);
-    }
+    //if((long_client.client == INVALID_SOCKET))
+    //{
+        //std::cout << "INVALID SOCKET IN Connection::Handle_Client";
+        //ExitThread(7);
+    //}
 
 
     char receivedData[100];

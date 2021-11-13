@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <thread>
+
 
 // Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 /*pragma comment (lib, "Ws2_32.lib")
@@ -91,6 +93,10 @@ void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
         DHT::Update_Time(sender_DHT_Entry);
 
     }
+    else
+    {
+        printf("Entry too short in MainClient::Add_Received_Entry_To_DHT()\n");
+    }
 }
 
 
@@ -98,16 +104,21 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 {
     for(int i=0; i<3;i++)
     {
-        if(length >= 42+22*i)
+        if(length >= 46+26*i)
         {
             //NOT TESTED
             _160bitnumber sender_Id;
             short unsigned int port;
+            in_addr addr;
             memcpy((void*)&sender_Id, recvbuf+20+22*i, 20);
             memcpy((void*)&port, recvbuf+40+22*i, 2);
+            memcpy((void*)&addr, recvbuf+42+22*i, 4);
+
 
             //Create a new thread and ping
 
+            MainClient received_Client(addr, port);
+            std::thread thread(&MainClient::Ping, &received_Client);
 
         }
 
@@ -182,7 +193,12 @@ int MainClient::Ping()
 
     //Get the ping back
     iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
-
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
 
     Add_Received_Entry_To_DHT(recvbuf, iResult);
 
@@ -283,8 +299,135 @@ int MainClient::GetFile(char *filename)
     return 0;
 }
 
+/*
+MainClient::MainClient(in_addr addr, unsigned short int port)
+{
+    printf("Mainclient(in_addr addr, port) being created\n\n");
+    SOCKET sock;
+    struct sockaddr_in serv_addr;
+
+    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    {
+        printf("\n Socket creation error \n");
+        exit(1);
+    }
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port); //Replace with port
+
+
+    serv_addr.sin_addr = addr;
+
+
+    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
+    {
+        printf("Error on connect() code :%i", WSAGetLastError());
+        exit(1);
+    }
+
+    if (sock == INVALID_SOCKET) {
+        printf("Unable to connect to server!\n");
+        WSACleanup();
+        exit(1);
+    }
+
+    MainClient::Socket = sock;
+    Server_IP = addr;
+    Server_Port = port;
+
+
+    //send(sock , hello , strlen(hello) , 0 );
+    //valread = read( sock , buffer, 1024);
+
+}
+*/
+
+
+//INCREADIBLY INEFFICENT TODO
+MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
+{
+    char *addr = inet_ntoa(addr_In);
+    char port[10];
+    sprintf(port, "%d", port_In);
+
+    printf("Mainclient(in_addr addr, int port) being created\n\n");
+
+    WSADATA wsaData;
+    SOCKET ConnectSocket = INVALID_SOCKET;
+    struct addrinfo *result = NULL,
+                    *ptr = NULL,
+                    hints;
+    int iResult;
+
+
+    // Initialize Winsock
+    iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
+    if (iResult != 0) {
+        printf("WSAStartup failed with error: %d\n", iResult);
+        exit(1);
+    }
+
+    ZeroMemory( &hints, sizeof(hints) );
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    // Resolve the server address and port
+
+
+    iResult = getaddrinfo(addr, port, &hints, &result);
+    if ( iResult != 0 ) {
+        printf("getaddrinfo failed with error: %d\n", iResult);
+        WSACleanup();
+        exit(1);
+    }
+
+    // Attempt to connect to an address until one succeeds
+    ptr=result;
+    //for(ptr=result; ptr != NULL ;ptr=ptr->ai_next) {
+
+        // Create a SOCKET for connecting to server
+        ConnectSocket = socket(ptr->ai_family, ptr->ai_socktype,
+            ptr->ai_protocol);
+        if (ConnectSocket == INVALID_SOCKET) {
+            printf("socket failed with error: %d\n", WSAGetLastError());
+            WSACleanup();
+            exit(1);
+        }
+
+        // Connect to server.
+        iResult = connect( ConnectSocket, ptr->ai_addr, (int)ptr->ai_addrlen);
+        if (iResult == SOCKET_ERROR) {
+            closesocket(ConnectSocket);
+            ConnectSocket = INVALID_SOCKET;
+            //continue;
+        }
+        //break;
+    //}
+
+    freeaddrinfo(result);
+
+    if (ConnectSocket == INVALID_SOCKET) {
+        printf("Unable to connect to server!\n");
+        WSACleanup();
+        exit(1);
+    }
+    MainClient::Socket = ConnectSocket;
+
+    unsigned long tmpa  = inet_addr(addr);
+    Server_IP = (in_addr&)tmpa;
+
+    Server_Port = (unsigned short int)atoi(port);
+
+
+}
+
+
+
+
 MainClient::MainClient(const char *addr, const char *port)
 {
+    printf("Mainclient(*addr, *port) being created\n\n");
 
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
