@@ -4,6 +4,7 @@
 #include "../include/DHT.h"
 
 #include <iostream>
+#include <random>
 
 #define INPUT_BUFFER_LENGTH 100
 
@@ -65,6 +66,28 @@ bool MainCli::String_Compare(char* string1, const char* string2)
 }
 
 
+void MainCli::Self_Find_Random_Node()
+{
+    _160bitnumber Testing;
+
+    std::random_device rd;   // non-deterministic generator
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
+
+    Testing.top = gen();
+    Testing.mid = gen();
+    Testing.bot = gen() >> 32;
+
+
+    MainClient Client("127.0.0.1", "1234");
+    Client.Find_Node(Testing);
+
+
+
+
+}
+
+
+
 
 int MainCli::Command_Parser(char Input[], int Input_len)
 {
@@ -78,13 +101,13 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     if(String_Compare(Input, "help"))
     {
         std::cout << "Helpmessage\n\n";
-        std::cout << "help          -- Receive this message\n";
-        std::cout << "self_get_file -- Get a file from 127.0.0.1 \n";
-        std::cout << "self_ping     -- Ping self \n";
-        std::cout << "print_dht     -- Print the dht\n";
-        std::cout << "exit          -- Exit the program\n";
-        std::cout << "test_dht      -- pings the DHT at position 159*20\n";
-        std::cout << "self_find_peer-- finds the closest 3 peers to a random id in own DHT\n";
+        std::cout << "help                  -- Receive this message\n";
+        std::cout << "self_get_file         -- Get a file from 127.0.0.1 \n";
+        std::cout << "self_ping             -- Ping self \n";
+        std::cout << "print_dht             -- Print the dht\n";
+        std::cout << "exit                  -- Exit the program\n";
+        std::cout << "test_dht              -- pings the DHT at position 159*20\n";
+        std::cout << "self_find_random_peer -- finds the closest 3 peers to a random id in own DHT\n";
         return 0;
     }
 
@@ -116,8 +139,10 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     {
         DHT_Single_Entry a = DHT::Access_DHT(159*20);
         if(a.is_set)
-        {   MainClient Client(a.addr, a.port);
-            Client.Ping();
+        {
+            //MainClient Client(a.addr, a.port);
+            //Client.Ping();
+            DHT::Test_Add_Entry();
         }
         else
             printf("The DHT at position 159*20 is not set\n");
@@ -126,9 +151,9 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         return 0;
     }
 
-    else if(String_Compare(Input, "self_find_peer"))
+    else if(String_Compare(Input, "self_find_random_peer"))
     {
-        printf("Not implemented yet");
+        Self_Find_Random_Node();
 
         return 0;
     }

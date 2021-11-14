@@ -13,8 +13,9 @@ namespace paft{
     class Connection
     {
     private:
-        static void Run_Proper_Command(char *buf, longsocket long_client);
+        static void Run_Proper_Command(char *buf, longsocket long_client, int len);
         static void Update_DHT(longsocket client, char recvdata[]);
+
 
     public:
         Connection();
@@ -23,6 +24,7 @@ namespace paft{
         static void Handle_Client(LPVOID lpParam);
         static void Send_File(LPVOID lpParam);
         static void Ping(LPVOID lpParam);
+        static void Lookup_Peer(LPVOID lpParam, char buf[], int len);
 
 
     };

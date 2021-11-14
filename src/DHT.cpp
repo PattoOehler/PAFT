@@ -5,6 +5,7 @@
 #include <time.h>
 #include <bits/stdc++.h>
 #include <mutex>
+#include <ws2tcpip.h>
 
 
 using namespace paft;
@@ -631,6 +632,11 @@ int DHT::Test_Add_Entry()
     Testing.id.bot = 123123123;
 
 
+
+    DHT_Single_Entry a = Access_DHT(159*20);
+    Testing.addr = a.addr;
+    Testing.port = a.port;
+
     std::random_device rd;   // non-deterministic generator
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
 
@@ -688,7 +694,7 @@ int DHT::Test_Add_Entry()
 
 
     three_DHT asdf = Lookup(ard.id);
-    for(int i=0;i<3;i++)
+    /*for(int i=0;i<3;i++)
     {
 
         std::cout << "Lookup \n";
@@ -697,7 +703,7 @@ int DHT::Test_Add_Entry()
                              std::hex << asdf.entry[i].id.bot << std::endl;
 
     }
-
+    */
 
     return 0;
 }

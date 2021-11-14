@@ -92,7 +92,63 @@ void Connection::Send_File(LPVOID lpParam)
 }
 
 
-void Connection::Run_Proper_Command(char *buf, longsocket long_client)
+void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
+{
+
+    SOCKET current_client = (SOCKET)lpParam;
+
+
+    char sendbuf[512];
+    _160bitnumber self = DHT::Get_SELF();
+    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+
+
+
+
+    if(len < 42)
+    {
+        return;
+    }
+
+    _160bitnumber a;
+    memcpy((char*)&a, buf+22, 20);
+    three_DHT closest_Three = DHT::Find_Value(a);
+
+    printf("Lookup_Peer before all of the memcpy's\n");
+    int counter=0;
+    if(closest_Three.entry[0].is_set)
+    {
+        memcpy(sendbuf+20, (char*)&closest_Three.entry[0].id, 20);
+        memcpy(sendbuf+40, (char*)&closest_Three.entry[0].port, 2);
+        memcpy(sendbuf+42, (char*)&closest_Three.entry[0].addr, 4);
+        counter=1;
+
+    }
+    if(closest_Three.entry[1].is_set)
+    {
+        memcpy(sendbuf+46, (char*)&closest_Three.entry[0].id, 20);
+        memcpy(sendbuf+66, (char*)&closest_Three.entry[0].port, 2);
+        memcpy(sendbuf+68, (char*)&closest_Three.entry[0].addr, 4);
+        counter=2;
+
+    }
+    if(closest_Three.entry[2].is_set)
+    {
+        memcpy(sendbuf+72, (char*)&closest_Three.entry[0].id, 20);
+        memcpy(sendbuf+92, (char*)&closest_Three.entry[0].port, 2);
+        memcpy(sendbuf+94, (char*)&closest_Three.entry[0].addr, 4);
+        counter=3;
+
+    }
+    printf("Lookup_Peer after all of the memcpy's\n");
+    send(current_client,sendbuf,20+26*counter,0);
+    printf("Lookup_Peer after the send\n");
+}
+
+
+
+
+void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 {
     char sendData[100];
 
@@ -115,7 +171,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client)
         {
             //Lookup Peer
             std::cout << "Client is asking to lookup a peer \n";
-            std::cout << "NOT IMPLEMTNED YET \n";
+            Lookup_Peer((LPVOID)long_client.client, buf, len);
 
 
         }
@@ -172,7 +228,7 @@ void Connection::Handle_Client(LPVOID lpParam)
     //}
 
 
-    char receivedData[100];
+    char receivedData[512];
     int res = recv(long_client.client,receivedData,sizeof(receivedData) ,0); // recv cmds
 
     if(res <= 22)
@@ -183,7 +239,7 @@ void Connection::Handle_Client(LPVOID lpParam)
     }
 
     Update_DHT(long_client, receivedData);
-    Run_Proper_Command( receivedData, long_client);
+    Run_Proper_Command( receivedData, long_client, res);
 
 
 }

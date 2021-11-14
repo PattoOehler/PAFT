@@ -102,6 +102,7 @@ void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 
 void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 {
+    //printf("Message length in MainClient::Ping_Received_Nodes is %i\n", length);
     for(int i=0; i<3;i++)
     {
         if(length >= 46+26*i)
@@ -110,17 +111,22 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
             _160bitnumber sender_Id;
             short unsigned int port;
             in_addr addr;
-            memcpy((void*)&sender_Id, recvbuf+20+22*i, 20);
-            memcpy((void*)&port, recvbuf+40+22*i, 2);
-            memcpy((void*)&addr, recvbuf+42+22*i, 4);
+            //printf("Copying position %i w length %i\n", 20+26*i, 20);
+            memcpy((void*)&sender_Id, recvbuf+20+26*i, 20);
+            //printf("Copying position %i w length %i\n", 40+26*i, 2);
+            memcpy((void*)&port, recvbuf+40+26*i, 2);
+            //printf("Copying position %i w length %i\n", 42+26*i, 4);
+            memcpy((void*)&addr, recvbuf+42+26*i, 4);
 
 
             //Create a new thread and ping
 
             MainClient received_Client(addr, port);
-            std::thread thread(&MainClient::Ping, &received_Client);
-
+            //std::thread thread(&MainClient::Ping, &received_Client);
+            //Sleep(1000);
+            received_Client.Ping();
         }
+
 
     }
 }
@@ -159,6 +165,7 @@ int MainClient::Find_Node(_160bitnumber node)
 
     Add_Received_Entry_To_DHT(recvbuf, iResult);
 
+    Ping_Received_Nodes(recvbuf, iResult);
 
 
     Shutdown_Connection_Gracefully();
@@ -350,7 +357,7 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     char port[10];
     sprintf(port, "%d", port_In);
 
-    printf("Mainclient(in_addr addr, int port) being created\n\n");
+    printf("Mainclient(%s:%s) being created\n\n",addr,port);
 
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
