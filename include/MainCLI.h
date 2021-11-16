@@ -10,6 +10,7 @@ namespace paft
     public:
         static int Start_Client();
         static void Self_Find_Random_Node();
+        static void Self_Find_Random_File();
 
     private:
         static int Command_Parser(char *Input, int a);

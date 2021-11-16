@@ -2,14 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="include\Connection.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Connection.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="676" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="include\DHT.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1920" topLine="39" />
+			<Cursor1 position="2998" topLine="112" />
 		</Cursor>
 	</File>
 	<File name="src\DHT.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -17,24 +12,24 @@
 			<Cursor1 position="14831" topLine="624" />
 		</Cursor>
 	</File>
+	<File name="include\MainCLI.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="238" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="include\Connection.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="676" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="src\MainServer.cpp" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1472" topLine="62" />
 		</Cursor>
 	</File>
-	<File name="include\MainCLI.h" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\MainCLI.cpp" open="1" top="1" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="264" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Connection.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2998" topLine="112" />
-		</Cursor>
-	</File>
-	<File name="src\Main_Client.cpp" open="1" top="1" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3151" topLine="51" />
+			<Cursor1 position="1450" topLine="55" />
 		</Cursor>
 	</File>
 	<File name="Main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -42,9 +37,9 @@
 			<Cursor1 position="204" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\MainCLI.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="include\DHT.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1583" topLine="63" />
+			<Cursor1 position="1883" topLine="45" />
 		</Cursor>
 	</File>
 	<File name="include\MainServer.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -54,7 +49,12 @@
 	</File>
 	<File name="include\Main_Client.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="474" topLine="0" />
+			<Cursor1 position="839" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\Main_Client.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3949" topLine="159" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

@@ -22,6 +22,8 @@ namespace paft
         void Shutdown_Connection_Gracefully();
         void Add_Received_Entry_To_DHT(char recvbuf[], int length);
         void Ping_Received_Nodes(char recvbuf[], int length);
+        void Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file);
+        int Find_File(_160bitnumber file);
 
     };
 

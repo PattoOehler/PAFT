@@ -100,36 +100,126 @@ void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 }
 
 
+void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file)
+{
+
+
+    for(int i=0; i<3;i++)
+    {
+        //Should be sorted but checking all anyway
+        if(length >= 46+26*i)
+        {
+
+            _160bitnumber sent_Id;
+            short unsigned int port;
+            in_addr addr;
+            memcpy((void*)&sent_Id, recvbuf+20+26*i, 20);
+            memcpy((void*)&port, recvbuf+40+26*i, 2);
+            memcpy((void*)&addr, recvbuf+42+26*i, 4);
+
+
+            //Create a new thread and ping
+            if(DHT::IsEqual(file, sent_Id))
+            {
+                //Store file
+                DHT_Single_Entry storing;
+                storing.id = sent_Id;
+                storing.addr = addr;
+                storing.port = port;
+                storing.is_set = true;
+                DHT::Store_FileId(storing);
+            }
+            else
+            {
+                //Ping Node if its up
+                MainClient received_Client(addr, port);
+                received_Client.Ping();
+
+            }
+
+        }
+
+
+    }
+}
+
+
+
+
 void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 {
-    //printf("Message length in MainClient::Ping_Received_Nodes is %i\n", length);
+
     for(int i=0; i<3;i++)
     {
         if(length >= 46+26*i)
         {
-            //NOT TESTED
+
             _160bitnumber sender_Id;
             short unsigned int port;
             in_addr addr;
-            //printf("Copying position %i w length %i\n", 20+26*i, 20);
             memcpy((void*)&sender_Id, recvbuf+20+26*i, 20);
-            //printf("Copying position %i w length %i\n", 40+26*i, 2);
             memcpy((void*)&port, recvbuf+40+26*i, 2);
-            //printf("Copying position %i w length %i\n", 42+26*i, 4);
             memcpy((void*)&addr, recvbuf+42+26*i, 4);
 
 
             //Create a new thread and ping
 
             MainClient received_Client(addr, port);
-            //std::thread thread(&MainClient::Ping, &received_Client);
-            //Sleep(1000);
+
             received_Client.Ping();
         }
 
 
     }
 }
+
+
+int MainClient::Find_File(_160bitnumber file)
+{
+
+    char sendbuf[43];
+    sendbuf[0] = 0x03;
+    Add_Self(sendbuf);
+
+    memcpy(sendbuf+23, (char*)&file, 20);
+
+
+
+    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    char recvbuf[DEFAULT_BUFLEN];
+    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+
+    if (iResult == SOCKET_ERROR) {
+        printf("recv failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    Add_Received_Entry_To_DHT(recvbuf, iResult);
+
+    Ping_Received_Nodes_If_Not_File(recvbuf, iResult, file);
+
+
+    Shutdown_Connection_Gracefully();
+
+
+
+    return 0;
+
+
+}
+
+
 
 
 int MainClient::Find_Node(_160bitnumber node)
