@@ -107,6 +107,27 @@ void MainCli::Self_Find_Random_File()
 
 }
 
+void MainCli::Self_Store_Random_File()
+{
+
+    _160bitnumber Testing;
+
+    std::random_device rd;   // non-deterministic generator
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
+
+    Testing.top = gen();
+    Testing.mid = gen();
+    Testing.bot = gen() >> 32;
+
+
+    MainClient Client("127.0.0.1", "1234");
+
+    Client.Find_File(Testing);
+
+
+
+}
+
 
 
 
@@ -130,6 +151,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "test_dht              -- pings the DHT at position 159*20\n";
         std::cout << "self_find_random_peer -- finds the closest 3 peers to a random id in own DHT\n";
         std::cout << "self_find_random_file -- finds the closest 3 peers/files to a random id in own DHT\n";
+        std::cout << "self_store_random_file-- sends store file RPC to self\n";
         return 0;
     }
 
@@ -181,6 +203,13 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     else if(String_Compare(Input, "self_find_random_file"))
     {
         Self_Find_Random_File();
+
+
+        return 0;
+    }
+    else if(String_Compare(Input, "self_store_random_file"))
+    {
+        Self_Store_Random_File();
 
 
         return 0;

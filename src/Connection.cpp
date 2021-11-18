@@ -105,13 +105,67 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 
 
 
-    if(len < 42)
+    if(len < 43)
     {
         return;
     }
 
     _160bitnumber a;
-    memcpy((char*)&a, buf+22, 20);
+    memcpy((char*)&a, buf+23, 20);
+    three_DHT closest_Three = DHT::Lookup(a);
+
+    printf("Lookup_Peer before all of the memcpy's\n");
+    int counter=0;
+    if(closest_Three.entry[0].is_set)
+    {
+        memcpy(sendbuf+20, (char*)&closest_Three.entry[0].id, 20);
+        memcpy(sendbuf+40, (char*)&closest_Three.entry[0].port, 2);
+        memcpy(sendbuf+42, (char*)&closest_Three.entry[0].addr, 4);
+        counter=1;
+
+    }
+    if(closest_Three.entry[1].is_set)
+    {
+        memcpy(sendbuf+46, (char*)&closest_Three.entry[0].id, 20);
+        memcpy(sendbuf+66, (char*)&closest_Three.entry[0].port, 2);
+        memcpy(sendbuf+68, (char*)&closest_Three.entry[0].addr, 4);
+        counter=2;
+
+    }
+    if(closest_Three.entry[2].is_set)
+    {
+        memcpy(sendbuf+72, (char*)&closest_Three.entry[0].id, 20);
+        memcpy(sendbuf+92, (char*)&closest_Three.entry[0].port, 2);
+        memcpy(sendbuf+94, (char*)&closest_Three.entry[0].addr, 4);
+        counter=3;
+
+    }
+    printf("Lookup_Peer after all of the memcpy's\n");
+    send(current_client,sendbuf,20+26*counter,0);
+    printf("Lookup_Peer after the send\n");
+}
+
+
+void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
+{
+
+    SOCKET current_client = (SOCKET)lpParam;
+
+
+    char sendbuf[512];
+    _160bitnumber self = DHT::Get_SELF();
+    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+
+
+
+
+    if(len < 43)
+    {
+        return;
+    }
+
+    _160bitnumber a;
+    memcpy((char*)&a, buf+23, 20);
     three_DHT closest_Three = DHT::Find_Value(a);
 
     printf("Lookup_Peer before all of the memcpy's\n");
@@ -147,6 +201,39 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 
 
 
+void Connection::Store_File(LPVOID lpParam, char buf[], int len)
+{
+
+    SOCKET current_client = (SOCKET)lpParam;
+
+
+    char sendbuf[512];
+    _160bitnumber self = DHT::Get_SELF();
+    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+
+
+
+
+    if(len < 49)
+    {
+        printf("Too short of a sent message in Connection::Store_File!\n");
+        return;
+    }
+
+
+    DHT_Single_Entry file_To_Add;
+
+    memcpy((char*)&file_To_Add.id,buf+23,20);
+    memcpy((char*)&file_To_Add.port, buf+43,2);
+    memcpy((char*)&file_To_Add.addr, buf+45, 4);
+
+    DHT::Store_FileId(file_To_Add);
+
+    send(current_client,sendbuf,20,0);
+
+}
+
+
 
 void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 {
@@ -180,7 +267,16 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Lookup File
             std::cout << "Client is asking to lookup a file \n";
 
-            std::cout << "NOT IMPLEMTNED YET \n";
+            Lookup_File((LPVOID)long_client.client, buf, len);
+
+
+        }
+        else if(buf[0] == 0x05)
+        {
+            //Lookup File
+            std::cout << "Client is asking to store a file \n";
+
+            Store_File((LPVOID)long_client.client, buf, len);
 
 
         }

@@ -73,6 +73,36 @@ void MainClient::Add_Self(char buf[])
 
 }
 
+/*
+void MainClient::Store_File_To_DHT(char recvbuf[], int length)
+{
+
+    if(length >= 49)
+    {
+
+
+
+        DHT_Single_Entry file_To_Store;
+
+        memcpy((void*)&file_To_Store.id, recvbuf+20, 20);
+
+        file_To_Store.addr = Server_IP;
+        file_To_Store.port = Server_Port;
+        file_To_Store.is_set = true;
+
+        DHT::Store_FileId(file_To_Store);
+
+
+    }
+    else
+    {
+        printf("Entry too short in MainClient::Store_File_To_DHT()\n");
+    }
+
+}
+*/
+
+
 void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 {
     if(length >= 20)
@@ -174,11 +204,65 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 }
 
 
+
+int MainClient::Store_File(DHT_Single_Entry file)
+{
+
+    char sendbuf[49];
+    sendbuf[0] = 0x05;
+    Add_Self(sendbuf);
+
+    memcpy(sendbuf+23, (char*)&file.id, 20);
+    memcpy(sendbuf+43, (char*)&file.port, 2);
+    memcpy(sendbuf+45, (char*)&file.addr, 4);
+
+
+
+    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    char recvbuf[DEFAULT_BUFLEN];
+    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+
+    if (iResult == SOCKET_ERROR) {
+        printf("recv failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    Add_Received_Entry_To_DHT(recvbuf, iResult);
+
+    //lol client shouldn't be storing a file
+    //Store_File_To_DHT(recvbuf, iResult);
+
+    //Ping_Received_Nodes_If_Not_File(recvbuf, iResult, file);
+
+
+    Shutdown_Connection_Gracefully();
+
+
+
+    return 0;
+
+
+}
+
+
+
+
 int MainClient::Find_File(_160bitnumber file)
 {
 
     char sendbuf[43];
-    sendbuf[0] = 0x03;
+    sendbuf[0] = 0x04;
     Add_Self(sendbuf);
 
     memcpy(sendbuf+23, (char*)&file, 20);
@@ -218,6 +302,10 @@ int MainClient::Find_File(_160bitnumber file)
 
 
 }
+
+
+
+
 
 
 
