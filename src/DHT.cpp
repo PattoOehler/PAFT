@@ -100,7 +100,6 @@ bool DHT::IsEqual(_160bitnumber id,_160bitnumber id2)
     {
         if(id.mid == id2.mid)
         {
-
             if(id.bot == id2.bot)
             {
                 return true;
@@ -602,9 +601,6 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 
         if(tmp.is_set == false)
         {
-            //DHT::DHT_ALL[(distance*20)+i] = Entry;
-            //DHT::DHT_ALL[(distance*20)+i].time_To_Timeout = time(0);
-            //DHT::DHT_ALL[(distance*20)+i].is_set = true;
             Entry.is_set = true;
             Entry.time_To_Timeout = time(0)+60*60; //1 Hour
             Write_To_DHT(Entry, distance*20+i);
@@ -723,11 +719,6 @@ void DHT::Print_DHT()
                              std::hex << tmp.id.bot;
                 std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time "<<
                 ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
-            }
-                else
-            {
-                //std::cout << "Causing break on " << i*20+j << std::endl;
-                break;
             }
 
 

@@ -22,13 +22,10 @@ int MainCli::Start_Client()
         std::cin.getline(buffer, INPUT_BUFFER_LENGTH);
         std::cin.clear();
 
-        //std::cout << buffer ;
+
         MainCli::Command_Parser(buffer, INPUT_BUFFER_LENGTH);
 
     }
-
-    //Should Not get to here
-    exit(1);
 }
 
 bool MainCli::String_Compare(char* string1, const char* string2)

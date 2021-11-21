@@ -22,7 +22,7 @@ namespace paft
     class MainServer
     {
     public:
-        static int Start_Server(int a);
+        static int Start_Server();
 
 
     };

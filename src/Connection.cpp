@@ -26,10 +26,6 @@ Connection::Connection()
     //ctor
 }
 
-Connection::~Connection()
-{
-    //dtor
-}
 
 void Connection::Ping(LPVOID lpParam)
 {
