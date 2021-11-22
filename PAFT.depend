@@ -147,12 +147,12 @@
 	<stdio.h>
 	<winsock.h>
 
-1637523561 source:c:\users\peyto-w\desktop\paft\github\paft\main.cpp
+1637536744 source:c:\users\peyto-w\desktop\paft\github\paft\main.cpp
 	<iostream>
 	<thread>
-	"include/MainServer.h"
-	"include/MainCLI.h"
-	"include/DHT.h"
+	"src/Server/MainServer.h"
+	"src/Client/MainCLI.h"
+	"src/DHT/DHT.h"
 
 1637523572 c:\users\peyto-w\desktop\paft\github\paft\include\mainserver.h
 	<winsock.h>
@@ -228,4 +228,94 @@
 	"../include/DHT.h"
 	<iostream>
 	<random>
+
+1637612617 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
+	"DHT.h"
+	"DHT_Access.h"
+	<random>
+	<iostream>
+	<time.h>
+	<bits/stdc++.h>
+	<mutex>
+	<ws2tcpip.h>
+
+1637612146 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
+	<stdint.h>
+	<mutex>
+	<winsock.h>
+
+1637613573 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
+	"DHT_Access.h"
+	<iostream>
+
+1637613386 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
+	"Connection.h"
+	"MainServer.h"
+	"../DHT/dht.h"
+	"../DHT/DHT_Access.h"
+	<winsock2.h>
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<ws2tcpip.h>
+	<iostream>
+
+1637263108 c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.h
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	"MainServer.h"
+
+1637523572 c:\users\peyto-w\desktop\paft\github\paft\src\server\mainserver.h
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+
+1637248999 c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.h
+
+1637612037 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\mainserver.cpp
+	"MainServer.h"
+	"Connection.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<winsock.h>
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<ws2tcpip.h>
+	<iostream>
+
+1637613506 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+	"Main_Client.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<iostream>
+	<winsock2.h>
+	<windows.h>
+	<ws2tcpip.h>
+	<stdlib.h>
+	<stdio.h>
+	<thread>
+
+1637536684 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
+	<winsock2.h>
+	"../DHT/DHT.h"
+
+1637613297 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
+	"MainCLI.h"
+	"Main_Client.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<iostream>
+	<random>
+
+1637612477 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.h
+	<stdint.h>
+	<mutex>
+	<winsock.h>
+	"DHT.h"
 

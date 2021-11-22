@@ -1,8 +1,8 @@
 #include <iostream>
 #include <thread>
-#include "include/MainServer.h"
-#include "include/MainCLI.h"
-#include "include/DHT.h"
+#include "src/Server/MainServer.h"
+#include "src/Client/MainCLI.h"
+#include "src/DHT/DHT.h"
 
 
 int main()

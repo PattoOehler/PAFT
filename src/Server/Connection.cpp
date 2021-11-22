@@ -1,6 +1,7 @@
 #include "Connection.h"
 #include "MainServer.h"
-#include "../include/dht.h"
+#include "../DHT/dht.h"
+#include "../DHT/DHT_Access.h"
 
 #include <winsock2.h>
 #include <winsock.h>
@@ -25,7 +26,10 @@ Connection::Connection()
 {
     //ctor
 }
-
+Connection::~Connection()
+{
+    //ctor
+}
 
 void Connection::Ping(LPVOID lpParam)
 {
@@ -33,7 +37,7 @@ void Connection::Ping(LPVOID lpParam)
 
 
     char sendbuf[20];
-    _160bitnumber self = DHT::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
 
@@ -95,7 +99,7 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
 
@@ -149,7 +153,7 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
 
@@ -204,7 +208,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
 
@@ -212,7 +216,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len)
 
     if(len < 49)
     {
-        printf("Too short of a sent message in Connection::Store_File!\n");
+        printf("Too short of a sent message(%i) in Connection::Store_File!\n", len);
         return;
     }
 
@@ -223,7 +227,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len)
     memcpy((char*)&file_To_Add.port, buf+43,2);
     memcpy((char*)&file_To_Add.addr, buf+45, 4);
 
-    DHT::Store_FileId(file_To_Add);
+    DHT_Access::Store_FileId(file_To_Add);
 
     send(current_client,sendbuf,20,0);
 

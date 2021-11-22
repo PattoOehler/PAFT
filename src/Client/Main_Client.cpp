@@ -1,6 +1,7 @@
 
-#include "../include/Main_Client.h"
-#include "../include/DHT.h"
+#include "Main_Client.h"
+#include "../DHT/DHT.h"
+#include "../DHT/DHT_Access.h"
 
 #include <iostream>
 
@@ -66,9 +67,9 @@ void MainClient::Shutdown_Connection_Gracefully()
 
 void MainClient::Add_Self(char buf[])
 {
-    _160bitnumber self = DHT::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(buf+1, (char*)&self, 20); // 160/8=20
-    short unsigned int port = DHT::Get_Self_Port();
+    short unsigned int port = DHT_Access::Get_Self_Port();
     memcpy(buf+21, (char*)&port, 2);
 
 }
@@ -157,7 +158,7 @@ void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _16
                 storing.addr = addr;
                 storing.port = port;
                 storing.is_set = true;
-                DHT::Store_FileId(storing);
+                DHT_Access::Store_FileId(storing);
             }
             else
             {
@@ -207,8 +208,9 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 
 int MainClient::Store_File(DHT_Single_Entry file)
 {
+    int bufLen = 49;
 
-    char sendbuf[49];
+    char sendbuf[bufLen];
     sendbuf[0] = 0x05;
     Add_Self(sendbuf);
 
@@ -218,7 +220,7 @@ int MainClient::Store_File(DHT_Single_Entry file)
 
 
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    int iResult = send( Socket, sendbuf, bufLen, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
@@ -406,7 +408,7 @@ int MainClient::GetFile(char *filename)
 
     char command[21];
     command[0] = '\x01';
-    _160bitnumber self = DHT::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(command+1, (char*)&self, 20); // 160/8=20
 
     std::cout << self.top << ' ' << self.mid << ' ' << self.bot << '\n';

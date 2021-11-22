@@ -1,4 +1,5 @@
-#include "../include/DHT.h"
+#include "DHT.h"
+#include "DHT_Access.h"
 
 #include <random>
 #include <iostream>
@@ -9,88 +10,6 @@
 
 
 using namespace paft;
-
-DHT_Single_Entry* DHT::DHT_ALL = new DHT_Single_Entry[160*20];
-DHT_Single_Entry* DHT::FileIds = new DHT_Single_Entry[100]; //Temporarily as 100, might need to change later
-_160bitnumber* DHT::SELF = new _160bitnumber;
-unsigned short int DHT::SELF_PORT = 1234; //Default value- should be set before accessed
-std::mutex* DHT::mutex_All = new std::mutex[160*20];
-std::mutex* DHT::mutex_FileIds = new std::mutex[100];
-
-
-
-void DHT::Store_FileId(DHT_Single_Entry entry)
-{
-    //This stores the FileId if there is less then 3 entries already for that ID
-    //And does not write anything otherwise-or if its full
-
-
-    int i=0;
-    int counter=0;
-    int first_pos=-1;
-    while((i<100) & (counter<3))
-    {
-        DHT_Single_Entry tmp = entry;
-        if(tmp.is_set)
-        {
-            if(IsEqual(tmp.id, entry.id))
-            {
-                counter++;
-            }
-
-        }
-        else
-        {
-            if(first_pos == -1)
-            {
-                first_pos=i;
-            }
-        }
-        i++;
-
-
-    }
-    if(counter >= 3)
-    {
-        return;
-    }
-    if(first_pos != 1)
-        Write_To_FileIds(entry,first_pos);
-
-}
-
-
-
-DHT_Single_Entry DHT::Access_FileIds(int position)
-{
-    if((position >= 100) | (position<0))
-    {
-        std::cout << "Position " << position << " is not valid!!!\n";
-        throw std::invalid_argument( "Position is not valid" );
-    }
-
-    mutex_FileIds[position].lock();
-    DHT_Single_Entry tmp = FileIds[position];
-    mutex_FileIds[position].unlock();
-
-    return tmp;
-}
-
-void DHT::Write_To_FileIds(DHT_Single_Entry write, int position)
-{
-    if((position >= 100) | (position<0))
-    {
-        std::cout << "Position " << position << " is not valid!!!\n";
-        throw std::invalid_argument( "Position is not valid" );
-    }
-
-    mutex_FileIds[position].lock();
-    FileIds[position] = write;
-    mutex_FileIds[position].unlock();
-}
-
-
-
 
 
 
@@ -122,7 +41,7 @@ three_DHT DHT::Find_Value(_160bitnumber id)
 
     for(int i=0;i<100;i++)
     {
-        DHT_Single_Entry tmp = Access_FileIds(i);
+        DHT_Single_Entry tmp = DHT_Access::Access_FileIds(i);
         if(tmp.is_set)
         {
             if(IsEqual(id, tmp.id))
@@ -160,33 +79,6 @@ three_DHT DHT::Find_Value(_160bitnumber id)
 
 
 
-DHT_Single_Entry DHT::Access_DHT(int position)
-{
-    if((position >= 160*20) | (position<0))
-    {
-        std::cout << "Position " << position << " is not valid!!!\n";
-        throw std::invalid_argument( "Position is not valid" );
-    }
-
-    mutex_All[position].lock();
-    DHT_Single_Entry tmp = DHT_ALL[position];
-    mutex_All[position].unlock();
-
-    return tmp;
-}
-
-void DHT::Write_To_DHT(DHT_Single_Entry write, int position)
-{
-    if((position >= 160*20) | (position<0))
-    {
-        std::cout << "Position " << position << " is not valid!!!\n";
-        throw std::invalid_argument( "Position is not valid" );
-    }
-
-    mutex_All[position].lock();
-    DHT_ALL[position] = write;
-    mutex_All[position].unlock();
-}
 
 
 
@@ -242,7 +134,7 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
     DHT_Single_Entry access;
     for(int i=0;i<20;i++)
     {
-        access = Access_DHT(bucket*20+i);
+        access = DHT_Access::Access_DHT(bucket*20+i);
         if(access.is_set)
         {
             if(closest.entry[0].is_set)
@@ -292,7 +184,7 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 
 three_DHT DHT::Lookup(_160bitnumber id)
 {
-    int distance = Distance(id, *SELF);
+    int distance = Distance(id, DHT_Access::Get_SELF());
     three_DHT closest = Lookup_One_Bucket(id, distance);
 
     if(closest.entry[2].is_set)
@@ -516,18 +408,18 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
     std::cout << "Updating DHT with "  << inet_ntoa(Update.addr) <<":" << Update.port << "\n";
 
-    int distance = Distance(Update.id, *SELF);
+    int distance = Distance(Update.id, DHT_Access::Get_SELF());
 
     for(int i=0; i<20; i++)
     {
-        DHT_Single_Entry tmp = Access_DHT(distance*20+i);
+        DHT_Single_Entry tmp = DHT_Access::Access_DHT(distance*20+i);
 
         if(tmp.is_set == true)
         {
             if(tmp.id.top == Update.id.top && tmp.id.mid == Update.id.mid && tmp.id.bot == Update.id.bot)
             {
                 Update.time_To_Timeout = time(0)+60*60; // 1 hour
-                Write_To_DHT(Update, distance*20+i);
+                DHT_Access::Write_To_DHT(Update, distance*20+i);
 
                 return;
             }
@@ -543,16 +435,6 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
 }
 
-void DHT::Set_Self_Port(unsigned short int port)
-{
-    SELF_PORT = port;
-
-}
-unsigned short int DHT::Get_Self_Port()
-{
-    return SELF_PORT;
-
-}
 
 
 
@@ -560,31 +442,29 @@ unsigned short int DHT::Get_Self_Port()
 void DHT::Init(){
 
     //This will set the SELF
-
+    //TODO
 
     //First check if the number is already set - if so should keep probs TODO
+
+
 
     std::random_device rd;   // non-deterministic generator
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
 
-    SELF->top = gen();
-    SELF->mid = gen();
+    _160bitnumber SELF;
 
-    SELF->bot = gen() >> 32;
+    SELF.top = gen();
+    SELF.mid = gen();
 
-    std::cout << SELF->top << " "<< SELF->mid << " "<< SELF->bot << std::endl;
+    SELF.bot = gen() >> 32;
+
+    std::cout << SELF.top << " "<< SELF.mid << " "<< SELF.bot << std::endl;
 
 
+    DHT_Access::Set_Self(SELF);
 
 
     return;
-}
-
-
-
-_160bitnumber DHT::Get_SELF()
-{
-    return *SELF;
 
 }
 
@@ -592,18 +472,18 @@ _160bitnumber DHT::Get_SELF()
 int DHT::Add_Entry(DHT_Single_Entry Entry)
 {
 
-    int distance = DHT::Distance(Entry.id, *SELF);
+    int distance = DHT::Distance(Entry.id, DHT_Access::Get_SELF());
 
 
     for(int i=0; i<20; i++)
     {
-        DHT_Single_Entry tmp = Access_DHT(distance*20+i);
+        DHT_Single_Entry tmp = DHT_Access::Access_DHT(distance*20+i);
 
         if(tmp.is_set == false)
         {
             Entry.is_set = true;
             Entry.time_To_Timeout = time(0)+60*60; //1 Hour
-            Write_To_DHT(Entry, distance*20+i);
+            DHT_Access::Write_To_DHT(Entry, distance*20+i);
             break;
         }
         else
@@ -629,7 +509,7 @@ int DHT::Test_Add_Entry()
 
 
 
-    DHT_Single_Entry a = Access_DHT(159*20);
+    DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
     Testing.addr = a.addr;
     Testing.port = a.port;
 
@@ -644,14 +524,16 @@ int DHT::Test_Add_Entry()
     //tmp_mid = SELF.mid;
     //tmp_bot = SELF.bot;
 
-    Testing.id.top = SELF->top;
-    Testing.id.mid = SELF->mid;
-    Testing.id.bot = SELF->bot;
+    _160bitnumber SELF = DHT_Access::Get_SELF();
+
+    Testing.id.top = SELF.top;
+    Testing.id.mid = SELF.mid;
+    Testing.id.bot = SELF.bot;
 
     tmp_top = 1;
     for(int i=0; i<64; i++)
     {
-        Testing.id.top = SELF->top ^ (tmp_top);
+        Testing.id.top = SELF.top ^ (tmp_top);
         tmp_top = tmp_top<<1;
         std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
@@ -660,11 +542,11 @@ int DHT::Test_Add_Entry()
 
     }
     ard = Testing;
-    Testing.id.top = SELF->top;
+    Testing.id.top = SELF.top;
     tmp_mid = 1;
     for(int i=0; i<64; i++)
     {
-        Testing.id.mid = SELF->mid ^ (tmp_mid);
+        Testing.id.mid = SELF.mid ^ (tmp_mid);
         tmp_mid = tmp_mid<<1;
         //std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
@@ -673,11 +555,11 @@ int DHT::Test_Add_Entry()
 
     }
 
-    Testing.id.mid = SELF->mid;
+    Testing.id.mid = SELF.mid;
     tmp_bot = 1;
     for(int i=0; i<32; i++)
     {
-        Testing.id.bot = SELF->bot ^ (tmp_bot);
+        Testing.id.bot = SELF.bot ^ (tmp_bot);
         tmp_bot = tmp_bot<<1;
         //std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
@@ -690,16 +572,7 @@ int DHT::Test_Add_Entry()
 
 
     three_DHT asdf = Lookup(ard.id);
-    /*for(int i=0;i<3;i++)
-    {
 
-        std::cout << "Lookup \n";
-        std::cout << std::hex << asdf.entry[i].id.top <<
-                             std::hex << asdf.entry[i].id.mid <<
-                             std::hex << asdf.entry[i].id.bot << std::endl;
-
-    }
-    */
 
     return 0;
 }
@@ -711,7 +584,7 @@ void DHT::Print_DHT()
     {
         for(int j=0;j<20;j++)
         {
-            DHT_Single_Entry tmp = Access_DHT(20*i+j);
+            DHT_Single_Entry tmp = DHT_Access::Access_DHT(20*i+j);
             if(tmp.is_set)
             {
                 std::cout << std::hex << tmp.id.top <<

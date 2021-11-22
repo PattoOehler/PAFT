@@ -27,16 +27,18 @@
 			<Add option="-lws2_32" />
 		</Linker>
 		<Unit filename="Main.cpp" />
-		<Unit filename="include/Connection.h" />
-		<Unit filename="include/DHT.h" />
-		<Unit filename="include/MainCLI.h" />
-		<Unit filename="include/MainServer.h" />
-		<Unit filename="include/Main_Client.h" />
-		<Unit filename="src/Connection.cpp" />
-		<Unit filename="src/DHT.cpp" />
-		<Unit filename="src/MainCLI.cpp" />
-		<Unit filename="src/MainServer.cpp" />
-		<Unit filename="src/Main_Client.cpp" />
+		<Unit filename="src/Client/MainCLI.cpp" />
+		<Unit filename="src/Client/MainCLI.h" />
+		<Unit filename="src/Client/Main_Client.cpp" />
+		<Unit filename="src/Client/Main_Client.h" />
+		<Unit filename="src/DHT/DHT.cpp" />
+		<Unit filename="src/DHT/DHT.h" />
+		<Unit filename="src/DHT/DHT_Access.cpp" />
+		<Unit filename="src/DHT/DHT_Access.h" />
+		<Unit filename="src/Server/Connection.cpp" />
+		<Unit filename="src/Server/Connection.h" />
+		<Unit filename="src/Server/MainServer.cpp" />
+		<Unit filename="src/Server/MainServer.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

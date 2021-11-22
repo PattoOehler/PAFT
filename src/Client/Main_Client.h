@@ -2,7 +2,7 @@
 #ifndef __PAFT_MAINCLIENT_H
 #define __PAFT_MAINCLIENT_H
 #include <winsock2.h>
-#include "DHT.h"
+#include "../DHT/DHT.h"
 
 namespace paft
 {

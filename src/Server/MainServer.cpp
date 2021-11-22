@@ -1,6 +1,7 @@
-#include "../include/MainServer.h"
-#include "../include/Connection.h"
-#include "../include/DHT.h"
+#include "MainServer.h"
+#include "Connection.h"
+#include "../DHT/DHT.h"
+#include "../DHT/DHT_Access.h"
 
 #include <winsock.h>
 #include <winsock2.h>
@@ -44,8 +45,8 @@ int MainServer::Start_Server()
      server.sin_addr.s_addr=INADDR_ANY;
 
      unsigned short int b = 1234;
-     DHT::Set_Self_Port(b);
-     std::cout << "Get self port --->" << std::dec << DHT::Get_Self_Port() << "\n";
+     DHT_Access::Set_Self_Port(b);
+     std::cout << "Get self port --->" << std::dec << DHT_Access::Get_Self_Port() << "\n";
      server.sin_port=htons(1234); // listen on port
 
      // create our socket
