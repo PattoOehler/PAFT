@@ -2,17 +2,18 @@
 #include "DHT_Access.h"
 #include <iostream>
 
+#define DHT_File_Len 100
 
 using namespace paft;
 
 DHT_Single_Entry* DHT_Access::all_Peers = new DHT_Single_Entry[160*20];
-DHT_Single_Entry* DHT_Access::all_Files = new DHT_Single_Entry[100]; //Temporarily as 100, might need to change later
+DHT_Single_Entry* DHT_Access::all_Files = new DHT_Single_Entry[DHT_File_Len]; //Temporarily as 100, might need to change later
 
 _160bitnumber* DHT_Access::own_ID = new _160bitnumber;
 unsigned short int DHT_Access::own_Port = 1234; //Default value- should be set before accessed
 
 std::mutex* DHT_Access::all_Peers_Mutex = new std::mutex[160*20];
-std::mutex* DHT_Access::all_Files_Mutex = new std::mutex[100];
+std::mutex* DHT_Access::all_Files_Mutex = new std::mutex[DHT_File_Len];
 
 
 
@@ -49,7 +50,7 @@ void DHT_Access::Write_To_DHT(DHT_Single_Entry write, int position)
 
 DHT_Single_Entry DHT_Access::Access_FileIds(int position)
 {
-    if((position >= 100) | (position<0))
+    if((position >= DHT_File_Len) | (position<0))
     {
         std::cout << "Position " << position << " is not valid!!!\n";
         throw std::invalid_argument( "Position is not valid" );
@@ -64,7 +65,7 @@ DHT_Single_Entry DHT_Access::Access_FileIds(int position)
 
 void DHT_Access::Write_To_FileIds(DHT_Single_Entry write, int position)
 {
-    if((position >= 100) | (position<0))
+    if((position >= DHT_File_Len) | (position<0))
     {
         std::cout << "Position " << position << " is not valid!!!\n";
         throw std::invalid_argument( "Position is not valid" );
@@ -77,42 +78,21 @@ void DHT_Access::Write_To_FileIds(DHT_Single_Entry write, int position)
 
 void DHT_Access::Store_FileId(DHT_Single_Entry entry)
 {
-    //This stores the FileId if there is less then 3 entries already for that ID
-    //And does not write anything otherwise-or if its full
 
-    //DOES NOT WORK TODO
-    printf("Storing a file ID... DOES NOT CURRENTLY WORK\n\n");
-    int i=0;
-    int counter=0;
-    int first_pos=-1;
-    while((i<100) & (counter<3))
+    printf("Storing a file ID...\n\n");
+
+    for(int i=0;i<DHT_File_Len;i++)
     {
-        DHT_Single_Entry tmp = entry;
-        if(tmp.is_set)
+        DHT_Single_Entry tmp_File = Access_FileIds(i);
+        if(!tmp_File.is_set)
         {
-            if(DHT::IsEqual(tmp.id, entry.id))
-            {
-                counter++;
-            }
-
+            entry.is_set = true;
+            Write_To_FileIds(entry, i);
+            break;
         }
-        else
-        {
-            if(first_pos == -1)
-            {
-                first_pos=i;
-            }
-        }
-        i++;
-
 
     }
-    if(counter >= 3)
-    {
-        return;
-    }
-    if(first_pos != 1)
-        Write_To_FileIds(entry,first_pos);
+
 
 }
 

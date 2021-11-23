@@ -60,6 +60,7 @@ namespace paft
         static void Update_Time(DHT_Single_Entry Update);
         //static void Lookup  //Should return 3 Ip addrs +
         static three_DHT Lookup(_160bitnumber id);
+        static void Print_Files();
 
 
 

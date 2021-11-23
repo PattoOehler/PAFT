@@ -602,3 +602,27 @@ void DHT::Print_DHT()
 
     return;
 }
+
+void DHT::Print_Files()
+{
+
+    for(int i=0;i<100;i++)
+    {
+
+        DHT_Single_Entry tmp = DHT_Access::Access_FileIds(i);
+        if(tmp.is_set)
+        {
+            std::cout << std::hex << tmp.id.top <<
+                         std::hex << tmp.id.mid <<
+                         std::hex << tmp.id.bot;
+            std::cout << "    In part " << std::dec << (i) << "\n";
+        }
+
+
+
+
+    }
+
+
+    return;
+}

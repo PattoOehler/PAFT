@@ -242,11 +242,6 @@ int MainClient::Store_File(DHT_Single_Entry file)
 
     Add_Received_Entry_To_DHT(recvbuf, iResult);
 
-    //lol client shouldn't be storing a file
-    //Store_File_To_DHT(recvbuf, iResult);
-
-    //Ping_Received_Nodes_If_Not_File(recvbuf, iResult, file);
-
 
     Shutdown_Connection_Gracefully();
 
@@ -486,48 +481,7 @@ int MainClient::GetFile(char *filename)
     return 0;
 }
 
-/*
-MainClient::MainClient(in_addr addr, unsigned short int port)
-{
-    printf("Mainclient(in_addr addr, port) being created\n\n");
-    SOCKET sock;
-    struct sockaddr_in serv_addr;
 
-    if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
-    {
-        printf("\n Socket creation error \n");
-        exit(1);
-    }
-
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(port); //Replace with port
-
-
-    serv_addr.sin_addr = addr;
-
-
-    if (connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
-    {
-        printf("Error on connect() code :%i", WSAGetLastError());
-        exit(1);
-    }
-
-    if (sock == INVALID_SOCKET) {
-        printf("Unable to connect to server!\n");
-        WSACleanup();
-        exit(1);
-    }
-
-    MainClient::Socket = sock;
-    Server_IP = addr;
-    Server_Port = port;
-
-
-    //send(sock , hello , strlen(hello) , 0 );
-    //valread = read( sock , buffer, 1024);
-
-}
-*/
 
 
 //INCREADIBLY INEFFICENT TODO

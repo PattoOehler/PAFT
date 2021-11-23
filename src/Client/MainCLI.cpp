@@ -48,6 +48,11 @@ bool MainCli::String_Compare(char* string1, const char* string2)
             }
 
         }
+        if(string2[i]  == '\n' || string2[i]  == '\0' || string2[i]  == ' ')
+        {
+            return false;
+
+        }
         if(string1[i] == string2[i])
             continue;
         else
@@ -136,11 +141,6 @@ void MainCli::Self_Store_Random_File()
 
 int MainCli::Command_Parser(char Input[], int Input_len)
 {
-    if(Input_len < 10)
-    {
-        std::cout << "Input_Len too short to operate MainClient::Command_Parser";
-        return 1;
-    }
 
 
     if(String_Compare(Input, "help"))
@@ -155,6 +155,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "self_find_random_peer -- finds the closest 3 peers to a random id in own DHT\n";
         std::cout << "self_find_random_file -- finds the closest 3 peers/files to a random id in own DHT\n";
         std::cout << "self_store_random_file-- sends store file RPC to self\n";
+        std::cout << "print_files           -- prints the stored files\n";
         return 0;
     }
 
@@ -215,6 +216,13 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
 
         return 0;
+    }
+    else if(String_Compare(Input, "print_files"))
+    {
+        DHT::Print_Files();
+        return 0;
+
+
     }
 
     else if(String_Compare(Input, "exit"))
