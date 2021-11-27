@@ -1,7 +1,4 @@
-#include "Connection.h"
-#include "MainServer.h"
-#include "../DHT/dht.h"
-#include "../DHT/DHT_Access.h"
+
 
 #include <winsock2.h>
 #include <winsock.h>
@@ -9,6 +6,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "Connection.h"
+#include "MainServer.h"
+#include "../DHT/dht.h"
+#include "../DHT/DHT_Access.h"
 
 #include <ws2tcpip.h>
 
@@ -55,8 +56,7 @@ void Connection::Send_File(LPVOID lpParam)
     // set our socket to the socket passed in as a parameter
     SOCKET current_client = (SOCKET)lpParam;
 
-    static char FileName[] = "SERVER_FILES/asdf.txt";  //TODO replace with the file gathered in MainServer::receive_cmds()
-
+    static char FileName[] = "SERVER_FILES/asdf.txt";
     char Filebuf[512];
     FILE *asdf = fopen( FileName, "rb" );
 
@@ -114,7 +114,6 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
     memcpy((char*)&a, buf+23, 20);
     three_DHT closest_Three = DHT::Lookup(a);
 
-    printf("Lookup_Peer before all of the memcpy's\n");
     int counter=0;
     if(closest_Three.entry[0].is_set)
     {
@@ -140,9 +139,7 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
         counter=3;
 
     }
-    printf("Lookup_Peer after all of the memcpy's\n");
     send(current_client,sendbuf,20+26*counter,0);
-    printf("Lookup_Peer after the send\n");
 }
 
 
@@ -168,7 +165,6 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
     memcpy((char*)&a, buf+23, 20);
     three_DHT closest_Three = DHT::Find_Value(a);
 
-    printf("Lookup_Peer before all of the memcpy's\n");
     int counter=0;
     if(closest_Three.entry[0].is_set)
     {
@@ -194,9 +190,8 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
         counter=3;
 
     }
-    printf("Lookup_Peer after all of the memcpy's\n");
     send(current_client,sendbuf,20+26*counter,0);
-    printf("Lookup_Peer after the send\n");
+
 }
 
 

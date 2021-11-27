@@ -399,7 +399,7 @@ int MainClient::Ping()
 int MainClient::GetFile(char *filename)
 {
     // \x01 is the command byte
-    //const char *sendbuf = "\x01Hello.txt\x00";  //TODO REMOVE WITH filename
+
 
     char command[21];
     command[0] = '\x01';
@@ -428,7 +428,7 @@ int MainClient::GetFile(char *filename)
     char recvbuf[DEFAULT_BUFLEN];
     int res=0;
     FILE *fp;
-    fp = fopen("CLIENT_FILES/asdf.txt", "w+b");  // TODO remove with filename
+    fp = fopen("CLIENT_FILES/asdf.txt", "w+b");
     while(true)
     {
         // Getting file loop

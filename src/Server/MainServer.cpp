@@ -40,34 +40,33 @@ int MainServer::Start_Server()
         return 0;
 
 
-     // fill in winsock struct ...
-     server.sin_family=AF_INET;
-     server.sin_addr.s_addr=INADDR_ANY;
+    // fill in winsock struct ...
+    server.sin_family=AF_INET;
+    server.sin_addr.s_addr=INADDR_ANY;
 
-     unsigned short int b = 1234;
-     DHT_Access::Set_Self_Port(b);
-     std::cout << "Get self port --->" << std::dec << DHT_Access::Get_Self_Port() << "\n";
-     server.sin_port=htons(1234); // listen on port
+    unsigned short int b = 1234;
+    DHT_Access::Set_Self_Port(b);
+    server.sin_port=htons(b); // listen on port
 
-     // create our socket
-     sock=socket(AF_INET,SOCK_STREAM,0);
+    // create our socket
+    sock=socket(AF_INET,SOCK_STREAM,0);
 
-     if(sock == INVALID_SOCKET)
-     {
+    if(sock == INVALID_SOCKET)
+    {
         return 0;
-     }
+    }
 
-     // bind our socket to a port(port 1234)
-     if( bind(sock,(sockaddr*)&server,sizeof(server)) !=0 )
-     {
+    // bind our socket to a port(port 1234)
+    if( bind(sock,(sockaddr*)&server,sizeof(server)) !=0 )
+    {
         return 0;
-     }
+    }
 
      // listen for a connection
-     if(listen(sock,5) != 0)
-     {
+    if(listen(sock,5) != 0)
+    {
         return 0;
-     }
+    }
 
      SOCKET client;
 
@@ -79,14 +78,14 @@ int MainServer::Start_Server()
      // loop forever
      while(true)
      {
-      // accept connections
-      client = accept(sock,(struct sockaddr*)&from,&fromlen);
-      printf("Client connected\r\n");
-      longsocket *a = new longsocket;
-      a->client = client;
-      a->from = from;
+          // accept connections
+          client = accept(sock,(struct sockaddr*)&from,&fromlen);
+          printf("Client connected\r\n");
+          longsocket *a = new longsocket;
+          a->client = client;
+          a->from = from;
 
-      CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Handle_Client,(LPVOID)a, 0, &thread);
+          CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)&paft::Connection::Handle_Client,(LPVOID)a, 0, &thread);
      }
 
      // shutdown winsock

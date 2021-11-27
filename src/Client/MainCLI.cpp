@@ -29,116 +29,6 @@ int MainCli::Start_Client()
     }
 }
 
-bool MainCli::String_Compare(char* string1, const char* string2)
-{
-    for(int i = 0;;i++)
-    {
-
-        if(string1[i]  == '\n' || string1[i]  == '\0' || string1[i]  == ' ')
-        {
-            if(string2[i]  == '\n' || string2[i]  == '\0' || string2[i]  == ' ')
-            {
-                return true;
-
-            }
-            else
-            {
-                return false;
-
-            }
-
-        }
-        if(string2[i]  == '\n' || string2[i]  == '\0' || string2[i]  == ' ')
-        {
-            return false;
-
-        }
-        if(string1[i] == string2[i])
-            continue;
-        else
-            return false;
-
-
-
-
-    }
-
-
-
-    //return false;
-}
-
-
-void MainCli::Self_Find_Random_Node()
-{
-    _160bitnumber Testing;
-
-    std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
-
-    Testing.top = gen();
-    Testing.mid = gen();
-    Testing.bot = gen() >> 32;
-
-
-    MainClient Client("127.0.0.1", "1234");
-    Client.Find_Node(Testing);
-
-
-
-
-}
-
-void MainCli::Self_Find_Random_File()
-{
-
-    _160bitnumber Testing;
-
-    std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
-
-    Testing.top = gen();
-    Testing.mid = gen();
-    Testing.bot = gen() >> 32;
-
-
-    MainClient Client("127.0.0.1", "1234");
-
-    Client.Find_File(Testing);
-
-
-
-}
-
-void MainCli::Self_Store_Random_File()
-{
-
-    _160bitnumber Testing;
-
-    std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
-
-    Testing.top = gen();
-    Testing.mid = gen();
-    Testing.bot = gen() >> 32;
-
-    DHT_Single_Entry file;
-
-    file = DHT_Access::Access_DHT(159*20);
-    file.id = Testing;
-
-
-    MainClient Client("127.0.0.1", "1234");
-
-    Client.Store_File(file);
-
-
-
-}
-
-
-
-
 int MainCli::Command_Parser(char Input[], int Input_len)
 {
 
@@ -235,3 +125,115 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     std::cout << "Unknown Command\n";
     return 1;
 }
+
+
+bool MainCli::String_Compare(char* string1, const char* string2)
+{
+    for(int i = 0;;i++)
+    {
+
+        if(string1[i]  == '\n' || string1[i]  == '\0' || string1[i]  == ' ')
+        {
+            if(string2[i]  == '\n' || string2[i]  == '\0' || string2[i]  == ' ')
+            {
+                return true;
+
+            }
+            else
+            {
+                return false;
+
+            }
+
+        }
+        if(string2[i]  == '\n' || string2[i]  == '\0' || string2[i]  == ' ')
+        {
+            return false;
+
+        }
+        if(string1[i] == string2[i])
+            continue;
+        else
+            return false;
+
+
+
+
+    }
+
+
+
+    //return false;
+}
+
+
+void MainCli::Self_Find_Random_Node()
+{
+    _160bitnumber Testing;
+
+    std::random_device rd;   // non-deterministic generator
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
+
+    Testing.top = gen();
+    Testing.mid = gen();
+    Testing.bot = gen() >> 32;
+
+
+    MainClient Client("127.0.0.1", "1234");
+    Client.Find_Node(Testing);
+
+
+
+
+}
+
+void MainCli::Self_Find_Random_File()
+{
+
+    _160bitnumber Testing;
+
+    std::random_device rd;   // non-deterministic generator
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
+
+    Testing.top = gen();
+    Testing.mid = gen();
+    Testing.bot = gen() >> 32;
+
+
+    MainClient Client("127.0.0.1", "1234");
+
+    Client.Find_File(Testing);
+
+
+
+}
+
+void MainCli::Self_Store_Random_File()
+{
+
+    _160bitnumber Testing;
+
+    std::random_device rd;   // non-deterministic generator
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
+
+    Testing.top = gen();
+    Testing.mid = gen();
+    Testing.bot = gen() >> 32;
+
+    DHT_Single_Entry file;
+
+    file = DHT_Access::Access_DHT(159*20);
+    file.id = Testing;
+
+
+    MainClient Client("127.0.0.1", "1234");
+
+    Client.Store_File(file);
+
+
+
+}
+
+
+
+

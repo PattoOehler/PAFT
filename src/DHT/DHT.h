@@ -19,9 +19,9 @@ typedef struct
 }_160bitnumber;
 typedef struct
 {
-    in_addr addr;//IP Addr
-    unsigned short int port =0;//Port
-    _160bitnumber id;//160bit ID
+    in_addr addr;
+    unsigned short int port =0;
+    _160bitnumber id;
     bool is_set = false;
     time_t time_To_Timeout;
     //Timeout ~1h
@@ -58,7 +58,6 @@ namespace paft
         static int Test_Add_Entry();
         static void Print_DHT();
         static void Update_Time(DHT_Single_Entry Update);
-        //static void Lookup  //Should return 3 Ip addrs +
         static three_DHT Lookup(_160bitnumber id);
         static void Print_Files();
 

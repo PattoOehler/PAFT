@@ -337,23 +337,18 @@ three_DHT DHT::Lookup(_160bitnumber id)
 
 int DHT::Log2(unsigned long long int n)
 {
-
-    if (n == 0) //throw ...
+    if (n == 0)
     {
-        //Here we have error
-        //you can use exception to handle this error or return Zero
-        //throw  new exception(std::out_of_range("fault we don't have log2 0"));
         return 0;
     }
 
-    //std::cout << "log is receiving " << n << std::endl;
     int logValue = -1;
-    while (n!=0) {//
+    while (n!=0)
+    {
         logValue++;
 
         n >>= 1;
     }
-    //std::cout << "Log value is " << logValue << std::endl;
     return logValue;
 
 
@@ -416,9 +411,11 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
         if(tmp.is_set == true)
         {
-            if(tmp.id.top == Update.id.top && tmp.id.mid == Update.id.mid && tmp.id.bot == Update.id.bot)
+            //if(tmp.id.top == Update.id.top && tmp.id.mid == Update.id.mid && tmp.id.bot == Update.id.bot)
+            if(IsEqual(tmp.id, Update.id))
             {
                 Update.time_To_Timeout = time(0)+60*60; // 1 hour
+                Update.is_set = true;
                 DHT_Access::Write_To_DHT(Update, distance*20+i);
 
                 return;
@@ -442,14 +439,11 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 void DHT::Init(){
 
     //This will set the SELF
-    //TODO
-
-    //First check if the number is already set - if so should keep probs TODO
 
 
 
     std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
     _160bitnumber SELF;
 
@@ -514,15 +508,12 @@ int DHT::Test_Add_Entry()
     Testing.port = a.port;
 
     std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO make random
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
     long long unsigned int tmp_top = gen();
     long long unsigned int tmp_mid = gen();
     long unsigned int tmp_bot = gen() >> 32;
 
-    //tmp_top = SELF.top;
-    //tmp_mid = SELF.mid;
-    //tmp_bot = SELF.bot;
 
     _160bitnumber SELF = DHT_Access::Get_SELF();
 
@@ -537,8 +528,7 @@ int DHT::Test_Add_Entry()
         tmp_top = tmp_top<<1;
         std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
-        //Testing.id.top += 1;
-        //Update_Time(Testing);
+
 
     }
     ard = Testing;
@@ -548,10 +538,8 @@ int DHT::Test_Add_Entry()
     {
         Testing.id.mid = SELF.mid ^ (tmp_mid);
         tmp_mid = tmp_mid<<1;
-        //std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
-        //Testing.id.mid +=1;
-        //Update_Time(Testing);
+
 
     }
 
@@ -561,17 +549,12 @@ int DHT::Test_Add_Entry()
     {
         Testing.id.bot = SELF.bot ^ (tmp_bot);
         tmp_bot = tmp_bot<<1;
-        //std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
-        //Testing.id.bot += 1;
-        //Update_Time(Testing);
+
 
     }
-        //^^^^^^
-    //This puts one entry into every k-bucket
 
 
-    three_DHT asdf = Lookup(ard.id);
 
 
     return 0;

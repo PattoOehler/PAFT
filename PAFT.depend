@@ -75,12 +75,12 @@
 1629342714 c:\users\peyto-w\desktop\paft\paft\include\dht.h
 	<stdint.h>
 
-1633895052 source:c:\users\patto\desktop\paft\paft\main.cpp
+1638041972 source:c:\users\patto\desktop\paft\paft\main.cpp
 	<iostream>
 	<thread>
-	"include/MainServer.h"
-	"include/MainCLI.h"
-	"include/DHT.h"
+	"src/Server/MainServer.h"
+	"src/Client/MainCLI.h"
+	"src/DHT/DHT.h"
 
 1633572896 c:\users\patto\desktop\paft\paft\include\mainserver.h
 	<windows.h>
@@ -318,4 +318,94 @@
 	<mutex>
 	<winsock.h>
 	"DHT.h"
+
+1638039534 c:\users\patto\desktop\paft\paft\src\server\mainserver.h
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+
+1638039534 c:\users\patto\desktop\paft\paft\src\client\maincli.h
+
+1638039777 c:\users\patto\desktop\paft\paft\src\dht\dht.h
+	<stdint.h>
+	<mutex>
+	<winsock.h>
+
+1638041676 source:c:\users\patto\desktop\paft\paft\src\client\main_client.cpp
+	"Main_Client.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<iostream>
+	<winsock2.h>
+	<windows.h>
+	<ws2tcpip.h>
+	<stdlib.h>
+	<stdio.h>
+	<thread>
+
+1638039534 c:\users\patto\desktop\paft\paft\src\client\main_client.h
+	<winsock2.h>
+	"../DHT/DHT.h"
+
+1638039534 c:\users\patto\desktop\paft\paft\src\dht\dht_access.h
+	<stdint.h>
+	<mutex>
+	<winsock.h>
+	"DHT.h"
+
+1638041718 source:c:\users\patto\desktop\paft\paft\src\client\maincli.cpp
+	"MainCLI.h"
+	"Main_Client.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<iostream>
+	<random>
+
+1638039534 source:c:\users\patto\desktop\paft\paft\src\dht\dht.cpp
+	"DHT.h"
+	"DHT_Access.h"
+	<random>
+	<iostream>
+	<time.h>
+	<bits/stdc++.h>
+	<mutex>
+	<ws2tcpip.h>
+
+1638039534 source:c:\users\patto\desktop\paft\paft\src\dht\dht_access.cpp
+	"DHT_Access.h"
+	<iostream>
+
+1638041959 source:c:\users\patto\desktop\paft\paft\src\server\connection.cpp
+	<winsock2.h>
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	"Connection.h"
+	"MainServer.h"
+	"../DHT/dht.h"
+	"../DHT/DHT_Access.h"
+	<ws2tcpip.h>
+	<iostream>
+
+1638041208 c:\users\patto\desktop\paft\paft\src\server\connection.h
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	"MainServer.h"
+
+1638040091 source:c:\users\patto\desktop\paft\paft\src\server\mainserver.cpp
+	"MainServer.h"
+	"Connection.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<winsock.h>
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<ws2tcpip.h>
+	<iostream>
 
