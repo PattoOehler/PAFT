@@ -495,44 +495,35 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 int DHT::Test_Add_Entry()
 {
 
-    DHT_Single_Entry Testing, ard;
-
-    Testing.id.top = 8446744073709551615; //18446744073709551615 is max int
-    Testing.id.mid = 999999999999999999;
-    Testing.id.bot = 123123123;
-
+    DHT_Single_Entry Testing;
 
 
     DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
     Testing.addr = a.addr;
     Testing.port = a.port;
 
-    std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
-    long long unsigned int tmp_top = gen();
-    long long unsigned int tmp_mid = gen();
-    long unsigned int tmp_bot = gen() >> 32;
+    long long unsigned int tmp_top;
+    long long unsigned int tmp_mid;
+    long unsigned int tmp_bot;
 
 
     _160bitnumber SELF = DHT_Access::Get_SELF();
-
-    Testing.id.top = SELF.top;
-    Testing.id.mid = SELF.mid;
     Testing.id.bot = SELF.bot;
+    Testing.id.mid = SELF.mid;
 
     tmp_top = 1;
     for(int i=0; i<64; i++)
     {
         Testing.id.top = SELF.top ^ (tmp_top);
         tmp_top = tmp_top<<1;
-        std::cout << tmp_top << " is what we are sending\n";
         Update_Time(Testing);
 
 
     }
-    ard = Testing;
+
     Testing.id.top = SELF.top;
+
     tmp_mid = 1;
     for(int i=0; i<64; i++)
     {
@@ -570,9 +561,7 @@ void DHT::Print_DHT()
             DHT_Single_Entry tmp = DHT_Access::Access_DHT(20*i+j);
             if(tmp.is_set)
             {
-                std::cout << std::hex << tmp.id.top <<
-                             std::hex << tmp.id.mid <<
-                             std::hex << tmp.id.bot;
+                std::cout << std::hex << tmp.id.top << tmp.id.mid << tmp.id.bot;
                 std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time "<<
                 ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
             }

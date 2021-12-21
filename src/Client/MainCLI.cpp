@@ -3,6 +3,7 @@
 #include "Main_Client.h"
 #include "../DHT/DHT.h"
 #include "../DHT/DHT_Access.h"
+#include "../FILEIO/Meta_Files.h"
 
 #include <iostream>
 #include <random>
@@ -46,6 +47,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "self_find_random_file -- finds the closest 3 peers/files to a random id in own DHT\n";
         std::cout << "self_store_random_file-- sends store file RPC to self\n";
         std::cout << "print_files           -- prints the stored files\n";
+        std::cout << "make_meta_file        -- makes a metadata file\n";
         return 0;
     }
 
@@ -114,6 +116,15 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
 
     }
+    else if(String_Compare(Input, "make_meta_file"))
+    {
+
+        Meta_Files::Make_File("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", DHT_Access::Get_SELF());
+
+
+        return 0;
+
+    }
 
     else if(String_Compare(Input, "exit"))
     {
@@ -171,7 +182,7 @@ void MainCli::Self_Find_Random_Node()
 {
     _160bitnumber Testing;
 
-    std::random_device rd;   // non-deterministic generator
+    std::random_device rd;
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
     Testing.top = gen();
@@ -192,7 +203,7 @@ void MainCli::Self_Find_Random_File()
 
     _160bitnumber Testing;
 
-    std::random_device rd;   // non-deterministic generator
+    std::random_device rd;
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
     Testing.top = gen();
@@ -213,7 +224,7 @@ void MainCli::Self_Store_Random_File()
 
     _160bitnumber Testing;
 
-    std::random_device rd;   // non-deterministic generator
+    std::random_device rd;
     std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
     Testing.top = gen();
