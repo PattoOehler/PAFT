@@ -87,6 +87,7 @@ void DHT_Access::Store_FileId(DHT_Single_Entry entry)
         if(!tmp_File.is_set)
         {
             entry.is_set = true;
+            entry.time_To_Timeout = time(0)+60*60; // 1 hour
             Write_To_FileIds(entry, i);
             break;
         }

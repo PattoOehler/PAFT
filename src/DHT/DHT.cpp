@@ -1,5 +1,6 @@
 #include "DHT.h"
 #include "DHT_Access.h"
+#include "DHT_Updater.h"
 
 #include <random>
 #include <iostream>
@@ -7,6 +8,7 @@
 #include <bits/stdc++.h>
 #include <mutex>
 #include <ws2tcpip.h>
+#include <thread>
 
 
 using namespace paft;
@@ -440,6 +442,8 @@ void DHT::Init(){
 
     //This will set the SELF
 
+    std::thread thread(DHT_Updater::Keep_DHT_Updated);
+    thread.detach();
 
 
     std::random_device rd;   // non-deterministic generator
