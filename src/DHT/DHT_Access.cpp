@@ -8,12 +8,29 @@ using namespace paft;
 
 DHT_Single_Entry* DHT_Access::all_Peers = new DHT_Single_Entry[160*20];
 DHT_Single_Entry* DHT_Access::all_Files = new DHT_Single_Entry[DHT_File_Len]; //Temporarily as 100, might need to change later
+std::string *DHT_Access::local_File_Locations = new std::string[DHT_File_Len];
 
 _160bitnumber* DHT_Access::own_ID = new _160bitnumber;
 unsigned short int DHT_Access::own_Port = 1234; //Default value- should be set before accessed
 
 std::mutex* DHT_Access::all_Peers_Mutex = new std::mutex[160*20];
 std::mutex* DHT_Access::all_Files_Mutex = new std::mutex[DHT_File_Len];
+
+
+std::string DHT_Access::Get_Local_File_Location(int position)
+{
+    return local_File_Locations[position];
+
+}
+
+void DHT_Access::Set_Local_File_Location(std::string local_File_Location, int position)
+{
+    local_File_Locations[position] = local_File_Location;
+
+}
+
+
+
 
 
 

@@ -602,3 +602,19 @@ void DHT::Print_Files()
 
     return;
 }
+
+
+_160bitnumber DHT::Random_ID()
+{
+    _160bitnumber random_ID;
+
+    std::random_device rd;
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
+
+    random_ID.top = gen();
+    random_ID.mid = gen();
+    random_ID.bot = gen() >> 32;
+
+    return random_ID;
+}
+

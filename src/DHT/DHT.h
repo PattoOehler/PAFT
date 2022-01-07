@@ -61,6 +61,8 @@ namespace paft
         static three_DHT Lookup(_160bitnumber id);
         static void Print_Files();
 
+        static _160bitnumber Random_ID();
+
 
 
     };

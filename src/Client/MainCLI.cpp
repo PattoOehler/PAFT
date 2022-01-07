@@ -119,7 +119,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     else if(String_Compare(Input, "make_meta_file"))
     {
 
-        Meta_Files::Make_File("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", DHT_Access::Get_SELF());
+        Meta_Files::Make_File("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", DHT::Random_ID());
 
 
         return 0;
@@ -180,14 +180,9 @@ bool MainCli::String_Compare(char* string1, const char* string2)
 
 void MainCli::Self_Find_Random_Node()
 {
-    _160bitnumber Testing;
+    _160bitnumber Testing = DHT::Random_ID();
 
-    std::random_device rd;
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
 
-    Testing.top = gen();
-    Testing.mid = gen();
-    Testing.bot = gen() >> 32;
 
 
     MainClient Client("127.0.0.1", "1234");
@@ -201,14 +196,7 @@ void MainCli::Self_Find_Random_Node()
 void MainCli::Self_Find_Random_File()
 {
 
-    _160bitnumber Testing;
-
-    std::random_device rd;
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
-
-    Testing.top = gen();
-    Testing.mid = gen();
-    Testing.bot = gen() >> 32;
+    _160bitnumber Testing = DHT::Random_ID();
 
 
     MainClient Client("127.0.0.1", "1234");
@@ -222,14 +210,7 @@ void MainCli::Self_Find_Random_File()
 void MainCli::Self_Store_Random_File()
 {
 
-    _160bitnumber Testing;
-
-    std::random_device rd;
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
-
-    Testing.top = gen();
-    Testing.mid = gen();
-    Testing.bot = gen() >> 32;
+    _160bitnumber Testing = DHT::Random_ID();
 
     DHT_Single_Entry file;
 
