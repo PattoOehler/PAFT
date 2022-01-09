@@ -63,7 +63,6 @@ namespace paft
 
         static _160bitnumber Random_ID();
 
-        static three_DHT Find_Closest_Peers_In_Network(_160bitnumber);
 
 
 

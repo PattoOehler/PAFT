@@ -352,6 +352,121 @@ int MainClient::Find_Node(_160bitnumber node)
 
 }
 
+
+int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
+{
+
+    char sendbuf[43];
+    sendbuf[0] = 0x03;
+    Add_Self(sendbuf);
+
+    memcpy(sendbuf+23, (char*)&node, 20);
+
+
+
+    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    char recvbuf[DEFAULT_BUFLEN];
+    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+
+    if (iResult == SOCKET_ERROR) {
+        printf("recv failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    DHT_Single_Entry current_Connection = Add_Received_Entry_To_DHT_And_Return_Entry(recvbuf, iResult);
+
+    three_DHT received_Nodes = Return_Received_Nodes(recvbuf, iResult);
+
+
+    Shutdown_Connection_Gracefully();
+
+    //Write this connection to lookup_DHT if they are closer then currently stored
+
+    //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
+
+    return 0;
+
+
+}
+
+DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length)
+{
+    if(length >= 20)
+    {
+
+
+        _160bitnumber sender_Id;
+        memcpy((void*)&sender_Id, recvbuf, 20);
+
+
+        DHT_Single_Entry sender_DHT_Entry;
+        sender_DHT_Entry.addr = Server_IP;
+        sender_DHT_Entry.id = sender_Id;
+        sender_DHT_Entry.port = Server_Port;
+        sender_DHT_Entry.is_set = true;
+
+
+        DHT::Update_Time(sender_DHT_Entry);
+
+        return sender_DHT_Entry;
+
+    }
+    else
+    {
+        printf("Entry too short in MainClient::Add_Received_Entry_To_DHT()\n");
+        DHT_Single_Entry a;
+        a.is_set = false;
+        return a;
+    }
+}
+
+
+
+
+three_DHT MainClient::Return_Received_Nodes(char recvbuf[], int length)
+{
+    three_DHT recived_Nodes;
+
+    for(int i=0; i<3;i++)
+    {
+        if(length >= 46+26*i)
+        {
+
+            _160bitnumber sender_Id;
+            short unsigned int port;
+            in_addr addr;
+            memcpy((void*)&sender_Id, recvbuf+20+26*i, 20);
+            memcpy((void*)&port, recvbuf+40+26*i, 2);
+            memcpy((void*)&addr, recvbuf+42+26*i, 4);
+
+            recived_Nodes.entry[i].addr = addr;
+            recived_Nodes.entry[i].port = port;
+            recived_Nodes.entry[i].id = sender_Id;
+
+        }
+
+
+    }
+
+    return recived_Nodes;
+
+}
+
+
+
+
+
 int MainClient::Ping()
 {
 

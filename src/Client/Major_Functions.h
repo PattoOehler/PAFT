@@ -21,4 +21,4 @@ namespace paft
 
 
 
-#endif // __PAFT_MAINCLIENT_H
+#endif // __PAFT_MAJOR_FUNCTIONS_H

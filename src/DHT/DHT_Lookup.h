@@ -23,10 +23,10 @@ namespace paft
         static three_DHT Access_Three_DHT(int position);
         static void Write_To_Three_DHT(three_DHT write, int position);
 
-        void Write_To_Three_DHT_Is_Available(bool write, int position);
-        bool Access_To_Three_DHT_Is_Available(int position);
+        static void Write_To_Three_DHT_Is_Available(bool write, int position);
+        static bool Access_To_Three_DHT_Is_Available(int position);
 
-        int Get_Available_Three_DHT();
+        static int Get_Available_Three_DHT();
 
     };
 

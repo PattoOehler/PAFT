@@ -26,6 +26,10 @@ namespace paft
         int Find_File(_160bitnumber file);
         int Store_File(DHT_Single_Entry file);
 
+        int Find_Node_Recursive(_160bitnumber node, int lookup_Identifier);
+        three_DHT Return_Received_Nodes(char recvbuf[], int length);
+        DHT_Single_Entry Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length);
+
     };
 
 }
