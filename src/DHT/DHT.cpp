@@ -496,6 +496,9 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 }
 
 
+
+
+
 int DHT::Test_Add_Entry()
 {
 
@@ -617,4 +620,41 @@ _160bitnumber DHT::Random_ID()
 
     return random_ID;
 }
+
+
+
+three_DHT DHT::Find_Closest_Peers_In_Network(_160bitnumber number)
+{
+
+    three_DHT In_Own_DHT = Lookup(number);
+
+
+
+    return In_Own_DHT;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

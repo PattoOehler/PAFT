@@ -125,6 +125,23 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         return 0;
 
     }
+    else if(String_Compare(Input, "test_dht_String"))
+    {
+
+
+        /*DHT_Access::Set_Local_File_Location("C:\\Cobal", 0);
+
+        std::string local0 = DHT_Access::Get_Local_File_Location(0);
+        if(local0.empty())
+        {
+            std::cout << "IT IS A NULLPTR!!\n";
+
+        }
+        */
+
+        return 0;
+
+    }
 
     else if(String_Compare(Input, "exit"))
     {

@@ -20,6 +20,7 @@ namespace paft
 
         static std::mutex* all_Peers_Mutex;
         static std::mutex* all_Files_Mutex;
+
         static _160bitnumber* own_ID;
         static unsigned short int own_Port;
 

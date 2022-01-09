@@ -17,6 +17,11 @@ std::mutex* DHT_Access::all_Peers_Mutex = new std::mutex[160*20];
 std::mutex* DHT_Access::all_Files_Mutex = new std::mutex[DHT_File_Len];
 
 
+
+
+
+
+
 std::string DHT_Access::Get_Local_File_Location(int position)
 {
     return local_File_Locations[position];
@@ -28,11 +33,6 @@ void DHT_Access::Set_Local_File_Location(std::string local_File_Location, int po
     local_File_Locations[position] = local_File_Location;
 
 }
-
-
-
-
-
 
 
 DHT_Single_Entry DHT_Access::Access_DHT(int position)

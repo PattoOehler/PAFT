@@ -31,10 +31,14 @@
 		<Unit filename="src/Client/MainCLI.h" />
 		<Unit filename="src/Client/Main_Client.cpp" />
 		<Unit filename="src/Client/Main_Client.h" />
+		<Unit filename="src/Client/Major_Functions.cpp" />
+		<Unit filename="src/Client/Major_Functions.h" />
 		<Unit filename="src/DHT/DHT.cpp" />
 		<Unit filename="src/DHT/DHT.h" />
 		<Unit filename="src/DHT/DHT_Access.cpp" />
 		<Unit filename="src/DHT/DHT_Access.h" />
+		<Unit filename="src/DHT/DHT_Lookup.cpp" />
+		<Unit filename="src/DHT/DHT_Lookup.h" />
 		<Unit filename="src/DHT/DHT_Updater.cpp" />
 		<Unit filename="src/DHT/DHT_Updater.h" />
 		<Unit filename="src/FileIO/Meta_Files.cpp" />
