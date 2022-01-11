@@ -241,7 +241,7 @@
 	<ws2tcpip.h>
 	<thread>
 
-1641759550 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
+1641930957 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
 	<stdint.h>
 	<mutex>
 	<winsock.h>
@@ -291,10 +291,11 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1641761718 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+1641927881 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
+	"Minor_Functions.h"
 	<iostream>
 	<winsock2.h>
 	<windows.h>
@@ -303,7 +304,7 @@
 	<stdio.h>
 	<thread>
 
-1641761717 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
+1641762618 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
 	<winsock2.h>
 	"../DHT/DHT.h"
 
@@ -450,10 +451,13 @@
 	<Windows.h>
 	<iostream>
 
-1641700033 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1641761808 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Lookup.h"
+	"Main_Client.h"
 
-1641699034 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
+1641927283 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
 	"../DHT/DHT.h"
 
 1641700083 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_lookup.cpp
@@ -464,4 +468,7 @@
 	<stdint.h>
 	<mutex>
 	"DHT.h"
+
+1641930890 c:\users\peyto-w\desktop\paft\github\paft\src\client\minor_functions.h
+	"../DHT/DHT.h"
 

@@ -2,6 +2,7 @@
 #include "Main_Client.h"
 #include "../DHT/DHT.h"
 #include "../DHT/DHT_Access.h"
+#include "Minor_Functions.h"
 
 #include <iostream>
 
@@ -392,6 +393,7 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
     Shutdown_Connection_Gracefully();
 
     //Write this connection to lookup_DHT if they are closer then currently stored
+    Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, node);
 
     //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
 

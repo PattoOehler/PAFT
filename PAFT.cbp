@@ -33,6 +33,8 @@
 		<Unit filename="src/Client/Main_Client.h" />
 		<Unit filename="src/Client/Major_Functions.cpp" />
 		<Unit filename="src/Client/Major_Functions.h" />
+		<Unit filename="src/Client/Minor_Functions.cpp" />
+		<Unit filename="src/Client/Minor_Functions.h" />
 		<Unit filename="src/DHT/DHT.cpp" />
 		<Unit filename="src/DHT/DHT.h" />
 		<Unit filename="src/DHT/DHT_Access.cpp" />

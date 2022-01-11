@@ -11,7 +11,7 @@ namespace paft
     private:
 
     public:
-        three_DHT Three_Closest_Peers_In_Network(_160bitnumber id);
+        static three_DHT Three_Closest_Peers_In_Network(_160bitnumber id);
 
     };
 
