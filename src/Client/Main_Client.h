@@ -12,6 +12,8 @@ namespace paft
         in_addr Server_IP;
         unsigned short int Server_Port;
 
+        bool setUpProperly=true;
+
     public:
         int GetFile(char *filename);
         int Ping();

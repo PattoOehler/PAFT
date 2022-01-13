@@ -33,7 +33,7 @@ namespace paft
 
         static DHT_Single_Entry Access_FileIds(int position);
         static void Write_To_FileIds(DHT_Single_Entry write, int position);
-        static void Store_FileId(DHT_Single_Entry entry);
+        static int Store_FileId(DHT_Single_Entry entry);
 
         static _160bitnumber Get_SELF();
         static void Set_Self(_160bitnumber own_Id);

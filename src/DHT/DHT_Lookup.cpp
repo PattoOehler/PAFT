@@ -89,6 +89,26 @@ three_DHT DHT_Lookup::Access_Three_DHT(int position)
     return tmp;
 }
 
+three_DHT DHT_Lookup::Access_Three_DHT_And_Lock(int position)
+{
+    if((position >= Lookup_Length) | (position<0))
+    {
+        std::cout << "Position " << position << " is not valid!!!\n";
+        throw std::invalid_argument( "Position is not valid" );
+    }
+
+    three_DHT_For_Lookups_Mutex[position].lock();
+    three_DHT tmp = three_DHT_For_Lookups[position];
+
+    return tmp;
+}
+
+void DHT_Lookup::Unlock(int position)
+{
+    three_DHT_For_Lookups_Mutex[position].unlock();
+
+}
+
 
 
 void DHT_Lookup::Write_To_Three_DHT(three_DHT write, int position)
@@ -102,4 +122,16 @@ void DHT_Lookup::Write_To_Three_DHT(three_DHT write, int position)
     three_DHT_For_Lookups_Mutex[position].lock();
     three_DHT_For_Lookups[position] = write;
     three_DHT_For_Lookups_Mutex[position].unlock();
+}
+
+
+void DHT_Lookup::Write_To_Locked_Three_DHT(three_DHT write, int position)
+{
+    if((position >= Lookup_Length) | (position<0))
+    {
+        std::cout << "Position " << position << " is not valid!!!\n";
+        throw std::invalid_argument( "Position is not valid" );
+    }
+
+    three_DHT_For_Lookups[position] = write;
 }

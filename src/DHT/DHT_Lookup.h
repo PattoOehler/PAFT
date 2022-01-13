@@ -21,12 +21,17 @@ namespace paft
 
     public:
         static three_DHT Access_Three_DHT(int position);
+        static three_DHT Access_Three_DHT_And_Lock(int position);
+
         static void Write_To_Three_DHT(three_DHT write, int position);
 
         static void Write_To_Three_DHT_Is_Available(bool write, int position);
         static bool Access_To_Three_DHT_Is_Available(int position);
 
         static int Get_Available_Three_DHT();
+
+        static void Unlock(int position);
+        static void Write_To_Locked_Three_DHT(three_DHT write, int position);
 
     };
 

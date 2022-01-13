@@ -93,7 +93,7 @@ void DHT_Access::Write_To_FileIds(DHT_Single_Entry write, int position)
     all_Files_Mutex[position].unlock();
 }
 
-void DHT_Access::Store_FileId(DHT_Single_Entry entry)
+int DHT_Access::Store_FileId(DHT_Single_Entry entry)
 {
 
     printf("Storing a file ID...\n\n");
@@ -106,7 +106,7 @@ void DHT_Access::Store_FileId(DHT_Single_Entry entry)
             entry.is_set = true;
             entry.time_To_Timeout = time(0)+60*60; // 1 hour
             Write_To_FileIds(entry, i);
-            break;
+            return i;
         }
 
     }

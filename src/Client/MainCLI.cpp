@@ -4,6 +4,7 @@
 #include "../DHT/DHT.h"
 #include "../DHT/DHT_Access.h"
 #include "../FILEIO/Meta_Files.h"
+#include "Major_Functions.h"
 
 #include <iostream>
 #include <random>
@@ -48,6 +49,8 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "self_store_random_file-- sends store file RPC to self\n";
         std::cout << "print_files           -- prints the stored files\n";
         std::cout << "make_meta_file        -- makes a metadata file\n";
+        std::cout << "self_find_random_node_network  -- Testing\n";
+        std::cout << "store_file_on_network -- stores a file on the network\n";
         return 0;
     }
 
@@ -125,19 +128,20 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         return 0;
 
     }
-    else if(String_Compare(Input, "test_dht_String"))
+    else if(String_Compare(Input, "self_find_random_node_network"))
     {
+        Self_Find_Random_Node_Network();
 
 
-        /*DHT_Access::Set_Local_File_Location("C:\\Cobal", 0);
 
-        std::string local0 = DHT_Access::Get_Local_File_Location(0);
-        if(local0.empty())
-        {
-            std::cout << "IT IS A NULLPTR!!\n";
+        return 0;
 
-        }
-        */
+    }
+
+    else if(String_Compare(Input, "store_file_on_network"))
+    {
+        Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft");
+
 
         return 0;
 
@@ -205,6 +209,17 @@ void MainCli::Self_Find_Random_Node()
     MainClient Client("127.0.0.1", "1234");
     Client.Find_Node(Testing);
 
+
+
+
+}
+
+void MainCli::Self_Find_Random_Node_Network()
+{
+    _160bitnumber Testing = DHT::Random_ID();
+
+
+    three_DHT a = Major_Functions::Three_Closest_Peers_In_Network(Testing);
 
 
 

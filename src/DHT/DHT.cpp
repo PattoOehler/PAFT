@@ -114,7 +114,7 @@ bool DHT::Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To)
     else
     {
         //Should not happen unless they are the same
-        std::cout << "Error in DHT::Compare - they are the same";
+        std::cout << "Error in DHT::Compare - they are the same\n";
         return false;
     }
 

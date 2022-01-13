@@ -19,6 +19,8 @@ namespace paft
         static void Add_To_Lookup_DHT(int lookupID, DHT_Single_Entry entry, _160bitnumber lookingFor);
         static void Write_Single_Entry_To_DHT_Lookup(DHT_Single_Entry entry, int lookupID, _160bitnumber lookingFor);
 
+        static void Do_Lookup_If_Closer(int lookupID, three_DHT received_values, _160bitnumber lookingFor);
+
     };
 
 }

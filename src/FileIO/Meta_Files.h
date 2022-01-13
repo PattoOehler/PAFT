@@ -19,6 +19,9 @@ public:
     long long int fileLength; //In bytes
     long long int chunkSize;
 
+
+
+
     Meta_Files(int chunk_Size, const char *fileName, long long int total_Bytes, linked_list a, _160bitnumber fileID);
     void Write_File();
     static void Make_File(const char *input_File, const char *output_File, _160bitnumber fileID);

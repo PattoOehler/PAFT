@@ -26,7 +26,7 @@ namespace paft{
         static void Ping(LPVOID lpParam);
         static void Lookup_Peer(LPVOID lpParam, char buf[], int len);
         static void Lookup_File(LPVOID lpParam, char buf[], int len);
-        static void Store_File(LPVOID lpParam, char buf[], int len);
+        static void Store_File(LPVOID lpParam, char buf[], int len, in_addr current_client_ip);
 
 
     };

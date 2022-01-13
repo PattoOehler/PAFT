@@ -32,6 +32,9 @@ using namespace paft;
 
 void MainClient::Shutdown_Connection_Gracefully()
 {
+    if(!setUpProperly)
+        return;
+
     char recvbuf[DEFAULT_BUFLEN];
     // shutdown the connection since no more data will be sent
     int iResult = shutdown(Socket, SD_SEND);
@@ -107,6 +110,9 @@ void MainClient::Store_File_To_DHT(char recvbuf[], int length)
 
 void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 {
+    if(!setUpProperly)
+        return;
+
     if(length >= 20)
     {
 
@@ -134,7 +140,8 @@ void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 
 void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file)
 {
-
+    if(!setUpProperly)
+        return;
 
     for(int i=0; i<3;i++)
     {
@@ -180,6 +187,9 @@ void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _16
 
 void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 {
+    if(!setUpProperly)
+        return;
+
 
     for(int i=0; i<3;i++)
     {
@@ -209,6 +219,9 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 
 int MainClient::Store_File(DHT_Single_Entry file)
 {
+    if(!setUpProperly)
+        return -1;
+
     int bufLen = 49;
 
     char sendbuf[bufLen];
@@ -258,6 +271,8 @@ int MainClient::Store_File(DHT_Single_Entry file)
 
 int MainClient::Find_File(_160bitnumber file)
 {
+    if(!setUpProperly)
+        return -1;
 
     char sendbuf[43];
     sendbuf[0] = 0x04;
@@ -310,6 +325,8 @@ int MainClient::Find_File(_160bitnumber file)
 
 int MainClient::Find_Node(_160bitnumber node)
 {
+    if(!setUpProperly)
+        return -1;
 
     char sendbuf[43];
     sendbuf[0] = 0x03;
@@ -356,6 +373,9 @@ int MainClient::Find_Node(_160bitnumber node)
 
 int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 {
+    if(!setUpProperly)
+        return -1;
+
 
     char sendbuf[43];
     sendbuf[0] = 0x03;
@@ -396,6 +416,7 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
     Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, node);
 
     //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
+    Minor_Functions::Do_Lookup_If_Closer(lookup_Identifier, received_Nodes, node);
 
     return 0;
 
@@ -404,6 +425,14 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 
 DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length)
 {
+    if(!setUpProperly)
+    {
+        DHT_Single_Entry a;
+        return a;
+    }
+
+
+
     if(length >= 20)
     {
 
@@ -426,7 +455,7 @@ DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char rec
     }
     else
     {
-        printf("Entry too short in MainClient::Add_Received_Entry_To_DHT()\n");
+        printf("Entry too short in MainClient::Add_Received_Entry_To_DHT_And_Return_Entry()\n");
         DHT_Single_Entry a;
         a.is_set = false;
         return a;
@@ -439,6 +468,10 @@ DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char rec
 three_DHT MainClient::Return_Received_Nodes(char recvbuf[], int length)
 {
     three_DHT recived_Nodes;
+    if(!setUpProperly)
+        return recived_Nodes;
+
+
 
     for(int i=0; i<3;i++)
     {
@@ -471,6 +504,8 @@ three_DHT MainClient::Return_Received_Nodes(char recvbuf[], int length)
 
 int MainClient::Ping()
 {
+    if(!setUpProperly)
+        return -1;
 
     char sendbuf[23];
     sendbuf[0] = 0x02;
@@ -516,7 +551,8 @@ int MainClient::Ping()
 int MainClient::GetFile(char *filename)
 {
     // \x01 is the command byte
-
+    if(!setUpProperly)
+        return -1;
 
     char command[21];
     command[0] = '\x01';
@@ -622,7 +658,8 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
-        exit(1);
+        setUpProperly=false;
+        return;
     }
 
     ZeroMemory( &hints, sizeof(hints) );
@@ -637,7 +674,8 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
-        exit(1);
+        setUpProperly=false;
+        return;
     }
 
     // Attempt to connect to an address until one succeeds
@@ -650,7 +688,8 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %d\n", WSAGetLastError());
             WSACleanup();
-            exit(1);
+            setUpProperly=false;
+            return;
         }
 
         // Connect to server.
@@ -668,7 +707,8 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        exit(1);
+        setUpProperly=false;
+        return;
     }
     MainClient::Socket = ConnectSocket;
 
@@ -699,7 +739,8 @@ MainClient::MainClient(const char *addr, const char *port)
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
-        exit(1);
+        setUpProperly=false;
+        return;
     }
 
     ZeroMemory( &hints, sizeof(hints) );
@@ -712,7 +753,8 @@ MainClient::MainClient(const char *addr, const char *port)
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
-        exit(1);
+        setUpProperly=false;
+        return;
     }
 
     // Attempt to connect to an address until one succeeds
@@ -724,7 +766,8 @@ MainClient::MainClient(const char *addr, const char *port)
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %d\n", WSAGetLastError());
             WSACleanup();
-            exit(1);
+            setUpProperly=false;
+            return;
         }
 
         // Connect to server.
@@ -742,7 +785,8 @@ MainClient::MainClient(const char *addr, const char *port)
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        exit(1);
+        setUpProperly=false;
+        return;
     }
     MainClient::Socket = ConnectSocket;
 

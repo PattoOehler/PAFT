@@ -196,8 +196,11 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
 
 
-void Connection::Store_File(LPVOID lpParam, char buf[], int len)
+void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current_client_ip)
 {
+    //TODO
+    //Currently uses the position 159*20 to check for ip address 127.0.0.1 - but needs to be more robust
+    // i.e. use something along the lines of 0.0.0.0 or force 127.0.0.1 and not allow 127.0.1.1
 
     SOCKET current_client = (SOCKET)lpParam;
 
@@ -205,9 +208,6 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len)
     char sendbuf[512];
     _160bitnumber self = DHT_Access::Get_SELF();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
-
-
-
 
     if(len < 49)
     {
@@ -221,6 +221,13 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len)
     memcpy((char*)&file_To_Add.id,buf+23,20);
     memcpy((char*)&file_To_Add.port, buf+43,2);
     memcpy((char*)&file_To_Add.addr, buf+45, 4);
+
+    DHT_Single_Entry self_entry = DHT_Access::Access_DHT(159*20);
+    int *aa = (int *)&file_To_Add.addr;
+    int *bb = (int *)&self_entry.addr;
+
+    if(&aa == &bb)
+        file_To_Add.addr = current_client_ip;
 
     DHT_Access::Store_FileId(file_To_Add);
 
@@ -271,7 +278,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Lookup File
             std::cout << "Client is asking to store a file \n";
 
-            Store_File((LPVOID)long_client.client, buf, len);
+            Store_File((LPVOID)long_client.client, buf, len, long_client.from.sin_addr);
 
 
         }

@@ -12,6 +12,7 @@ namespace paft
         static void Self_Find_Random_Node();
         static void Self_Find_Random_File();
         static void Self_Store_Random_File();
+        static void Self_Find_Random_Node_Network();
 
     private:
         static int Command_Parser(char *Input, int a);
