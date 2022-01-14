@@ -2,44 +2,29 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\Client\MainCLI.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\DHT\DHT_Lookup.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="339" topLine="0" />
+			<Cursor1 position="2389" topLine="52" />
 		</Cursor>
 	</File>
-	<File name="src\FileIO\linkedlist.h" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="6" />
-		</Cursor>
-	</File>
-	<File name="src\DHT\DHT.h" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="595" topLine="3" />
-		</Cursor>
-	</File>
-	<File name="src\DHT\DHT_Updater.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="211" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\FileIO\Meta_Files.h" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="465" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Server\Connection.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="817" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\DHT\DHT_Lookup.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\DHT\DHT_Lookup.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="902" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Client\Main_Client.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Client\MainCLI.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="287" topLine="0" />
+			<Cursor1 position="4573" topLine="72" />
+		</Cursor>
+	</File>
+	<File name="src\FileIO\Meta_Files.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3025" topLine="100" />
+		</Cursor>
+	</File>
+	<File name="src\Client\MainCLI.h" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="339" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\DHT\DHT.cpp" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -47,19 +32,9 @@
 			<Cursor1 position="2540" topLine="79" />
 		</Cursor>
 	</File>
-	<File name="src\DHT\DHT_Access.h" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Server\MainServer.h" open="0" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="889" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Server\MainServer.cpp" open="0" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1223" topLine="39" />
-		</Cursor>
-	</File>
-	<File name="src\FileIO\sha256.cpp" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="4751" topLine="93" />
+			<Cursor1 position="106" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Main.cpp" open="0" top="0" tabpos="25" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -67,29 +42,44 @@
 			<Cursor1 position="235" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="src\Client\Main_Client.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="287" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\DHT\DHT.h" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1012" topLine="21" />
+		</Cursor>
+	</File>
 	<File name="src\Client\Minor_Functions.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="839" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\DHT\DHT_Access.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Server\Connection.h" open="0" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3111" topLine="0" />
+			<Cursor1 position="817" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Client\Main_Client.cpp" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
+	<File name="src\Client\Main_Client.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4723" topLine="207" />
 		</Cursor>
 	</File>
-	<File name="src\DHT\DHT_Lookup.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Client\Major_Functions.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2389" topLine="52" />
+			<Cursor1 position="384" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\FileIO\Meta_Files.cpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Server\MainServer.cpp" open="0" top="0" tabpos="24" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3025" topLine="100" />
+			<Cursor1 position="1223" topLine="39" />
+		</Cursor>
+	</File>
+	<File name="src\DHT\DHT_Access.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="889" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\FileIO\sha256.h" open="0" top="0" tabpos="17" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -97,14 +87,19 @@
 			<Cursor1 position="473" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Server\MainServer.h" open="0" top="0" tabpos="19" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Client\Minor_Functions.cpp" open="1" top="1" tabpos="3" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="106" topLine="0" />
+			<Cursor1 position="2427" topLine="9" />
 		</Cursor>
 	</File>
-	<File name="src\Client\MainCLI.cpp" open="1" top="1" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\FileIO\linkedlist.h" open="0" top="0" tabpos="15" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="4681" topLine="111" />
+			<Cursor1 position="0" topLine="6" />
+		</Cursor>
+	</File>
+	<File name="src\DHT\DHT_Updater.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="211" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\FileIO\linkedlist.cpp" open="0" top="0" tabpos="20" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -112,9 +107,9 @@
 			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Client\Minor_Functions.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\FileIO\sha256.cpp" open="0" top="0" tabpos="22" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1923" topLine="0" />
+			<Cursor1 position="4751" topLine="93" />
 		</Cursor>
 	</File>
 	<File name="src\DHT\DHT_Updater.cpp" open="0" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -122,19 +117,24 @@
 			<Cursor1 position="839" topLine="50" />
 		</Cursor>
 	</File>
-	<File name="src\Client\Major_Functions.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\FileIO\Meta_Files.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1768" topLine="7" />
+			<Cursor1 position="465" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\Server\Connection.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Client\Major_Functions.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="708" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\DHT\DHT_Access.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3111" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\Server\Connection.cpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4869" topLine="173" />
-		</Cursor>
-	</File>
-	<File name="src\Client\Major_Functions.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="384" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

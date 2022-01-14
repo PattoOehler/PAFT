@@ -28,10 +28,16 @@ void Minor_Functions::Do_Lookup_If_Closer(int lookupID, three_DHT received_value
         return;
     }
 
+    bool is_0_In_Current_Three = DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[0].id) && DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[1].id) &&
+                                            DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[2].id);
+    bool is_1_In_Current_Three = DHT::IsEqual(received_values.entry[1].id,  current_Three.entry[0].id) && DHT::IsEqual(received_values.entry[1].id,  current_Three.entry[1].id) &&
+                                            DHT::IsEqual(received_values.entry[1].id,  current_Three.entry[2].id);
+    bool is_2_In_Current_Three = DHT::IsEqual(received_values.entry[2].id,  current_Three.entry[0].id) && DHT::IsEqual(received_values.entry[2].id,  current_Three.entry[1].id) &&
+                                            DHT::IsEqual(received_values.entry[2].id,  current_Three.entry[2].id);
 
-    //If any of the values gathered is closer then the furthest away one stored then perform the search.
+    //If any of the values gathered is closer then the furthest away one stored & not already searched then perform the search.
     bool is0Closer = DHT::Compare(received_values.entry[0].id, current_Three.entry[2].id, lookingFor);
-    if(is0Closer)
+    if(is0Closer && (!is_0_In_Current_Three))
     {
         MainClient client(received_values.entry[0].addr, received_values.entry[0].port);
         client.Find_Node_Recursive(lookingFor, lookupID);
@@ -39,7 +45,7 @@ void Minor_Functions::Do_Lookup_If_Closer(int lookupID, three_DHT received_value
     }
 
     bool is1Closer = DHT::Compare(received_values.entry[1].id, current_Three.entry[2].id, lookingFor);
-    if(is1Closer)
+    if(is1Closer && (!is_1_In_Current_Three))
     {
         MainClient client(received_values.entry[1].addr, received_values.entry[1].port);
         client.Find_Node_Recursive(lookingFor, lookupID);
@@ -47,7 +53,7 @@ void Minor_Functions::Do_Lookup_If_Closer(int lookupID, three_DHT received_value
     }
 
     bool is2Closer = DHT::Compare(received_values.entry[2].id, current_Three.entry[2].id, lookingFor);
-    if(is2Closer)
+    if(is2Closer && (!is_2_In_Current_Three))
     {
         MainClient client(received_values.entry[2].addr, received_values.entry[2].port);
         client.Find_Node_Recursive(lookingFor, lookupID);
@@ -89,7 +95,6 @@ void Minor_Functions::Add_To_Lookup_DHT(int lookupID, DHT_Single_Entry entry, _1
 void Minor_Functions::Write_Single_Entry_To_DHT_Lookup(DHT_Single_Entry entry, int lookupID, _160bitnumber lookingFor)
 {
     //Access_Three_DHT_And_Lock needs to be unlocked
-
     three_DHT current_Three = DHT_Lookup::Access_Three_DHT_And_Lock(lookupID);
 
     bool should_Go_In_0 = DHT::Compare(entry.id, current_Three.entry[0].id, lookingFor) && current_Three.entry[0].is_set;
