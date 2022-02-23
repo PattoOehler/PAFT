@@ -35,6 +35,31 @@ void DHT_Access::Set_Local_File_Location(std::string local_File_Location, int po
 }
 
 
+int DHT_Access::Find_Stored_File(_160bitnumber entry)
+{
+
+    for(int i=0; i<DHT_File_Len; i++)
+    {
+        DHT_Single_Entry a = Access_FileIds(i);
+        if(a.is_set)
+        {
+            if(DHT::IsEqual(a.id, entry))
+            {
+              std::string localFileLocation = Get_Local_File_Location(i);
+              if(!localFileLocation.empty())
+                return i;
+
+            }
+
+        }
+
+    }
+
+    return -1;
+
+}
+
+
 DHT_Single_Entry DHT_Access::Access_DHT(int position)
 {
     if((position >= 160*20) | (position<0))

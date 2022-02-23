@@ -35,6 +35,8 @@ namespace paft
         static void Write_To_FileIds(DHT_Single_Entry write, int position);
         static int Store_FileId(DHT_Single_Entry entry);
 
+        static int Find_Stored_File(_160bitnumber entry);
+
         static _160bitnumber Get_SELF();
         static void Set_Self(_160bitnumber own_Id);
 

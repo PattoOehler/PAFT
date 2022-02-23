@@ -243,8 +243,8 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 
     if(buf[0] == 0x01)
         {
-            //Client is asking for file
-
+            //Client is asking for FULL file
+            // Depreciated TODO delete
             Connection::Send_File((LPVOID)long_client.client);
 
         }
@@ -276,9 +276,18 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
         else if(buf[0] == 0x05)
         {
             //Lookup File
-            std::cout << "Client is asking to store a file \n";
+            std::cout << "Client is asking to store a file ID\n";
 
             Store_File((LPVOID)long_client.client, buf, len, long_client.from.sin_addr);
+
+
+        }
+        else if(buf[0] == 0x06)
+        {
+            //Send chunk of a file
+            std::cout << "Client is asking to download a chunk of a file\n";
+
+            Send_File_Chunk((LPVOID)long_client.client, buf, len);
 
 
         }
@@ -295,6 +304,42 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 
 
 }
+
+void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
+{
+    //TODO
+    SOCKET current_client = (SOCKET)lpParam;
+
+
+    _160bitnumber FileID;
+    int desiredChunk;
+    memcpy((char*)&FileID,buf+23,20);
+    memcpy((char*)&desiredChunk, buf+43,4);
+
+
+    int FileLocation = DHT_Access::Find_Stored_File(FileID);
+    if(FileLocation == -1)
+        Ping(lpParam); //Most basic response - we do not have the file stored
+
+    if(desiredChunk == -1)
+    {
+        //The meta-data file is what needs to be returned
+
+    }
+    else
+    {
+        //Return the chunk at position desiredChunk
+
+    }
+
+
+}
+
+
+
+
+
+
 
 void Connection::Update_DHT(longsocket client, char recvdata[])
 {
