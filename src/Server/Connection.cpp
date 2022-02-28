@@ -324,6 +324,8 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     if(desiredChunk == -1)
     {
         //The meta-data file is what needs to be returned
+        //char *sendbuf = new char[meta-file-length];
+
 
     }
     else

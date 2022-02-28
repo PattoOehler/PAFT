@@ -42,8 +42,74 @@ void Meta_Files::set_File_Name(const char* fileName)
 
 }
 
+std::string Meta_Files::getOutput_File_Name(_160bitnumber id)
+{
+    std::string filepath;
+
+    filepath.push_back('M');
+    filepath.push_back('e');
+    filepath.push_back('t');
+    filepath.push_back('a');
+    filepath.push_back('f');
+    filepath.push_back('i');
+    filepath.push_back('l');
+    filepath.push_back('e');
+    filepath.push_back('s');
+    filepath.push_back('/');
+
+    int counter;
+    char *FILEID = (char *)&id;
+
+    for(counter=0; counter<20;counter++)
+    {
+        unsigned char a = FILEID[counter];
+        int ab = a;
+        int i;
+        for(i=0;i*16<ab-16;i++)
+        {
+
+        }
+        unsigned int num1 = i;
+
+        if(num1 > 9)
+            filepath.push_back('a' + num1-10);
+        else
+            filepath.push_back('0' + num1);
+
+        unsigned int num2 = ((unsigned int)FILEID[0+counter]) % 16;
+
+        if(num2 > 9)
+            filepath.push_back('a' + num2-10);
+        else
+            filepath.push_back('0' + num2);
+    }
+
+    filepath.push_back('.');
+    filepath.push_back('p');
+    filepath.push_back('a');
+    filepath.push_back('f');
+    filepath.push_back('t');
+    filepath.push_back('\0');
+
+
+    return filepath;
+}
+
+
+
 void Meta_Files::set_Output_File_Name()
 {
+
+    std::string filepath = getOutput_File_Name(id);
+
+    for(int i=0;i<filepath.size();i++)
+    {
+        output_File_Name[i] = filepath[i];
+
+    }
+
+    /*
+    Old working code - looking to replace with new function
     output_File_Name[0] = 'M';
     output_File_Name[1] = 'e';
     output_File_Name[2] = 't';
@@ -88,6 +154,7 @@ void Meta_Files::set_Output_File_Name()
     output_File_Name[3+counter*2+10] = 'f';
     output_File_Name[4+counter*2+10] = 't';
     output_File_Name[5+counter*2+10] = '\0';
+    */
 
 }
 

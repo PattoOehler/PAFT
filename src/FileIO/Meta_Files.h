@@ -26,6 +26,7 @@ public:
     void Write_File();
     static void Make_File(const char *input_File, const char *output_File, _160bitnumber fileID);
 
+    static std::string getOutput_File_Name(_160bitnumber id);
 
 private:
     void set_File_Name(const char *fileName);

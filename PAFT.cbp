@@ -43,6 +43,8 @@
 		<Unit filename="src/DHT/DHT_Lookup.h" />
 		<Unit filename="src/DHT/DHT_Updater.cpp" />
 		<Unit filename="src/DHT/DHT_Updater.h" />
+		<Unit filename="src/FileIO/FileFunctions.cpp" />
+		<Unit filename="src/FileIO/FileFunctions.h" />
 		<Unit filename="src/FileIO/Meta_Files.cpp" />
 		<Unit filename="src/FileIO/Meta_Files.h" />
 		<Unit filename="src/FileIO/linkedlist.cpp" />

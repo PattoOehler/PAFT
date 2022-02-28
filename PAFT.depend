@@ -250,7 +250,7 @@
 	"DHT_Access.h"
 	<iostream>
 
-1642100188 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
+1646084637 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
 	<winsock2.h>
 	<winsock.h>
 	<windows.h>
@@ -414,7 +414,7 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1642097166 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.h
+1646085800 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.h
 	<iostream>
 	"linkedlist.h"
 	"../DHT/DHT.h"
@@ -481,4 +481,11 @@
 	"../DHT/DHT_Lookup.h"
 	"../DHT/DHT.h"
 	"Main_Client.h"
+
+1646084804 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.cpp
+	"FileFunctions.h"
+
+1646084637 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.h
+	"../DHT/DHT.h"
+	<iostream>
 
