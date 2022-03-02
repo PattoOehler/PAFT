@@ -135,7 +135,7 @@ int DHT_Access::Store_FileId(DHT_Single_Entry entry)
         }
 
     }
-
+    return -1;
 
 }
 

@@ -5,6 +5,7 @@
 #include "../DHT/DHT_Access.h"
 #include "Main_Client.h"
 #include "../FileIO/Meta_Files.h"
+#include "../FileIO/sha256.h"
 
 using namespace paft;
 
@@ -63,3 +64,78 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 
 }
+
+
+void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name, _160bitnumber fileID)
+{
+
+    Meta_Files::Make_File(local_file_location, public_File_Name, fileID);
+
+    DHT_Single_Entry self = DHT_Access::Access_DHT(159*20);
+    if(!self.is_set)
+    {
+        std::cout << "ERROR in Upload_File_To_Network -- DHT[159*20] isn't set to SELF!!!\n";
+        return;
+    }
+
+    self.id = fileID;
+
+    int fileIDpos = DHT_Access::Store_FileId(self);
+
+    DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
+
+    three_DHT closest_In_Network = Three_Closest_Peers_In_Network(fileID);
+    for(int i=0;i<3;i++)
+    {
+        if(closest_In_Network.entry[i].is_set)
+        {
+            MainClient client = MainClient(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
+            client.Store_File(self);
+        }
+    }
+
+
+
+
+}
+
+
+void Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
+{
+    //TODO
+    //Validate Checksum
+    //Write it to a file
+
+    MainClient client = MainClient(entry.addr, entry.port);
+    char *recvbuf = client.Get_MetaData_File(ID);
+
+    int len;
+    memcpy((char *)&len,recvbuf,4);
+
+    std::string checksum_received = sha256(recvbuf+4, len-4);
+    //TODO verify checksum
+
+
+    //Write to the file
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

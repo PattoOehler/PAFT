@@ -42,7 +42,7 @@ void Meta_Files::set_File_Name(const char* fileName)
 
 }
 
-std::string Meta_Files::getOutput_File_Name(_160bitnumber id)
+std::string Meta_Files::getOutput_File_Name(_160bitnumber file_id)
 {
     std::string filepath;
 
@@ -58,7 +58,7 @@ std::string Meta_Files::getOutput_File_Name(_160bitnumber id)
     filepath.push_back('/');
 
     int counter;
-    char *FILEID = (char *)&id;
+    char *FILEID = (char *)&file_id;
 
     for(counter=0; counter<20;counter++)
     {

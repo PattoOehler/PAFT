@@ -246,11 +246,11 @@
 	<mutex>
 	<winsock.h>
 
-1645650092 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
+1646257034 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
 	"DHT_Access.h"
 	<iostream>
 
-1646084637 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
+1646261053 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
 	<winsock2.h>
 	<winsock.h>
 	<windows.h>
@@ -260,10 +260,11 @@
 	"MainServer.h"
 	"../DHT/dht.h"
 	"../DHT/DHT_Access.h"
+	"../FileIO/Meta_Files.h"
 	<ws2tcpip.h>
 	<iostream>
 
-1645647732 c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.h
+1646259181 c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.h
 	<winsock.h>
 	<windows.h>
 	<stdlib.h>
@@ -291,7 +292,7 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1642099210 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+1646260416 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
@@ -304,11 +305,11 @@
 	<stdio.h>
 	<thread>
 
-1642031214 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
+1646259322 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
 	<winsock2.h>
 	"../DHT/DHT.h"
 
-1642100328 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
+1646260102 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
 	"MainCLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -431,7 +432,7 @@
 1639010641 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\sha256.h
 	<string>
 
-1640020558 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.cpp
+1646087118 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.cpp
 	"Meta_Files.h"
 	"linkedlist.h"
 	"sha256.h"
@@ -452,7 +453,7 @@
 	<Windows.h>
 	<iostream>
 
-1642098943 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1646257319 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -460,7 +461,7 @@
 	"Main_Client.h"
 	"../FileIO/Meta_Files.h"
 
-1642097504 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
+1646256856 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
 	"../DHT/DHT.h"
 	<iostream>
 

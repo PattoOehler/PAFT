@@ -15,6 +15,8 @@ namespace paft
     public:
         static three_DHT Three_Closest_Peers_In_Network(_160bitnumber id);
         static void Upload_File_To_Network(const char *local_file_location, const char *public_File_Name);
+        static void Upload_File_To_Network(const char *local_file_location, const char *public_File_Name, _160bitnumber fileID);
+        static void getMetaDataFile(_160bitnumber ID, std::string checksum, DHT_Single_Entry entry);
 
     };
 

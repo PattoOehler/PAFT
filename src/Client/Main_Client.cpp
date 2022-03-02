@@ -371,6 +371,91 @@ int MainClient::Find_Node(_160bitnumber node)
 }
 
 
+char *MainClient::Get_MetaData_File(_160bitnumber fileid)
+{
+    if(!setUpProperly)
+        return nullptr;
+
+    char sendbuf[27];
+    sendbuf[0] = 0x02;
+
+    Add_Self(sendbuf);
+
+
+    int n1 = -1;  //Asking for chunk[-1] which means the meta-data file
+    memcpy(sendbuf+23, (char*)&n1, 4);
+
+    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return nullptr;
+    }
+
+
+
+
+
+
+    char buf[DEFAULT_BUFLEN];
+
+    iResult = recv(Socket, buf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR)
+    {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return nullptr;
+    }
+    Add_Received_Entry_To_DHT(buf, iResult);
+
+
+
+
+
+
+    int Eight_MiB = 8000000;
+
+    char *recvbuf;
+    recvbuf = (char *) malloc(Eight_MiB);
+
+    int recvbuf_Count=4; //Leaves room for the length in the buffer
+    //Get the data
+    //If this errors out they don't have the file
+    iResult = 1;
+    while(iResult > 0)
+    {
+        iResult = recv(Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        if (iResult == SOCKET_ERROR)
+        {
+            printf("send failed with error: %d\n", WSAGetLastError());
+            closesocket(Socket);
+            WSACleanup();
+            return nullptr;
+        }
+        recvbuf_Count += iResult;
+
+    }
+
+
+
+
+
+    Shutdown_Connection_Gracefully();
+
+    memcpy(recvbuf, (char*)&recvbuf_Count, 4); //Put the length in the buffer
+
+    return recvbuf;
+
+
+}
+
+
+
+
+
 int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 {
     if(!setUpProperly)

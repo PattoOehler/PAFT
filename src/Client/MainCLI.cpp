@@ -51,6 +51,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "make_meta_file        -- makes a metadata file\n";
         std::cout << "self_find_random_node_network  -- Testing\n";
         std::cout << "store_file_on_network -- stores a file on the network\n";
+        std::cout << "store_file_net_and_get_meta_back -- For Testing\n";
         return 0;
     }
 
@@ -146,6 +147,18 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         return 0;
 
     }
+    else if(String_Compare(Input, "store_file_net_and_get_meta_back"))
+    {
+
+
+        //_160bitnumber ID = DHT::Random_ID();
+        //Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", ID);
+
+        std::cout << "Not implemented yet\n";
+
+        return 0;
+
+    }
 
     else if(String_Compare(Input, "exit"))
     {
@@ -219,7 +232,7 @@ void MainCli::Self_Find_Random_Node_Network()
     _160bitnumber Testing = DHT::Random_ID();
 
 
-    three_DHT a = Major_Functions::Three_Closest_Peers_In_Network(Testing);
+    Major_Functions::Three_Closest_Peers_In_Network(Testing);
 
 
 

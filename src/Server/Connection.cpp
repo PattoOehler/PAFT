@@ -10,6 +10,7 @@
 #include "MainServer.h"
 #include "../DHT/dht.h"
 #include "../DHT/DHT_Access.h"
+#include "../FileIO/Meta_Files.h"
 
 #include <ws2tcpip.h>
 
@@ -39,7 +40,7 @@ void Connection::Ping(LPVOID lpParam)
 
     char sendbuf[20];
     _160bitnumber self = DHT_Access::Get_SELF();
-    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+    memcpy(sendbuf, (char*)&self, 20);
 
 
     send(current_client,sendbuf,20,0);
@@ -151,7 +152,7 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
     char sendbuf[512];
     _160bitnumber self = DHT_Access::Get_SELF();
-    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+    memcpy(sendbuf, (char*)&self, 20);
 
 
 
@@ -317,14 +318,37 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     memcpy((char*)&desiredChunk, buf+43,4);
 
 
+    Ping(lpParam);
     int FileLocation = DHT_Access::Find_Stored_File(FileID);
     if(FileLocation == -1)
-        Ping(lpParam); //Most basic response - we do not have the file stored
+        return; //We don't have the file stored so exit the connection
+
 
     if(desiredChunk == -1)
     {
         //The meta-data file is what needs to be returned
-        //char *sendbuf = new char[meta-file-length];
+        std::string metafilePath = Meta_Files::getOutput_File_Name(FileID);
+        int Eight_MiB = 8000000;
+
+        char *buf;
+        buf = (char *) malloc(Eight_MiB);
+
+
+
+        //Send the bytes - already pinged
+        FILE *file = NULL;
+        size_t bytesRead = 0;
+
+        file = fopen(metafilePath.c_str(), "rb");
+
+        if (file != NULL)
+        {
+            while ((bytesRead = fread(buf, 1, Eight_MiB, file)) > 0)
+            {
+                // process bytesRead worth of data in buffer
+                send(current_client,buf,bytesRead,0);
+            }
+        }
 
 
     }
