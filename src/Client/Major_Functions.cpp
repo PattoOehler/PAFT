@@ -7,6 +7,12 @@
 #include "../FileIO/Meta_Files.h"
 #include "../FileIO/sha256.h"
 
+
+#include <iostream>
+#include <fstream>
+
+#include <unistd.h>
+
 using namespace paft;
 
 
@@ -102,22 +108,36 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 void Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
 {
-    //TODO
-    //Validate Checksum
-    //Write it to a file
-
+    std::cout << "Major Functions -- client.Get_MetaData_File\n";
+    //sleep(4);
     MainClient client = MainClient(entry.addr, entry.port);
     char *recvbuf = client.Get_MetaData_File(ID);
+    std::cout << "Major Functions -- client.Get_MetaData_File done!\n";
 
     int len;
     memcpy((char *)&len,recvbuf,4);
 
     std::string checksum_received = sha256(recvbuf+4, len-4);
     //TODO verify checksum
-
+    std::cout << "Checksum: " << checksum_received << "\n";
 
     //Write to the file
+    if(len -4 > 0)
+    {
+        std::ofstream wf("Test_Metafiles/meta.paft", std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return;
+        }
 
+        wf.write(recvbuf+4, len-4);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::getMetaDataFile length is < 0!!!\n";
+
+    }
 
 }
 

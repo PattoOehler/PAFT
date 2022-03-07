@@ -377,7 +377,7 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
         return nullptr;
 
     char sendbuf[27];
-    sendbuf[0] = 0x02;
+    sendbuf[0] = 0x06;
 
     Add_Self(sendbuf);
 

@@ -294,7 +294,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
         }
         else
         {
-            printf("Invalid cmd %x\n", buf[0]);
+            printf("\nConnection::Run_Proper_Command Improper command %x\n", buf[0]);
             strcpy(sendData,"Invalid cmd\n");
             Sleep(10);
             send(long_client.client,sendData,sizeof(sendData),0);
@@ -309,6 +309,9 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 {
     //TODO
+
+    std::cout << "Connection::Send_File_Chunk is getting called\n";
+
     SOCKET current_client = (SOCKET)lpParam;
 
 
@@ -326,6 +329,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 
     if(desiredChunk == -1)
     {
+        std::cout << "Connection::Send_File_Chunk Desired Chunk == -1\n";
         //The meta-data file is what needs to be returned
         std::string metafilePath = Meta_Files::getOutput_File_Name(FileID);
         int Eight_MiB = 8000000;
@@ -343,9 +347,11 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 
         if (file != NULL)
         {
+            std::cout << "Connection::Send_File_Chunk file not null\n";
             while ((bytesRead = fread(buf, 1, Eight_MiB, file)) > 0)
             {
                 // process bytesRead worth of data in buffer
+                std::cout << "Connection::Send_File_Chunk While loop\n";
                 send(current_client,buf,bytesRead,0);
             }
         }

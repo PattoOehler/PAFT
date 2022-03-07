@@ -149,12 +149,23 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     }
     else if(String_Compare(Input, "store_file_net_and_get_meta_back"))
     {
+        DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
+        if(!a.is_set)
+        {
+            printf("The DHT at position 159*20 is not set\n");
+            return 0;
+        }
+
+        _160bitnumber ID = DHT::Random_ID();
+        Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", ID);
 
 
-        //_160bitnumber ID = DHT::Random_ID();
-        //Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", ID);
+        std::cout << "Made it to getMetaDataFile\n";
 
-        std::cout << "Not implemented yet\n";
+        Major_Functions::getMetaDataFile(ID, "asdf", a);
+
+
+        std::cout << "Done!!!\n";
 
         return 0;
 
