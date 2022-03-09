@@ -80,7 +80,6 @@ int MainServer::Start_Server()
      {
           // accept connections
           client = accept(sock,(struct sockaddr*)&from,&fromlen);
-          printf("Client connected\r\n");
           longsocket *a = new longsocket;
           a->client = client;
           a->from = from;

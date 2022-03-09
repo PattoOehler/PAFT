@@ -109,7 +109,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 void Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
 {
     std::cout << "Major Functions -- client.Get_MetaData_File\n";
-    //sleep(4);
+    sleep(2);
     MainClient client = MainClient(entry.addr, entry.port);
     char *recvbuf = client.Get_MetaData_File(ID);
     std::cout << "Major Functions -- client.Get_MetaData_File done!\n";
@@ -135,7 +135,7 @@ void Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_exp
     }
     else
     {
-        std::cout << "Major_Functions::getMetaDataFile length is < 0!!!\n";
+        std::cout << "Major_Functions::getMetaDataFile length is < 0! (=" << len << ")\n";
 
     }
 

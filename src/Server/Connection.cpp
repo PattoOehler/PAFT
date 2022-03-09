@@ -82,7 +82,6 @@ void Connection::Send_File(LPVOID lpParam)
 
         send(current_client,Filebuf,Bytes_To_Send,0);
         counter++;
-        //std::cout << "filesize = " << filesize << " and counter*512 = " << 512*counter << std::endl;
         Sleep(10);
 
 
@@ -317,14 +316,18 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 
     _160bitnumber FileID;
     int desiredChunk;
-    memcpy((char*)&FileID,buf+23,20);
-    memcpy((char*)&desiredChunk, buf+43,4);
+    memcpy((char*)&desiredChunk,buf+23,4);
+    memcpy((char*)&FileID, buf+27,20);
 
 
     Ping(lpParam);
     int FileLocation = DHT_Access::Find_Stored_File(FileID);
     if(FileLocation == -1)
+    {
+        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk!\n\n";
         return; //We don't have the file stored so exit the connection
+    }
+
 
 
     if(desiredChunk == -1)
@@ -361,6 +364,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     else
     {
         //Return the chunk at position desiredChunk
+        std::cout << "The chunk desired is " << desiredChunk << " in Connection::Send_File_Chunk\n\n";
 
     }
 
@@ -408,7 +412,7 @@ void Connection::Handle_Client(LPVOID lpParam)
 
     if(res <= 22)
     {
-        std::cout << "Message length = " << res << ". Exiting...\n";
+        std::cout << "Message length in Connection::Handle_Client = " << res << ". Exiting...\n";
         closesocket(long_client.client);
         ExitThread(0);
     }

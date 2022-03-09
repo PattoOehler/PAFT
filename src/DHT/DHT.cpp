@@ -403,7 +403,7 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 void DHT::Update_Time(DHT_Single_Entry Update)
 {
 
-    std::cout << "Updating DHT with "  << inet_ntoa(Update.addr) <<":" << Update.port << "\n";
+    //std::cout << "Updating DHT with "  << inet_ntoa(Update.addr) <<":" << Update.port << "\n";
 
     int distance = Distance(Update.id, DHT_Access::Get_SELF());
 
@@ -581,6 +581,14 @@ void DHT::Print_DHT()
 
     return;
 }
+
+
+void DHT::Print_ID(_160bitnumber id_to_print)
+{
+    std::cout << std::hex << id_to_print.top << id_to_print.mid << id_to_print.bot << std::dec;
+
+}
+
 
 void DHT::Print_Files()
 {

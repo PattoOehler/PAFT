@@ -376,7 +376,7 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
     if(!setUpProperly)
         return nullptr;
 
-    char sendbuf[27];
+    char sendbuf[47];
     sendbuf[0] = 0x06;
 
     Add_Self(sendbuf);
@@ -384,11 +384,13 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
 
     int n1 = -1;  //Asking for chunk[-1] which means the meta-data file
     memcpy(sendbuf+23, (char*)&n1, 4);
+    memcpy(sendbuf+27, (char*)&fileid, 20);
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+
+    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 ); // hardcoding for error testing
 
     if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
+        printf("MainClient::Get_MetaData_File send failed with error: %d\n", WSAGetLastError());
         closesocket(Socket);
         WSACleanup();
         return nullptr;
@@ -428,6 +430,7 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
     while(iResult > 0)
     {
         iResult = recv(Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        std::cout << "MainClient::Get_MetaData_File received a message of length(for the file) " << iResult << "\n\n";
         if (iResult == SOCKET_ERROR)
         {
             printf("send failed with error: %d\n", WSAGetLastError());

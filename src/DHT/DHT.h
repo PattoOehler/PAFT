@@ -65,6 +65,8 @@ namespace paft
 
         static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);
 
+        static void Print_ID(_160bitnumber id_to_print);
+
 
 
 
