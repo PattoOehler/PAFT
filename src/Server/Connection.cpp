@@ -309,6 +309,12 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 {
     //TODO
 
+    if(len < 47 )
+    {
+        std::cout << "Connection::Seld_File_Chunk len = " << len << "\nExiting\n";
+        return;
+
+    }
     std::cout << "Connection::Send_File_Chunk is getting called\n";
 
     SOCKET current_client = (SOCKET)lpParam;
@@ -324,7 +330,9 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     int FileLocation = DHT_Access::Find_Stored_File(FileID);
     if(FileLocation == -1)
     {
-        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk!\n\n";
+        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - ";
+        DHT::Print_ID(FileID);
+        std::cout << "\n\n";
         return; //We don't have the file stored so exit the connection
     }
 
@@ -365,6 +373,39 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     {
         //Return the chunk at position desiredChunk
         std::cout << "The chunk desired is " << desiredChunk << " in Connection::Send_File_Chunk\n\n";
+
+
+
+        //The chunk is what needs to be returned
+        std::string filePath = DHT_Access::Get_Local_File_Location(FileLocation);;
+        int Eight_MiB = 8000000;
+
+        char *buf;
+        buf = (char *) malloc(Eight_MiB);
+
+
+
+        //Send the bytes - already pinged
+        FILE *file = NULL;
+        size_t bytesRead = 0;
+
+        file = fopen(filePath.c_str(), "rb");
+
+        fseek(file, desiredChunk*Eight_MiB, SEEK_SET);
+
+
+        if (file != NULL)
+        {
+            std::cout << "Connection::Send_File_Chunk file not null\n";
+
+            bytesRead = fread(buf, 1, Eight_MiB, file);
+
+            // process bytesRead worth of data in buffer
+            std::cout << "Connection::Send_File_Chunk While loop\n";
+            send(current_client,buf,bytesRead,0);
+
+        }
+
 
     }
 

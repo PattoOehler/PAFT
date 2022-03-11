@@ -37,7 +37,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
     if(String_Compare(Input, "help"))
     {
-        std::cout << "Helpmessage\n\n";
+        std::cout << "\n\n\n\nHelpmessage\n\n";
         std::cout << "help                  -- Receive this message\n";
         std::cout << "self_get_file         --  \n";
         std::cout << "self_ping             -- Ping self \n";
@@ -52,6 +52,8 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "self_find_random_node_network  -- Testing\n";
         std::cout << "store_file_on_network -- stores a file on the network\n";
         std::cout << "store_file_net_and_get_meta_back -- For Testing\n";
+        std::cout << "store_file_net_and_get_chunk_back -- For Testing\n";
+        std::cout << "\n\n";
         return 0;
     }
 
@@ -163,6 +165,28 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "Made it to getMetaDataFile\n";
 
         Major_Functions::getMetaDataFile(ID, "asdf", a);
+
+
+        std::cout << "Done!!!\n";
+
+        return 0;
+
+    }
+    else if(String_Compare(Input, "store_file_net_and_get_chunk_back"))
+    {
+        DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
+        if(!a.is_set)
+        {
+            printf("The DHT at position 159*20 is not set\n");
+            return 0;
+        }
+
+        _160bitnumber ID = DHT::Random_ID();
+        Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", ID);
+
+
+
+        Major_Functions::getFileChunk(ID, "ExpectedChecksum", a,1);
 
 
         std::cout << "Done!!!\n";

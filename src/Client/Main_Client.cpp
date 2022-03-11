@@ -23,7 +23,8 @@
 #pragma comment (lib, "AdvApi32.lib")
  Unknown if it does anything
 */
-#define DEFAULT_BUFLEN 512
+//DEFAULT_BUFLEN was   512  if stuff breaks
+#define DEFAULT_BUFLEN 2048
 
 
 
@@ -282,7 +283,7 @@ int MainClient::Find_File(_160bitnumber file)
 
 
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    int iResult = send( Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
@@ -336,7 +337,7 @@ int MainClient::Find_Node(_160bitnumber node)
 
 
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    int iResult = send( Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
@@ -387,7 +388,7 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
     memcpy(sendbuf+27, (char*)&fileid, 20);
 
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 ); // hardcoding for error testing
+    int iResult = send( Socket, sendbuf, 47, 0 );
 
     if (iResult == SOCKET_ERROR) {
         printf("MainClient::Get_MetaData_File send failed with error: %d\n", WSAGetLastError());
@@ -459,6 +460,116 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
 
 
 
+
+
+
+
+
+char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
+{
+    if(!setUpProperly)
+        return nullptr;
+    if(chunk < 0)
+        return nullptr;
+
+    char sendbuf[47];
+    sendbuf[0] = 0x06;
+
+    Add_Self(sendbuf);
+
+
+    memcpy(sendbuf+23, (char*)&chunk, 4);
+    memcpy(sendbuf+27, (char*)&fileid, 20);
+
+
+    int iResult = send( Socket, sendbuf, 47, 0 );
+
+    if (iResult == SOCKET_ERROR) {
+        printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return nullptr;
+    }
+
+
+
+
+
+
+    char buf[DEFAULT_BUFLEN];
+
+    iResult = recv(Socket, buf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR)
+    {
+        printf("MainClient::GetFileChunk Send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return nullptr;
+    }
+    Add_Received_Entry_To_DHT(buf, iResult);
+
+
+
+
+
+
+    int Eight_MiB = 8000000 + 4;  // +4 for the length(recvBuf_Count)
+
+    char *recvbuf;
+    recvbuf = (char *) malloc(Eight_MiB);
+
+    int recvbuf_Count=4; //4 Leaves room for the length in the buffer
+    //Get the data
+    //If this errors out they don't have the file
+    iResult = 1;
+    int totalRecievedBytes=0;
+    while(iResult > 0)
+    {
+        iResult = recv(Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        totalRecievedBytes += iResult;
+        std::cout << "MainClient::GetFileChunk received a message of length(for the file) " << iResult << " << total " << totalRecievedBytes << "\n";
+        if (iResult == SOCKET_ERROR)
+        {
+            if(totalRecievedBytes == Eight_MiB)
+            {
+                std::cout << "totReceived = EightMiB - Continuing...\n";
+                iResult = 0;
+                continue;
+
+            }
+            printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
+            closesocket(Socket);
+            WSACleanup();
+            return nullptr;
+        }
+        recvbuf_Count += iResult;
+
+    }
+
+
+
+
+
+    Shutdown_Connection_Gracefully();
+
+    memcpy(recvbuf, (char*)&recvbuf_Count, 4); //Put the length in the buffer
+
+    return recvbuf;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 {
     if(!setUpProperly)
@@ -473,7 +584,7 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 
 
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    int iResult = send( Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
@@ -600,7 +711,7 @@ int MainClient::Ping()
 
     Add_Self(sendbuf);
 
-    int iResult = send( Socket, sendbuf, (int)strlen(sendbuf), 0 );
+    int iResult = send( Socket, sendbuf, 23, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
@@ -655,7 +766,7 @@ int MainClient::GetFile(char *filename)
 
 
     // Send a buffer telling the server to send a file
-    int iResult = send( Socket, command, (int)strlen(command), 0 );
+    int iResult = send( Socket, command, 21, 0 );
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
         closesocket(Socket);

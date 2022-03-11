@@ -28,6 +28,7 @@ namespace paft
         int Find_File(_160bitnumber file);
         int Store_File(DHT_Single_Entry file);
         char *Get_MetaData_File(_160bitnumber fileid);
+        char *GetFileChunk(_160bitnumber fileid, int chunk);
 
         int Find_Node_Recursive(_160bitnumber node, int lookup_Identifier);
         three_DHT Return_Received_Nodes(char recvbuf[], int length);

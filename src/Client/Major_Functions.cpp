@@ -135,7 +135,7 @@ void Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_exp
     }
     else
     {
-        std::cout << "Major_Functions::getMetaDataFile length is < 0! (=" << len << ")\n";
+        std::cout << "Major_Functions::getMetaDataFile length is <= 0! (=" << len-4 << ")\n";
 
     }
 
@@ -143,6 +143,43 @@ void Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_exp
 
 
 
+
+void Major_Functions::getFileChunk(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry, int chunkNum)
+{
+    if(chunkNum < 0)
+        return;
+
+    sleep(2);
+    MainClient client = MainClient(entry.addr, entry.port);
+    char *recvbuf = client.GetFileChunk(ID, chunkNum);
+
+    int len;
+    memcpy((char *)&len,recvbuf,4);
+
+    std::string checksum_received = sha256(recvbuf+4, len-4);
+    //TODO verify checksum
+    std::cout << "Checksum(len= " << len-4 << "): " << checksum_received << "\n";
+
+
+    //Write to the file
+    if(len -4 > 0)
+    {
+        std::ofstream wf("Test_Metafiles/chunk.paft", std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return;
+        }
+
+        wf.write(recvbuf+4, len-4);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::getFileChunk length is <= 0! (len=" << len-4 << ")\n";
+
+    }
+
+}
 
 
 
