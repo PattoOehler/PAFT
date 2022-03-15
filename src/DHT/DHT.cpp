@@ -484,10 +484,6 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
             DHT_Access::Write_To_DHT(Entry, distance*20+i);
             break;
         }
-        else
-        {
-            std::cout << "Skipping this attempt trying the next one\n";
-        }
 
     }
 
@@ -568,7 +564,7 @@ void DHT::Print_DHT()
             DHT_Single_Entry tmp = DHT_Access::Access_DHT(20*i+j);
             if(tmp.is_set)
             {
-                std::cout << std::hex << tmp.id.top << tmp.id.mid << tmp.id.bot;
+                DHT::Print_ID(tmp.id);
                 std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time "<<
                 ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
             }
@@ -585,7 +581,58 @@ void DHT::Print_DHT()
 
 void DHT::Print_ID(_160bitnumber id_to_print)
 {
-    std::cout << std::hex << id_to_print.top << id_to_print.mid << id_to_print.bot << std::dec;
+    unsigned char *pointer =  (unsigned char *) &id_to_print;
+    for(int i=0; i<20; i++)
+    {
+        int counter =0;
+        while(pointer[i] != 0)
+        {
+            pointer[i] --;
+            counter++;
+        }
+        /*
+        int high = counter/16;
+        int low = counter%16;
+
+        if(high > 9)
+        {
+            char a = 'A' + high-10;
+            std::cout << a;
+        }
+        else
+        {
+            char a = '0' + high;
+            std::cout << a;
+        }
+        if(low > 9)
+        {
+            char a = 'A' + low-10;
+            std::cout << a;
+        }
+        else
+        {
+            char a = '0' + low;
+            std::cout << a;
+        }
+        */
+
+        int printrs[2] = {counter/16, counter%16};
+        for(int i=0;i < 2; i++)
+        {
+            char a;
+            if(printrs[i] > 9)
+                a = 'A' + printrs[i]-10;
+            else
+                a = '0' + printrs[i];
+            std::cout << a;
+        }
+
+
+
+
+    }
+
+
 
 }
 
@@ -599,9 +646,7 @@ void DHT::Print_Files()
         DHT_Single_Entry tmp = DHT_Access::Access_FileIds(i);
         if(tmp.is_set)
         {
-            std::cout << std::hex << tmp.id.top <<
-                         std::hex << tmp.id.mid <<
-                         std::hex << tmp.id.bot;
+            DHT::Print_ID(tmp.id);
             std::cout << "    In part " << std::dec << (i) << "\n";
         }
 

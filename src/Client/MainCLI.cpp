@@ -39,7 +39,6 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     {
         std::cout << "\n\n\n\nHelpmessage\n\n";
         std::cout << "help                  -- Receive this message\n";
-        std::cout << "self_get_file         --  \n";
         std::cout << "self_ping             -- Ping self \n";
         std::cout << "print_dht             -- Print the dht\n";
         std::cout << "exit                  -- Exit the program\n";
@@ -54,30 +53,16 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "store_file_net_and_get_meta_back -- For Testing\n";
         std::cout << "store_file_net_and_get_chunk_back -- For Testing\n";
         std::cout << "\n\n";
-        return 0;
     }
-
-
-
-
-    else if(String_Compare(Input, "self_get_file"))
-    {
-
-        return 0;
-
-    }
-
     else if(String_Compare(Input, "self_ping"))
     {
         MainClient Client("127.0.0.1", "1234");
         Client.Ping();
-        return 0;
 
     }
     else if(String_Compare(Input, "print_dht"))
     {
         DHT::Print_DHT();
-        return 0;
 
     }
     else if(String_Compare(Input, "test_dht"))
@@ -90,35 +75,26 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         else
             printf("The DHT at position 159*20 is not set\n");
 
-
-        return 0;
     }
 
     else if(String_Compare(Input, "self_find_random_peer"))
     {
         Self_Find_Random_Node();
-
-        return 0;
     }
 
     else if(String_Compare(Input, "self_find_random_file"))
     {
         Self_Find_Random_File();
 
-
-        return 0;
     }
     else if(String_Compare(Input, "self_store_random_file"))
     {
         Self_Store_Random_File();
 
-
-        return 0;
     }
     else if(String_Compare(Input, "print_files"))
     {
         DHT::Print_Files();
-        return 0;
 
 
     }
@@ -127,17 +103,10 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
         Meta_Files::Make_File("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", DHT::Random_ID());
 
-
-        return 0;
-
     }
     else if(String_Compare(Input, "self_find_random_node_network"))
     {
         Self_Find_Random_Node_Network();
-
-
-
-        return 0;
 
     }
 
@@ -146,7 +115,6 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft");
 
 
-        return 0;
 
     }
     else if(String_Compare(Input, "store_file_net_and_get_meta_back"))
@@ -169,8 +137,6 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
         std::cout << "Done!!!\n";
 
-        return 0;
-
     }
     else if(String_Compare(Input, "store_file_net_and_get_chunk_back"))
     {
@@ -191,19 +157,19 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
         std::cout << "Done!!!\n";
 
-        return 0;
-
     }
 
     else if(String_Compare(Input, "exit"))
     {
         exit(0);
-        return 0;
+    }
+    else
+    {
+       std::cout << "Unknown Command\n";
     }
 
 
-    std::cout << "Unknown Command\n";
-    return 1;
+    return 0;
 }
 
 
@@ -236,14 +202,7 @@ bool MainCli::String_Compare(char* string1, const char* string2)
         else
             return false;
 
-
-
-
     }
-
-
-
-    //return false;
 }
 
 
