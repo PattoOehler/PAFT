@@ -363,6 +363,7 @@ int DHT::Log2(unsigned long long int n)
 
 int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 {
+    //TODO NOT WORKING
     unsigned long long int top_distance = id.top ^ id2.top;
     unsigned long long int mid_distance = id.mid ^ id2.mid;
     unsigned long int bot_distance = id.bot ^ id2.bot;
@@ -403,8 +404,6 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 void DHT::Update_Time(DHT_Single_Entry Update)
 {
 
-    //std::cout << "Updating DHT with "  << inet_ntoa(Update.addr) <<":" << Update.port << "\n";
-
     int distance = Distance(Update.id, DHT_Access::Get_SELF());
 
     for(int i=0; i<20; i++)
@@ -413,7 +412,7 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
         if(tmp.is_set == true)
         {
-            //if(tmp.id.top == Update.id.top && tmp.id.mid == Update.id.mid && tmp.id.bot == Update.id.bot)
+
             if(IsEqual(tmp.id, Update.id))
             {
                 Update.time_To_Timeout = time(0)+60*60; // 1 hour
@@ -590,45 +589,17 @@ void DHT::Print_ID(_160bitnumber id_to_print)
             pointer[i] --;
             counter++;
         }
-        /*
-        int high = counter/16;
-        int low = counter%16;
 
-        if(high > 9)
-        {
-            char a = 'A' + high-10;
-            std::cout << a;
-        }
-        else
-        {
-            char a = '0' + high;
-            std::cout << a;
-        }
-        if(low > 9)
-        {
-            char a = 'A' + low-10;
-            std::cout << a;
-        }
-        else
-        {
-            char a = '0' + low;
-            std::cout << a;
-        }
-        */
-
-        int printrs[2] = {counter/16, counter%16};
+        int amount[2] = {counter/16, counter%16};
+        char currentLetter;
         for(int i=0;i < 2; i++)
         {
-            char a;
-            if(printrs[i] > 9)
-                a = 'A' + printrs[i]-10;
+            if(amount[i] > 9)
+                currentLetter = 'A' + amount[i]-10;
             else
-                a = '0' + printrs[i];
-            std::cout << a;
+                currentLetter = '0' + amount[i];
+            std::cout << currentLetter;
         }
-
-
-
 
     }
 

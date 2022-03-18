@@ -229,7 +229,7 @@
 	<iostream>
 	<random>
 
-1647379519 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
+1647575748 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
 	"DHT.h"
 	"DHT_Access.h"
 	"DHT_Updater.h"
@@ -309,13 +309,14 @@
 	<winsock2.h>
 	"../DHT/DHT.h"
 
-1647377450 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
+1647573289 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
 	"MainCLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
 	"../FILEIO/Meta_Files.h"
 	"Major_Functions.h"
+	"../UnitTests/MainUnitTests.h"
 	<iostream>
 	<random>
 
@@ -492,5 +493,19 @@
 
 1646088237 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.h
 	"../DHT/DHT.h"
+	<iostream>
+
+1647575105 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.cpp
+	"DHT_TESTS.h"
+
+1647573183 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.h
+	"../../DHT/DHT.h"
+	<iostream>
+
+1647573025 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.cpp
+	"MainUnitTests.h"
+	"DHT/DHT_TESTS.h"
+
+1647573175 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.h
 	<iostream>
 

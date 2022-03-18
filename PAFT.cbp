@@ -55,6 +55,10 @@
 		<Unit filename="src/Server/Connection.h" />
 		<Unit filename="src/Server/MainServer.cpp" />
 		<Unit filename="src/Server/MainServer.h" />
+		<Unit filename="src/UnitTests/DHT/DHT_TESTS.cpp" />
+		<Unit filename="src/UnitTests/DHT/DHT_TESTS.h" />
+		<Unit filename="src/UnitTests/MainUnitTests.cpp" />
+		<Unit filename="src/UnitTests/MainUnitTests.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

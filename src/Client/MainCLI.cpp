@@ -5,6 +5,7 @@
 #include "../DHT/DHT_Access.h"
 #include "../FILEIO/Meta_Files.h"
 #include "Major_Functions.h"
+#include "../UnitTests/MainUnitTests.h"
 
 #include <iostream>
 #include <random>
@@ -52,6 +53,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "store_file_on_network -- stores a file on the network\n";
         std::cout << "store_file_net_and_get_meta_back -- For Testing\n";
         std::cout << "store_file_net_and_get_chunk_back -- For Testing\n";
+        std::cout << "manual_tests          -- Runs all of the manual tests\n";
         std::cout << "\n\n";
     }
     else if(String_Compare(Input, "self_ping"))
@@ -156,6 +158,11 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
 
         std::cout << "Done!!!\n";
+
+    }
+    else if(String_Compare(Input, "manual_tests"))
+    {
+        MainUnitTests::Run_All_Manual_Tests();
 
     }
 
