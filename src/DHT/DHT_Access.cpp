@@ -10,9 +10,10 @@ DHT_Single_Entry* DHT_Access::all_Peers = new DHT_Single_Entry[160*20];
 DHT_Single_Entry* DHT_Access::all_Files = new DHT_Single_Entry[DHT_File_Len]; //Temporarily as 100, might need to change later
 std::string *DHT_Access::local_File_Locations = new std::string[DHT_File_Len];
 
-_160bitnumber* DHT_Access::own_ID = new _160bitnumber;
+_160bitnumber DHT_Access::own_ID;
 unsigned short int DHT_Access::own_Port = 1234; //Default value- should be set before accessed
 
+std::mutex* DHT_Access::own_ID_Mutex = new std::mutex[1];
 std::mutex* DHT_Access::all_Peers_Mutex = new std::mutex[160*20];
 std::mutex* DHT_Access::all_Files_Mutex = new std::mutex[DHT_File_Len];
 
@@ -150,13 +151,17 @@ int DHT_Access::Store_FileId(DHT_Single_Entry entry)
 
 _160bitnumber DHT_Access::Get_SELF()
 {
-    return *own_ID;
+    own_ID_Mutex[0].lock();
+    _160bitnumber returning = own_ID;
+    own_ID_Mutex[0].unlock();
+    return returning;
 
 }
 
 void DHT_Access::Set_Self(_160bitnumber own_Id)
 {
-    own_ID = &own_Id;
+    std::cout << "Setting self!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+    own_ID = own_Id;
 }
 
 

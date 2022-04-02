@@ -54,6 +54,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         std::cout << "store_file_net_and_get_meta_back -- For Testing\n";
         std::cout << "store_file_net_and_get_chunk_back -- For Testing\n";
         std::cout << "manual_tests          -- Runs all of the manual tests\n";
+        std::cout << "print_self            -- For Testing\n";
         std::cout << "\n\n";
     }
     else if(String_Compare(Input, "self_ping"))
@@ -164,6 +165,13 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     {
         MainUnitTests::Run_All_Manual_Tests();
 
+    }
+    else if(String_Compare(Input, "print_self"))
+    {
+        _160bitnumber self = DHT_Access::Get_SELF();
+        std::cout << "SELF: ";
+        DHT::Print_ID(self);
+        std::cout << "\n";
     }
 
     else if(String_Compare(Input, "exit"))

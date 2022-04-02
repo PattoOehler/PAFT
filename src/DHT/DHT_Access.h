@@ -18,10 +18,11 @@ namespace paft
         static DHT_Single_Entry* all_Files;
         static std::string *local_File_Locations;
 
+        static std::mutex* own_ID_Mutex;
         static std::mutex* all_Peers_Mutex;
         static std::mutex* all_Files_Mutex;
 
-        static _160bitnumber* own_ID;
+        static _160bitnumber own_ID;
         static unsigned short int own_Port;
 
 

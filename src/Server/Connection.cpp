@@ -33,6 +33,7 @@ Connection::~Connection()
     //ctor
 }
 
+
 void Connection::Ping(LPVOID lpParam)
 {
     SOCKET current_client = (SOCKET)lpParam;
@@ -44,7 +45,6 @@ void Connection::Ping(LPVOID lpParam)
 
 
     send(current_client,sendbuf,20,0);
-
 
 
 }
@@ -237,6 +237,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
 
 
 
+
 void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 {
     char sendData[100];
@@ -253,6 +254,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Pinging
             //std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
             Connection::Ping((LPVOID)long_client.client);
+
 
 
         }
@@ -299,9 +301,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             send(long_client.client,sendData,sizeof(sendData),0);
 
         }
-
         shutdown(long_client.client, SD_SEND);
-
 
 }
 

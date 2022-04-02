@@ -371,6 +371,7 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
     //This is the distance formula
     if(top_distance != 0)
     {
+        std::cout << "DHT::Distance top_distance != 0 \n";
         return Log2(top_distance);
 
     }
@@ -378,15 +379,20 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
     {
         if(mid_distance != 0)
         {
+            std::cout << "DHT::Distance mid_distnace != 0 \n";
             return 64+Log2(mid_distance);
 
         }
         else
         {
             if(bot_distance != 0)
+            {
+                std::cout << "DHT::Distance bot_distance != 0 \n";
                 return 128+Log2((unsigned long long int)bot_distance);
+            }
             else
             {
+                std::cout << "DHT::Distance bot_distance == 0 \n";
                 return  159;
             }
 
@@ -455,7 +461,9 @@ void DHT::Init(){
 
     SELF.bot = gen() >> 32;
 
-    std::cout << SELF.top << " "<< SELF.mid << " "<< SELF.bot << std::endl;
+    std::cout << "SELF: ";
+    DHT::Print_ID(SELF);
+    std::cout << "\n";
 
 
     DHT_Access::Set_Self(SELF);
@@ -517,7 +525,7 @@ int DHT::Test_Add_Entry()
     tmp_top = 1;
     for(int i=0; i<64; i++)
     {
-        Testing.id.top = SELF.top ^ (tmp_top);
+        Testing.id.top = SELF.top ^ tmp_top;
         tmp_top = tmp_top<<1;
         Update_Time(Testing);
 
@@ -529,7 +537,7 @@ int DHT::Test_Add_Entry()
     tmp_mid = 1;
     for(int i=0; i<64; i++)
     {
-        Testing.id.mid = SELF.mid ^ (tmp_mid);
+        Testing.id.mid = SELF.mid ^ tmp_mid;
         tmp_mid = tmp_mid<<1;
         Update_Time(Testing);
 
@@ -540,14 +548,11 @@ int DHT::Test_Add_Entry()
     tmp_bot = 1;
     for(int i=0; i<32; i++)
     {
-        Testing.id.bot = SELF.bot ^ (tmp_bot);
+        Testing.id.bot = SELF.bot ^ tmp_bot;
         tmp_bot = tmp_bot<<1;
         Update_Time(Testing);
 
-
     }
-
-
 
 
     return 0;
