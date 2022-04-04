@@ -1,6 +1,5 @@
 
 #include "DHT_TESTS.h"
-
 using namespace paft;
 
 void DHT_TESTS::Manual_DHT__Print_ID()
@@ -19,4 +18,42 @@ void DHT_TESTS::Manual_DHT__Print_ID()
 
 
     std::cout << "\nDHT_TESTS::Manual_DHT__Print_ID()\n";
+}
+
+
+
+void DHT_TESTS::DHT__IsEqual()
+{
+    _160bitnumber num = DHT::Random_ID();
+
+    if(!DHT::IsEqual(num, num))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::IsEqual is not performing as expected\n";
+    }
+
+    _160bitnumber num2 = num;
+
+    num2.bot += 1;
+    if(DHT::IsEqual(num, num2))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::IsEqual is not performing as expected\n";
+    }
+
+    num2.bot -= 1;
+    num2.mid += 1;
+    if(DHT::IsEqual(num, num2))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::IsEqual is not performing as expected\n";
+    }
+
+    num2.mid -= 1;
+    num2.top += 1;
+    if(DHT::IsEqual(num, num2))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::IsEqual is not performing as expected\n";
+    }
 }

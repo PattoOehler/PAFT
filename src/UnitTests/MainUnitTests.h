@@ -14,6 +14,7 @@ namespace paft
         // MANUAL TESTS
         static void Run_All_Manual_Tests();
 
+        static void Run_All_Auto_Tests();
 
 
 

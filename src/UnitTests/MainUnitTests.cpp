@@ -12,3 +12,10 @@ void MainUnitTests::Run_All_Manual_Tests()
     DHT_TESTS::Manual_DHT__Print_ID();
 
 }
+
+
+void MainUnitTests::Run_All_Auto_Tests()
+{
+    DHT_TESTS::DHT__IsEqual();
+
+}

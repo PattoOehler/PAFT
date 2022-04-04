@@ -35,7 +35,6 @@ void MainClient::Shutdown_Connection_Gracefully()
 {
     if(!setUpProperly)
         return;
-    //TODO UNCOMMENT BLOCK
 
     char recvbuf[DEFAULT_BUFLEN];
     // shutdown the connection since no more data will be sent
@@ -711,7 +710,6 @@ int MainClient::Ping()
 
 
 
-    //NOT changing of self TODO REMOVE COMMENT
     Add_Self(sendbuf);
 
     int iResult = send( Socket, sendbuf, 23, 0 );
@@ -736,7 +734,6 @@ int MainClient::Ping()
         return 1;
     }
 
-    //NOT changing of self TODO REMOVE COMMENT
     Add_Received_Entry_To_DHT(recvbuf, iResult);
 
 

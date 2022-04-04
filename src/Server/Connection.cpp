@@ -307,7 +307,6 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 
 void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 {
-    //TODO
 
     if(len < 47 )
     {

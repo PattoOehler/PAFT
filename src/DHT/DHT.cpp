@@ -48,7 +48,8 @@ three_DHT DHT::Find_Value(_160bitnumber id)
         {
             if(IsEqual(id, tmp.id))
             {
-                closest.entry[closest_counter] = tmp;
+                if(closest_counter < 3)
+                    closest.entry[closest_counter] = tmp;
                 closest_counter++;
 
             }
@@ -113,8 +114,7 @@ bool DHT::Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To)
     }
     else
     {
-        //Should not happen unless they are the same
-        std::cout << "Error in DHT::Compare - they are the same\n";
+        //Returns false when id=id2
         return false;
     }
 
@@ -363,15 +363,13 @@ int DHT::Log2(unsigned long long int n)
 
 int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 {
-    //TODO NOT WORKING
     unsigned long long int top_distance = id.top ^ id2.top;
     unsigned long long int mid_distance = id.mid ^ id2.mid;
     unsigned long int bot_distance = id.bot ^ id2.bot;
 
-    //This is the distance formula
+
     if(top_distance != 0)
     {
-        std::cout << "DHT::Distance top_distance != 0 \n";
         return Log2(top_distance);
 
     }
@@ -379,7 +377,6 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
     {
         if(mid_distance != 0)
         {
-            std::cout << "DHT::Distance mid_distnace != 0 \n";
             return 64+Log2(mid_distance);
 
         }
@@ -387,12 +384,10 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
         {
             if(bot_distance != 0)
             {
-                std::cout << "DHT::Distance bot_distance != 0 \n";
                 return 128+Log2((unsigned long long int)bot_distance);
             }
             else
             {
-                std::cout << "DHT::Distance bot_distance == 0 \n";
                 return  159;
             }
 
@@ -443,23 +438,14 @@ void DHT::Update_Time(DHT_Single_Entry Update)
 
 
 
-void DHT::Init(){
-
-    //This will set the SELF
-
+void DHT::Init()
+{
     std::thread thread(DHT_Updater::Keep_DHT_Updated);
     thread.detach();
 
 
-    std::random_device rd;   // non-deterministic generator
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
+    _160bitnumber SELF = DHT::Random_ID();
 
-    _160bitnumber SELF;
-
-    SELF.top = gen();
-    SELF.mid = gen();
-
-    SELF.bot = gen() >> 32;
 
     std::cout << "SELF: ";
     DHT::Print_ID(SELF);
@@ -626,9 +612,6 @@ void DHT::Print_Files()
             std::cout << "    In part " << std::dec << (i) << "\n";
         }
 
-
-
-
     }
 
 
@@ -641,7 +624,7 @@ _160bitnumber DHT::Random_ID()
     _160bitnumber random_ID;
 
     std::random_device rd;
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int
+    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO
 
     random_ID.top = gen();
     random_ID.mid = gen();

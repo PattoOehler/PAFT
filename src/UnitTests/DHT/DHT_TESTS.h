@@ -16,6 +16,8 @@ namespace paft
         static void Manual_DHT__Print_ID();
 
 
+        // AUTOMATIC TESTS
+        static void DHT__IsEqual();
 
 
     };
