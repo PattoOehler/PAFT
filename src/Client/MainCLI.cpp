@@ -73,7 +73,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
         if(a.is_set)
         {
-            DHT::Test_Add_Entry();
+            DHT::Add_Entry_All_Buckets();
         }
         else
             printf("The DHT at position 159*20 is not set\n");

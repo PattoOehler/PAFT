@@ -15,6 +15,131 @@ using namespace paft;
 
 
 
+DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_find, _160bitnumber previous_id)
+{
+    if((bucket > 20) | (bucket < 0))
+    {
+        DHT_Single_Entry tmp;
+        tmp.is_set = false;
+        return tmp;
+    }
+
+
+    DHT_Single_Entry closest;
+    DHT_Single_Entry access;
+
+    closest.is_set = false;
+    access.is_set = false;
+
+    for(int i=0;i<20;i++)
+    {
+        access = DHT_Access::Access_DHT(bucket*20+i);
+        if(access.is_set)
+        {
+            if(!closest.is_set)
+            {
+                if(Compare(previous_id, access.id, id_to_find))
+                    closest=access;
+            }
+            else
+            {
+                if(Compare(access.id, closest.id, id_to_find) && Compare(previous_id, access.id, id_to_find))
+                    closest=access;
+
+
+            }
+        }
+
+    }
+
+    return closest;
+
+}
+
+
+three_DHT DHT::Lookup(_160bitnumber id)
+{
+    int bucket = Distance(id, DHT_Access::Get_SELF());
+    three_DHT closest = Lookup_One_Bucket(id, bucket);
+    int entryCounter = 0;
+
+    if(closest.entry[2].is_set)
+        return closest;
+    else if(closest.entry[1].is_set)
+        entryCounter = 2;
+    else if(closest.entry[0].is_set)
+        entryCounter = 1;
+    else
+        entryCounter = 0;
+
+
+
+
+    int bucket_counter=1;
+    _160bitnumber previous_UpID = id;
+    _160bitnumber previous_DownID = id;
+
+    DHT_Single_Entry upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
+    DHT_Single_Entry downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+
+    while((bucket+bucket_counter <= 20) | (bucket-bucket_counter >= 0))
+    {
+        if(upEntry.is_set | downEntry.is_set)
+        {
+            if(upEntry.is_set && downEntry.is_set)
+            {
+                if(Compare(upEntry.id, downEntry.id, id))
+                {
+                    closest.entry[entryCounter] = upEntry;
+                    DHT_Single_Entry upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
+                }
+                else
+                {
+                    closest.entry[entryCounter] = downEntry;
+                    DHT_Single_Entry downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+                }
+                entryCounter++;
+            }
+            else
+            {
+                if(upEntry.is_set)
+                {
+                    closest.entry[entryCounter] = upEntry;
+                    DHT_Single_Entry upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
+                }
+                else
+                {
+                    closest.entry[entryCounter] = downEntry;
+                    DHT_Single_Entry downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+                }
+            }
+        }
+        else
+            bucket_counter++;
+    }
+
+
+
+    return closest;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 bool DHT::IsEqual(_160bitnumber id,_160bitnumber id2)
 {
     if(id.top == id2.top)
@@ -22,9 +147,7 @@ bool DHT::IsEqual(_160bitnumber id,_160bitnumber id2)
         if(id.mid == id2.mid)
         {
             if(id.bot == id2.bot)
-            {
                 return true;
-            }
         }
 
     }
@@ -98,25 +221,18 @@ bool DHT::Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To)
 
 
     if(top_distance1 != top_distance2)
-    {
         return top_distance1 < top_distance2 ? true : false;
 
-    }
     else if(mid_distance1 != mid_distance2)
-    {
         return mid_distance1 < mid_distance2 ? true : false;
 
-    }
     else if(bot_distance1 != bot_distance2)
-    {
         return bot_distance1 < bot_distance2 ? true : false;
 
-    }
+    //Returns false when id=id2
     else
-    {
-        //Returns false when id=id2
         return false;
-    }
+
 
 
 }
@@ -184,156 +300,7 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 
 
 
-three_DHT DHT::Lookup(_160bitnumber id)
-{
-    int distance = Distance(id, DHT_Access::Get_SELF());
-    three_DHT closest = Lookup_One_Bucket(id, distance);
 
-    if(closest.entry[2].is_set)
-        return closest;
-
-    three_DHT next_Buckets[2];
-
-    bool run=true;
-
-
-    int distance_Counter = 1;
-    while(run)
-    {
-        if(closest.entry[2].is_set)
-            return closest;
-
-        //Test for the Buckets bounds and if both are out of range exit
-        //If its just one it should not be set and the other will work
-        if(distance-distance_Counter >= 0)
-            next_Buckets[0] = Lookup_One_Bucket(id, distance-distance_Counter);
-        else
-        {
-            next_Buckets[0].entry[0].is_set = false;
-            next_Buckets[0].entry[1].is_set = false;
-            next_Buckets[0].entry[2].is_set = false;
-
-        }
-        if(distance+distance_Counter <= 159)
-            next_Buckets[1] = Lookup_One_Bucket(id, distance+distance_Counter);
-        else
-        {
-            next_Buckets[1].entry[0].is_set = false;
-            next_Buckets[1].entry[1].is_set = false;
-            next_Buckets[1].entry[2].is_set = false;
-
-        }
-
-        if((distance+distance_Counter > 159) & (distance-distance_Counter < 0))
-        {
-            //Ran through the whole DHT and not all were found
-            return closest;
-
-        }
-        distance_Counter++;
-
-        //It should run a maximum of three times
-        for(int three=0; three<3;three++)
-        {
-
-            if(next_Buckets[0].entry[0].is_set && next_Buckets[1].entry[0].is_set)
-            {
-                if(Compare(next_Buckets[0].entry[0].id, next_Buckets[1].entry[0].id, id))
-                {
-                    for(int i=0;i<3;i++)
-                    {
-                        if(!closest.entry[i].is_set)
-                        {
-                            closest.entry[i] = next_Buckets[0].entry[0];
-                            next_Buckets[0].entry[0] = next_Buckets[0].entry[1];
-                            next_Buckets[0].entry[1] = next_Buckets[0].entry[2];
-                            next_Buckets[0].entry[2].is_set = false;
-                            break;
-
-                        }
-
-                    }
-
-                }
-                else
-                {
-                    for(int i=0;i<3;i++)
-                    {
-                        if(!closest.entry[i].is_set)
-                        {
-                            closest.entry[i] = next_Buckets[1].entry[0];
-                            next_Buckets[1].entry[0] = next_Buckets[1].entry[1];
-                            next_Buckets[1].entry[1] = next_Buckets[1].entry[2];
-                            next_Buckets[1].entry[2].is_set = false;
-                            break;
-
-                        }
-
-                    }
-
-                }
-
-
-            }
-            else if(next_Buckets[0].entry[0].is_set | next_Buckets[1].entry[0].is_set)
-            {
-
-
-                if(next_Buckets[0].entry[0].is_set)
-                {
-
-                    for(int i=0;i<3;i++)
-                    {
-                        if(!closest.entry[i].is_set)
-                        {
-                            closest.entry[i] = next_Buckets[0].entry[0];
-                            next_Buckets[0].entry[0] = next_Buckets[0].entry[1];
-                            next_Buckets[0].entry[1] = next_Buckets[0].entry[2];
-                            next_Buckets[0].entry[2].is_set = false;
-                            break;
-
-                        }
-
-                    }
-
-
-                }
-                else
-                {
-                    //next_Buckets[1].entry[0].is_set = true so set it to the most first possible place
-                    for(int i=0;i<3;i++)
-                    {
-                        if(!closest.entry[i].is_set)
-                        {
-                            closest.entry[i] = next_Buckets[1].entry[0];
-                            next_Buckets[1].entry[0] = next_Buckets[1].entry[1];
-                            next_Buckets[1].entry[1] = next_Buckets[1].entry[2];
-                            next_Buckets[1].entry[2].is_set = false;
-                            break;
-
-                        }
-
-                    }
-
-
-                }
-
-            }
-            else
-            {
-                //Breaks out of the 3 loops - not necessary but increases runtime
-                break;
-            }
-
-        }
-    }
-
-
-
-
-    return closest;
-
-}
 
 
 
@@ -369,28 +336,19 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 
 
     if(top_distance != 0)
-    {
         return Log2(top_distance);
 
-    }
     else
     {
         if(mid_distance != 0)
-        {
             return 64+Log2(mid_distance);
 
-        }
         else
         {
             if(bot_distance != 0)
-            {
                 return 128+Log2((unsigned long long int)bot_distance);
-            }
             else
-            {
                 return  159;
-            }
-
         }
     }
 
@@ -488,13 +446,19 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 
 
 
-int DHT::Test_Add_Entry()
+int DHT::Add_Entry_All_Buckets()
 {
 
     DHT_Single_Entry Testing;
 
 
     DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
+    if(!a.is_set)
+    {
+        std::cout << "DHT Position 159*20 IS NOT SET DHT::Add_Entry_All_Buckets cannot run!\n\n";
+        return -1;
+    }
+
     Testing.addr = a.addr;
     Testing.port = a.port;
 

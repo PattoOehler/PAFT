@@ -55,7 +55,7 @@ namespace paft
         static int Log2(unsigned long long int n);
         static void Init();
 
-        static int Test_Add_Entry();
+        static int Add_Entry_All_Buckets();
         static void Print_DHT();
         static void Update_Time(DHT_Single_Entry Update);
         static three_DHT Lookup(_160bitnumber id);
@@ -67,8 +67,7 @@ namespace paft
 
         static void Print_ID(_160bitnumber id_to_print);
 
-
-
+        static DHT_Single_Entry Next_Closest_In_Bucket(int bucket, _160bitnumber id, _160bitnumber previous_id);
 
     };
 
