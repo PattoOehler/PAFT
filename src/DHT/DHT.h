@@ -4,7 +4,8 @@
 #include <stdint.h>
 #include <mutex>
 #include <winsock.h>
-
+#include <random>
+#include <ctime>
 
 
 typedef struct
@@ -47,7 +48,11 @@ namespace paft
         static three_DHT Lookup_One_Bucket(_160bitnumber id, int bucket);
 
 
+
+
     public:
+        static std::mt19937_64 gen;
+
         static three_DHT Find_Value(_160bitnumber id);
         static bool IsEqual(_160bitnumber id,_160bitnumber id2);
 

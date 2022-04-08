@@ -26,8 +26,15 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
     {
         if(in_DHT.entry[i].is_set)
         {
+            std::cout << "Major_Functions::Three_Closest_Peers_In_Network entry[" << i << "] is set\n";
             MainClient client = MainClient(in_DHT.entry[i].addr, in_DHT.entry[i].port);
             client.Find_Node_Recursive(id, dht_Identifier);
+            std::cout << "Major_Functions::Three_Closest_Peers_In_Network after client.Find_Node_Recursive()\n";
+        }
+        else
+        {
+            std::cout << "Major_Functions::Three_Closest_Peers_In_Network entry[" << i << "] not set\n";
+
         }
     }
 

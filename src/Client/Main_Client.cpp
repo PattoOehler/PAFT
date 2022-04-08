@@ -575,6 +575,7 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
     if(!setUpProperly)
         return -1;
 
+    std::cout << "MainClient::Find_Node_Recursive set up properly\n";
 
     char sendbuf[43];
     sendbuf[0] = 0x03;
@@ -608,15 +609,17 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 
     three_DHT received_Nodes = Return_Received_Nodes(recvbuf, iResult);
 
-
+    std::cout << "MainClient::Find_Node_Recursive shutting down connection\n";
     Shutdown_Connection_Gracefully();
 
+    std::cout << "MainClient::Find_Node_Recursive Add_To_Lookup_DHT\n";
     //Write this connection to lookup_DHT if they are closer then currently stored
     Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, node);
+    std::cout << "MainClient::Find_Node_Recursive Add_To_Lookup_DHT end\n";
 
     //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
     Minor_Functions::Do_Lookup_If_Closer(lookup_Identifier, received_Nodes, node);
-
+    std::cout << "MainClient::Find_Node_Recursive End\n";
     return 0;
 
 

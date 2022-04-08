@@ -57,3 +57,85 @@ void DHT_TESTS::DHT__IsEqual()
         std::cout << "DHT::IsEqual is not performing as expected\n";
     }
 }
+
+
+void DHT_TESTS::DHT__Compare()
+{
+
+    _160bitnumber num = DHT::Random_ID();
+    _160bitnumber num2 = num;
+    num2.bot += 1;
+
+    if(!DHT::Compare(num,num2, num))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Compare is not performing as expected\n";
+    }
+
+    if(DHT::Compare(num2,num, num))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Compare is not performing as expected2\n";
+    }
+
+    if(DHT::Compare(num,num, num))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Compare is not performing as expected2\n";
+    }
+
+    if(DHT::Compare(num2,num2, num))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Compare is not performing as expected2\n";
+    }
+
+}
+
+
+void DHT_TESTS::DHT__Random_ID()
+{
+
+    _160bitnumber id = DHT::Random_ID();
+    _160bitnumber id2 = DHT::Random_ID();
+    _160bitnumber id3 = DHT::Random_ID();
+    _160bitnumber id4 = DHT::Random_ID();
+    _160bitnumber id5 = DHT::Random_ID();
+
+    if(DHT::IsEqual(id, id2))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+    if(DHT::IsEqual(id2, id3))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+    if(DHT::IsEqual(id3, id4))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+    if(DHT::IsEqual(id4, id5))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+    if(DHT::IsEqual(id2, id4))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+    if(DHT::IsEqual(id2, id5))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+    if(DHT::IsEqual(id3, id5))
+    {
+        std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
+        std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
+    }
+}
+

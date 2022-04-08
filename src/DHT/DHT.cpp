@@ -14,10 +14,12 @@
 using namespace paft;
 
 
+std::mt19937_64 DHT::gen(time(nullptr));
+
 
 DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_find, _160bitnumber previous_id)
 {
-    if((bucket > 20) | (bucket < 0))
+    if((bucket > 159) | (bucket < 0))
     {
         DHT_Single_Entry tmp;
         tmp.is_set = false;
@@ -59,6 +61,7 @@ DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_fin
 
 three_DHT DHT::Lookup(_160bitnumber id)
 {
+    //TODO NOT WORKING
     int bucket = Distance(id, DHT_Access::Get_SELF());
     three_DHT closest = Lookup_One_Bucket(id, bucket);
     int entryCounter = 0;
@@ -79,24 +82,29 @@ three_DHT DHT::Lookup(_160bitnumber id)
     _160bitnumber previous_UpID = id;
     _160bitnumber previous_DownID = id;
 
-    DHT_Single_Entry upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
-    DHT_Single_Entry downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+    DHT_Single_Entry upEntry;
+    DHT_Single_Entry downEntry;
 
-    while((bucket+bucket_counter <= 20) | (bucket-bucket_counter >= 0))
+    while( ((bucket+bucket_counter <= 159) | (bucket-bucket_counter >= 0)) & (entryCounter < 3 ))
     {
-        if(upEntry.is_set | downEntry.is_set)
+        upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
+        downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+
+        while( (upEntry.is_set | downEntry.is_set) & (entryCounter < 3) )
         {
             if(upEntry.is_set && downEntry.is_set)
             {
                 if(Compare(upEntry.id, downEntry.id, id))
                 {
                     closest.entry[entryCounter] = upEntry;
-                    DHT_Single_Entry upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
+                    previous_UpID = upEntry.id;
+                    upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
                 }
                 else
                 {
                     closest.entry[entryCounter] = downEntry;
-                    DHT_Single_Entry downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+                    previous_DownID = downEntry.id;
+                    downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
                 }
                 entryCounter++;
             }
@@ -105,17 +113,19 @@ three_DHT DHT::Lookup(_160bitnumber id)
                 if(upEntry.is_set)
                 {
                     closest.entry[entryCounter] = upEntry;
-                    DHT_Single_Entry upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
+                    previous_UpID = upEntry.id;
+                    upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
                 }
                 else
                 {
                     closest.entry[entryCounter] = downEntry;
-                    DHT_Single_Entry downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
+                    previous_DownID = downEntry.id;
+                    downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
                 }
             }
         }
-        else
-            bucket_counter++;
+
+        bucket_counter++;
     }
 
 
@@ -123,17 +133,6 @@ three_DHT DHT::Lookup(_160bitnumber id)
     return closest;
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -315,11 +314,9 @@ int DHT::Log2(unsigned long long int n)
     while (n!=0)
     {
         logValue++;
-
         n >>= 1;
     }
     return logValue;
-
 
 }
 
@@ -587,9 +584,8 @@ _160bitnumber DHT::Random_ID()
 {
     _160bitnumber random_ID;
 
-    std::random_device rd;
-    std::mt19937_64 gen(rd()^time(NULL)); // With this set gen() will give a psudo random 64 bit(unsigned long long) int TODO
-
+    //Produces pseudo-random Numbers based upon startup time.
+    //TODO make random numbers cryptographically secure
     random_ID.top = gen();
     random_ID.mid = gen();
     random_ID.bot = gen() >> 32;

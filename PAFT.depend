@@ -230,7 +230,7 @@
 	<iostream>
 	<random>
 
-1649267599 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
+1649450887 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
 	"DHT.h"
 	"DHT_Access.h"
 	"DHT_Updater.h"
@@ -242,10 +242,12 @@
 	<ws2tcpip.h>
 	<thread>
 
-1649272826 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
+1649450850 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
 	<stdint.h>
 	<mutex>
 	<winsock.h>
+	<random>
+	<ctime>
 
 1648927765 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
 	"DHT_Access.h"
@@ -293,7 +295,7 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1649102937 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+1649379442 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
@@ -455,7 +457,7 @@
 	<Windows.h>
 	<iostream>
 
-1647035627 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1649379537 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -483,11 +485,12 @@
 1642027848 c:\users\peyto-w\desktop\paft\github\paft\src\client\minor_functions.h
 	"../DHT/DHT.h"
 
-1642200700 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\minor_functions.cpp
+1649379229 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\minor_functions.cpp
 	"Minor_Functions.h"
 	"../DHT/DHT_Lookup.h"
 	"../DHT/DHT.h"
 	"Main_Client.h"
+	<iostream>
 
 1646084804 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.cpp
 	"FileFunctions.h"
@@ -496,14 +499,14 @@
 	"../DHT/DHT.h"
 	<iostream>
 
-1649104416 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.cpp
+1649449094 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.cpp
 	"DHT_TESTS.h"
 
-1649103938 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.h
+1649450958 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.h
 	"../../DHT/DHT.h"
 	<iostream>
 
-1649104351 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.cpp
+1649450918 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.cpp
 	"MainUnitTests.h"
 	"DHT/DHT_TESTS.h"
 

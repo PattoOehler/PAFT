@@ -4,6 +4,8 @@
 #include "../DHT/DHT.h"
 #include "Main_Client.h"
 
+#include <iostream>
+
 using namespace paft;
 
 
@@ -17,16 +19,27 @@ void Minor_Functions::Do_Lookup_If_Closer(int lookupID, three_DHT received_value
     //If one of the values is not set(should be sorted) lookup all
     if(!current_Three.entry[2].is_set)
     {
-        MainClient client1(received_values.entry[0].addr, received_values.entry[0].port);
-        client1.Find_Node_Recursive(lookingFor, lookupID);
+        std::cout << "Minor_Functions::Do_Lookup_If_Closer current_Three.entry[2] is not set\n";
+        if(received_values.entry[0].is_set)
+        {
+            MainClient client1(received_values.entry[0].addr, received_values.entry[0].port);
+            client1.Find_Node_Recursive(lookingFor, lookupID);
+        }
 
-        MainClient client2(received_values.entry[1].addr, received_values.entry[1].port);
-        client2.Find_Node_Recursive(lookingFor, lookupID);
-
-        MainClient client3(received_values.entry[2].addr, received_values.entry[2].port);
-        client3.Find_Node_Recursive(lookingFor, lookupID);
+        if(received_values.entry[1].is_set)
+        {
+            MainClient client2(received_values.entry[1].addr, received_values.entry[1].port);
+            client2.Find_Node_Recursive(lookingFor, lookupID);
+        }
+        if(received_values.entry[2].is_set)
+        {
+            MainClient client3(received_values.entry[2].addr, received_values.entry[2].port);
+            client3.Find_Node_Recursive(lookingFor, lookupID);
+        }
         return;
     }
+
+    std::cout << "Minor_Functions::Do_Lookup_If_Closer current_Three.entry[2] is set\n";
 
     bool is_0_In_Current_Three = DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[0].id) && DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[1].id) &&
                                             DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[2].id);
