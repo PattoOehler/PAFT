@@ -160,7 +160,6 @@ _160bitnumber DHT_Access::Get_SELF()
 
 void DHT_Access::Set_Self(_160bitnumber own_Id)
 {
-    std::cout << "Setting self!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
     own_ID = own_Id;
 }
 

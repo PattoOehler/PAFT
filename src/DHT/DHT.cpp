@@ -61,7 +61,7 @@ DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_fin
 
 three_DHT DHT::Lookup(_160bitnumber id)
 {
-    //TODO NOT WORKING
+
     int bucket = Distance(id, DHT_Access::Get_SELF());
     three_DHT closest = Lookup_One_Bucket(id, bucket);
     int entryCounter = 0;
@@ -127,8 +127,6 @@ three_DHT DHT::Lookup(_160bitnumber id)
 
         bucket_counter++;
     }
-
-
 
     return closest;
 
