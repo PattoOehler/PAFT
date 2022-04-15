@@ -27,6 +27,8 @@
 			<Add option="-lws2_32" />
 		</Linker>
 		<Unit filename="Main.cpp" />
+		<Unit filename="src/Client/CLI_Functions.cpp" />
+		<Unit filename="src/Client/CLI_Functions.h" />
 		<Unit filename="src/Client/MainCLI.cpp" />
 		<Unit filename="src/Client/MainCLI.h" />
 		<Unit filename="src/Client/Main_Client.cpp" />

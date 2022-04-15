@@ -312,7 +312,7 @@
 	<winsock2.h>
 	"../DHT/DHT.h"
 
-1649266939 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
+1650054384 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
 	"MainCLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -320,6 +320,7 @@
 	"../FILEIO/Meta_Files.h"
 	"Major_Functions.h"
 	"../UnitTests/MainUnitTests.h"
+	"CLI_Functions.h"
 	<iostream>
 	<random>
 
@@ -511,5 +512,14 @@
 	"DHT/DHT_TESTS.h"
 
 1649104285 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.h
+	<iostream>
+
+1650054338 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
+
+1650054448 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
+	"CLI_Functions.h"
+	"Main_Client.h"
+	"../DHT/DHT_Access.h"
+	"Major_Functions.h"
 	<iostream>
 
