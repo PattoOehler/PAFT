@@ -21,7 +21,7 @@ void CLI_Functions::Help_Command()
     std::cout << "self_store_random_file-- sends store file RPC to self\n";
     std::cout << "print_files           -- prints the stored files\n";
     std::cout << "make_meta_file        -- makes a metadata file\n";
-    std::cout << "self_find_random_node_network  -- Testing\n";
+    std::cout << "self_find_random_node_network  -- Recursively find closest 3 peers in network\n";
     std::cout << "store_file_on_network -- stores a file on the network\n";
     std::cout << "store_file_net_and_get_meta_back -- For Testing\n";
     std::cout << "store_file_net_and_get_chunk_back -- For Testing\n";
@@ -100,7 +100,7 @@ void CLI_Functions::Store_File_Net_And_Get_Chunk_Back_Command()
 
 void CLI_Functions::Print_Self_Command()
 {
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     std::cout << "SELF: ";
     DHT::Print_ID(self);
     std::cout << "\n";

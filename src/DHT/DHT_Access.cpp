@@ -10,10 +10,10 @@ DHT_Single_Entry* DHT_Access::all_Peers = new DHT_Single_Entry[160*20];
 DHT_Single_Entry* DHT_Access::all_Files = new DHT_Single_Entry[DHT_File_Len]; //Temporarily as 100, might need to change later
 std::string *DHT_Access::local_File_Locations = new std::string[DHT_File_Len];
 
-_160bitnumber DHT_Access::own_ID;
-unsigned short int DHT_Access::own_Port = 1234; //Default value- should be set before accessed
 
-std::mutex* DHT_Access::own_ID_Mutex = new std::mutex[1];
+DHT_Single_Entry DHT_Access::SELF;
+
+std::mutex DHT_Access::own_ID_Mutex;
 std::mutex* DHT_Access::all_Peers_Mutex = new std::mutex[160*20];
 std::mutex* DHT_Access::all_Files_Mutex = new std::mutex[DHT_File_Len];
 
@@ -149,30 +149,64 @@ int DHT_Access::Store_FileId(DHT_Single_Entry entry)
 
 }
 
-_160bitnumber DHT_Access::Get_SELF()
+
+
+
+
+_160bitnumber DHT_Access::Get_SELF_ID()
 {
-    own_ID_Mutex[0].lock();
-    _160bitnumber returning = own_ID;
-    own_ID_Mutex[0].unlock();
+    own_ID_Mutex.lock();
+    _160bitnumber returning = SELF.id;
+    own_ID_Mutex.unlock();
     return returning;
 
 }
 
-void DHT_Access::Set_Self(_160bitnumber own_Id)
+void DHT_Access::Set_Self_ID(_160bitnumber self)
 {
-    own_ID = own_Id;
+    own_ID_Mutex.lock();
+    SELF.id = self;
+    own_ID_Mutex.unlock();
+
+
 }
 
 
+
+
+
+DHT_Single_Entry DHT_Access::Get_SELF()
+{
+    own_ID_Mutex.lock();
+    DHT_Single_Entry returning = SELF;
+    own_ID_Mutex.unlock();
+    return returning;
+
+}
+
+void DHT_Access::Set_Self(DHT_Single_Entry self)
+{
+    own_ID_Mutex.lock();
+    SELF = self;
+    own_ID_Mutex.unlock();
+}
+
+
+
+unsigned short int DHT_Access::Get_Self_Port()
+{
+    own_ID_Mutex.lock();
+    unsigned short int own_Port = SELF.port;
+    own_ID_Mutex.unlock();
+    return own_Port;
+
+}
 
 void DHT_Access::Set_Self_Port(unsigned short int port)
 {
-    own_Port = port;
-
-}
-unsigned short int DHT_Access::Get_Self_Port()
-{
-    return own_Port;
+    own_ID_Mutex.lock();
+    SELF.port = port;
+    own_ID_Mutex.unlock();
 
 }
 

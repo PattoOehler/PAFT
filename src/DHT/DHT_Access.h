@@ -18,13 +18,11 @@ namespace paft
         static DHT_Single_Entry* all_Files;
         static std::string *local_File_Locations;
 
-        static std::mutex* own_ID_Mutex;
+        static std::mutex own_ID_Mutex;
         static std::mutex* all_Peers_Mutex;
         static std::mutex* all_Files_Mutex;
 
-        static _160bitnumber own_ID;
-        static unsigned short int own_Port;
-
+        static DHT_Single_Entry SELF;
 
 
     public:
@@ -38,8 +36,12 @@ namespace paft
 
         static int Find_Stored_File(_160bitnumber entry);
 
-        static _160bitnumber Get_SELF();
-        static void Set_Self(_160bitnumber own_Id);
+        static _160bitnumber Get_SELF_ID();
+        static void Set_Self_ID(_160bitnumber own_Id);
+
+        static DHT_Single_Entry Get_SELF();
+        static void Set_Self(DHT_Single_Entry own_Id);
+
 
         static void Set_Self_Port(unsigned short int port);
         static unsigned short int Get_Self_Port();

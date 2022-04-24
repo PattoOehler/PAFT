@@ -62,7 +62,7 @@ DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_fin
 three_DHT DHT::Lookup(_160bitnumber id)
 {
 
-    int bucket = Distance(id, DHT_Access::Get_SELF());
+    int bucket = Distance(id, DHT_Access::Get_SELF_ID());
     three_DHT closest = Lookup_One_Bucket(id, bucket);
     int entryCounter = 0;
 
@@ -358,7 +358,7 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 void DHT::Update_Time(DHT_Single_Entry Update)
 {
 
-    int distance = Distance(Update.id, DHT_Access::Get_SELF());
+    int distance = Distance(Update.id, DHT_Access::Get_SELF_ID());
 
     for(int i=0; i<20; i++)
     {
@@ -405,7 +405,7 @@ void DHT::Init()
     std::cout << "\n";
 
 
-    DHT_Access::Set_Self(SELF);
+    DHT_Access::Set_Self_ID(SELF);
 
 
     return;
@@ -416,7 +416,7 @@ void DHT::Init()
 int DHT::Add_Entry(DHT_Single_Entry Entry)
 {
 
-    int distance = DHT::Distance(Entry.id, DHT_Access::Get_SELF());
+    int distance = DHT::Distance(Entry.id, DHT_Access::Get_SELF_ID());
 
 
     for(int i=0; i<20; i++)
@@ -463,7 +463,7 @@ int DHT::Add_Entry_All_Buckets()
     long unsigned int tmp_bot;
 
 
-    _160bitnumber SELF = DHT_Access::Get_SELF();
+    _160bitnumber SELF = DHT_Access::Get_SELF_ID();
     Testing.id.bot = SELF.bot;
     Testing.id.mid = SELF.mid;
 

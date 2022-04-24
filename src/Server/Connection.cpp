@@ -40,7 +40,7 @@ void Connection::Ping(LPVOID lpParam)
 
 
     char sendbuf[20];
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(sendbuf, (char*)&self, 20);
 
 
@@ -99,7 +99,7 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
 
@@ -150,7 +150,7 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(sendbuf, (char*)&self, 20);
 
 
@@ -206,7 +206,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
     if(len < 49)

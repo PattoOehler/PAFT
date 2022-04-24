@@ -72,7 +72,7 @@ void MainClient::Shutdown_Connection_Gracefully()
 
 void MainClient::Add_Self(char buf[])
 {
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(buf+1, (char*)&self, 20); // 160/8=20
     short unsigned int port = DHT_Access::Get_Self_Port();
     memcpy(buf+21, (char*)&port, 2);
@@ -753,7 +753,7 @@ int MainClient::GetFile(char *filename)
 
     char command[21];
     command[0] = '\x01';
-    _160bitnumber self = DHT_Access::Get_SELF();
+    _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(command+1, (char*)&self, 20); // 160/8=20
 
     std::cout << self.top << ' ' << self.mid << ' ' << self.bot << '\n';
