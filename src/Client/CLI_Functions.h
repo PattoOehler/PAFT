@@ -4,6 +4,7 @@
 #define __PAFT_CLI_FUNCTIONS_H
 
 
+using namespace std;
 
 namespace paft
 {
@@ -15,7 +16,7 @@ namespace paft
         static void Store_File_Net_And_Get_Meta_Back_Command();
         static void Store_File_Net_And_Get_Chunk_Back_Command();
         static void Print_Self_Command();
-
+        static void Upload_File_Network(char input[], int length);
     };
 
 }

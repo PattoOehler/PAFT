@@ -66,7 +66,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         Self_Find_Random_Node_Network();
 
     else if(String_Compare(Input, "store_file_on_network"))
-        Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft");
+        CLI_Functions::Upload_File_Network(Input, Input_len);
 
     else if(String_Compare(Input, "store_file_net_and_get_meta_back"))
         CLI_Functions::Store_File_Net_And_Get_Meta_Back_Command();
