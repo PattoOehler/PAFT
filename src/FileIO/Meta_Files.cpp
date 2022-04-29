@@ -108,53 +108,6 @@ void Meta_Files::set_Output_File_Name()
 
     }
 
-    /*
-    Old working code - looking to replace with new function
-    output_File_Name[0] = 'M';
-    output_File_Name[1] = 'e';
-    output_File_Name[2] = 't';
-    output_File_Name[3] = 'a';
-    output_File_Name[4] = 'f';
-    output_File_Name[5] = 'i';
-    output_File_Name[6] = 'l';
-    output_File_Name[7] = 'e';
-    output_File_Name[8] = 's';
-    output_File_Name[9] = '/';
-
-    int counter;
-    char *FILEID = (char *)&id;
-
-    for(counter=0; counter<20;counter++)
-    {
-        unsigned char a = FILEID[counter];
-        int ab = a;
-        int i;
-        for(i=0;i*16<ab-16;i++)
-        {
-
-        }
-        unsigned int num1 = i;
-
-        if(num1 > 9)
-            output_File_Name[counter*2+10] = 'a' + num1-10;
-        else
-            output_File_Name[counter*2+10] = '0' + num1;
-
-        unsigned int num2 = ((unsigned int)FILEID[0+counter]) % 16;
-
-        if(num2 > 9)
-            output_File_Name[1+counter*2+10] = 'a' + num2-10;
-        else
-            output_File_Name[1+counter*2+10] = '0' + num2;
-    }
-
-    output_File_Name[counter*2+10] = '.';
-    output_File_Name[1+counter*2+10] = 'p';
-    output_File_Name[2+counter*2+10] = 'a';
-    output_File_Name[3+counter*2+10] = 'f';
-    output_File_Name[4+counter*2+10] = 't';
-    output_File_Name[5+counter*2+10] = '\0';
-    */
 
 }
 
@@ -168,21 +121,41 @@ void Meta_Files::Write_File()
     if(!metaFile)
     {
         std::cout << "Error opening the output file!\n";
-        exit(1);
+        return;
     }
 
+    int Eight_MiB = 8000000;
+    char *buf;
+    buf = (char *) malloc(Eight_MiB);
+    long long unsigned int bufCounter=112;
+
     char *FILEID = (char *)&id;
-    metaFile.write(FILEID, 20);
-    metaFile.write((char *)&file_Name, 80);
-    metaFile.write((char *)&fileLength, 8);
-    metaFile.write((char *)&chunkSize, 4);
+
+
+    memcpy(buf, FILEID, 20);
+    memcpy(buf+20, (char *)&file_Name, 80);
+    memcpy(buf+100, (char *)&fileLength, 8);
+    memcpy(buf+108, (char *)&chunkSize, 4 );
+
+    metaFile.write(buf, 112);
 
     int len = hash_List.length;
     for(int i=0; i<len; i++)
-        metaFile.write(hash_List.pop_head().c_str(), 64);
+    {
+        //Keeping the change of string to char* on 2 seperate lines fixed a problem - keep it
+        std::string strChunkHash = hash_List.pop_head();
+        const char *chunkHash= strChunkHash.c_str();
+
+        metaFile.write(chunkHash, 64);
+        memcpy(buf+bufCounter, chunkHash, 64);
+        bufCounter+=64;
+    }
 
     metaFile.close();
 
+    std::cout << "Created MetaDatafile checksum: " << sha256(buf, bufCounter) << "\n";
+
+    free(buf);
 
 }
 
