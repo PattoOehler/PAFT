@@ -9,7 +9,7 @@
 
 
 
-
+using namespace paft;
 
 
 Meta_Files::Meta_Files(int chunk_Size, const char *fileName,long long int total_Bytes, linked_list a, _160bitnumber fileID)
@@ -153,7 +153,9 @@ void Meta_Files::Write_File()
 
     metaFile.close();
 
-    std::cout << "Created MetaDatafile checksum: " << sha256(buf, bufCounter) << "\n";
+    std::cout << "Download string 'IMPLETMENT " << sha256(buf, bufCounter) << " ";
+    DHT::Print_ID(id);
+    std::cout << "'\n";
 
     free(buf);
 
