@@ -295,11 +295,12 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1650758818 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+1651595288 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
 	"Minor_Functions.h"
+	"../DHT/DHT_Lookup.h"
 	<iostream>
 	<winsock2.h>
 	<windows.h>
@@ -308,11 +309,11 @@
 	<stdio.h>
 	<thread>
 
-1647031655 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
+1651595209 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.h
 	<winsock2.h>
 	"../DHT/DHT.h"
 
-1651115612 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
+1651595133 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
 	"MainCLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -458,7 +459,7 @@
 	<Windows.h>
 	<iostream>
 
-1649959014 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1651593968 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -470,11 +471,11 @@
 	<fstream>
 	<unistd.h>
 
-1647026396 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
+1651595166 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
 	"../DHT/DHT.h"
 	<iostream>
 
-1649958911 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_lookup.cpp
+1651593478 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_lookup.cpp
 	"DHT_Lookup.h"
 	<iostream>
 
@@ -514,9 +515,9 @@
 1649104285 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.h
 	<iostream>
 
-1651115633 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
+1651595095 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
 
-1651118226 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
+1651595045 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
 	"CLI_Functions.h"
 	"Main_Client.h"
 	"../DHT/DHT_Access.h"

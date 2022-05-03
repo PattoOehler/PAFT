@@ -20,8 +20,8 @@ std::mutex *DHT_Lookup::is_Available_Mutex = new std::mutex[Lookup_Length];
 
 int DHT_Lookup::Get_Available_Three_DHT()
 {
-    int i=0;
-    for(;i<Lookup_Length;i++)
+
+    for(int i=0;i<Lookup_Length;i++)
     {
         if(Access_To_Three_DHT_Is_Available(i))
         {

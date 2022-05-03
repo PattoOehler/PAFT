@@ -11,22 +11,23 @@ using namespace paft;
 void CLI_Functions::Help_Command()
 {
     std::cout << "\n\n\n\nHelpmessage\n\n";
-    std::cout << "help                                               -- Receive this message\n";
-    std::cout << "self_ping                                          -- Ping self \n";
-    std::cout << "print_dht                                          -- Print the dht\n";
-    std::cout << "test_dht                                           -- pings the DHT at position 159*20\n";
-    std::cout << "self_find_random_peer                              -- finds the closest 3 peers to a random id in own DHT\n";
-    std::cout << "self_find_random_file                              -- finds the closest 3 peers/files to a random id in own DHT\n";
-    std::cout << "self_store_random_file                             -- sends store file RPC to self\n";
-    std::cout << "print_files                                        -- prints the stored files\n";
-    std::cout << "make_meta_file                                     -- makes a metadata file\n";
-    std::cout << "self_find_random_node_network                      -- Recursively find closest 3 peers in network\n";
+    std::cout << "help                                                -- Receive this message\n";
+    std::cout << "self_ping                                           -- Ping self \n";
+    std::cout << "print_dht                                           -- Print the dht\n";
+    std::cout << "test_dht                                            -- pings the DHT at position 159*20\n";
+    std::cout << "self_find_random_peer                               -- finds the closest 3 peers to a random id in own DHT\n";
+    std::cout << "self_find_random_file                               -- finds the closest 3 peers/files to a random id in own DHT\n";
+    std::cout << "self_store_random_file                              -- sends store file RPC to self\n";
+    std::cout << "print_files                                         -- prints the stored files\n";
+    std::cout << "make_meta_file                                      -- makes a metadata file\n";
+    std::cout << "self_find_random_node_network                       -- Recursively find closest 3 peers in network\n";
     std::cout << "store_file_on_network [C:\\File_Location] [Filename]-- stores a file on the network\n";
-    std::cout << "store_file_net_and_get_meta_back                   -- For Testing\n";
-    std::cout << "store_file_net_and_get_chunk_back                  -- For Testing\n";
-    std::cout << "manual_tests                                       -- Runs all of the manual tests\n";
-    std::cout << "print_self                                         -- For Testing\n";
-    std::cout << "exit                                               -- Exit the program\n";
+    std::cout << "download_file_on_network [SHA-CHECKSUM] [FileID]    -- downloads a file from the network\n";
+    std::cout << "store_file_net_and_get_meta_back                    -- For Testing\n";
+    std::cout << "store_file_net_and_get_chunk_back                   -- For Testing\n";
+    std::cout << "manual_tests                                        -- Runs all of the manual tests\n";
+    std::cout << "print_self                                          -- For Testing\n";
+    std::cout << "exit                                                -- Exit the program\n";
     std::cout << "\n\n";
 
 }
@@ -184,6 +185,81 @@ void CLI_Functions::Upload_File_Network(char input[], int length)
 }
 
 
+void CLI_Functions::Downlaod_File_Network(char input[], int length)
+{
+    char checksum[150];
+    char fileID[80];
+
+    int checksum_Counter=0;
+    int fileID_Counter=0;
+
+    checksum[0] = '\0';
+    fileID[0] = '\0';
+
+    bool is_Command=true;
+    bool is_File_Location=true;
+    bool is_File_Name=true;
+
+    for(int i=0; i<length; i++)
+    {
+        if(is_Command)
+        {
+            if(input[i] == ' ')
+                is_Command=false;
+        }
+        else
+        {
+            if(is_File_Location)
+            {
+                if(input[i] != ' ')
+                {
+                    checksum[checksum_Counter] = input[i];
+                    checksum_Counter++;
+                }
+                else
+                {
+                    is_File_Location=false;
+                }
+            }
+            else
+            {
+                if(is_File_Name)
+                {
+                    if((input[i] != ' ') | (input[i] == '\0') | (input[i] == '\n'))
+                    {
+                        fileID[fileID_Counter] = input[i];
+                        fileID_Counter++;
+                    }
+                    else
+                    {
+                        is_File_Name=false;
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+        }
+
+    }
+
+
+    if(checksum[0] == '\0')
+    {
+        std::cout << "Error no parameters given\n";
+    }
+    else
+    {
+
+        //Major_Functions::Find_File_On_Network( fileID );
+
+        //Needs to download after this
+
+    }
+
+}
 
 
 

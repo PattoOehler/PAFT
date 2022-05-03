@@ -39,6 +39,31 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
 }
 
 
+three_DHT Major_Functions::Find_File_On_Network(_160bitnumber id)
+{
+    int dht_Identifier = DHT_Lookup::Get_Available_Three_DHT();
+
+    three_DHT in_DHT = DHT::Lookup(id);
+    DHT_Lookup::Write_To_Three_DHT(in_DHT, dht_Identifier);
+    for(int i=0;i<3;i++)
+    {
+        if(in_DHT.entry[i].is_set)
+        {
+            std::cout << "Major_Functions::Find_File_On_Network entry[" << i << "] is set\n";
+            MainClient client = MainClient(in_DHT.entry[i].addr, in_DHT.entry[i].port);
+            client.Find_File_Recursive(id, dht_Identifier);
+        }
+
+    }
+
+    DHT_Lookup::Write_To_Three_DHT_Is_Available(true, dht_Identifier);
+
+    //Todo - double check this return
+    return in_DHT;
+}
+
+
+
 void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name)
 {
     _160bitnumber created_File_ID = DHT::Random_ID();

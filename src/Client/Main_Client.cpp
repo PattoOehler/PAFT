@@ -3,6 +3,7 @@
 #include "../DHT/DHT.h"
 #include "../DHT/DHT_Access.h"
 #include "Minor_Functions.h"
+#include "../DHT/DHT_Lookup.h"
 
 #include <iostream>
 
@@ -620,6 +621,77 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 
 
 }
+
+
+
+
+
+
+int MainClient::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
+{
+    if(!setUpProperly)
+        return -1;
+
+
+    char sendbuf[43];
+    sendbuf[0] = 0x04;
+    Add_Self(sendbuf);
+
+    memcpy(sendbuf+23, (char*)&fileID, 20);
+
+
+
+    int iResult = send( Socket, sendbuf, 43, 0 );
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    char recvbuf[DEFAULT_BUFLEN];
+    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+
+    if (iResult == SOCKET_ERROR) {
+        printf("recv failed with error: %d\n", WSAGetLastError());
+        closesocket(Socket);
+        WSACleanup();
+        return 1;
+    }
+
+    DHT_Single_Entry current_Connection = Add_Received_Entry_To_DHT_And_Return_Entry(recvbuf, iResult);
+
+    three_DHT received_Nodes = Return_Received_Nodes(recvbuf, iResult);
+
+    Shutdown_Connection_Gracefully();
+
+
+
+    three_DHT current_Three = DHT_Lookup::Access_Three_DHT(lookup_Identifier);
+
+    if( (!DHT::IsEqual(fileID, received_Nodes.entry[0].id)) | (!DHT::IsEqual(fileID, current_Three.entry[0].id)) )
+    {
+        //Write this connection to lookup_DHT if they are closer then currently stored
+        Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, fileID);
+
+        //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
+        Minor_Functions::Do_Lookup_If_Closer(lookup_Identifier, received_Nodes, fileID);
+    }
+    return 0;
+
+
+}
+
+
+
+
+
+
+
+
+
 
 DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length)
 {

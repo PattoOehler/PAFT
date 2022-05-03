@@ -17,6 +17,7 @@ namespace paft
         static void Store_File_Net_And_Get_Chunk_Back_Command();
         static void Print_Self_Command();
         static void Upload_File_Network(char input[], int length);
+        static void Downlaod_File_Network(char input[], int length);
     };
 
 }
