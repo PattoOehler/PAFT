@@ -18,6 +18,8 @@ namespace paft
         static void Print_Self_Command();
         static void Upload_File_Network(char input[], int length);
         static void Downlaod_File_Network(char input[], int length);
+        static void Ping(char input[], int length);
+        static int* Arguement_Positions(char input[], int length);
     };
 
 }

@@ -13,6 +13,7 @@ void CLI_Functions::Help_Command()
     std::cout << "\n\n\n\nHelpmessage\n\n";
     std::cout << "help                                                -- Receive this message\n";
     std::cout << "self_ping                                           -- Ping self \n";
+    std::cout << "ping [ip] [port]                                    -- Ping\n";
     std::cout << "print_dht                                           -- Print the dht\n";
     std::cout << "test_dht                                            -- pings the DHT at position 159*20\n";
     std::cout << "self_find_random_peer                               -- finds the closest 3 peers to a random id in own DHT\n";
@@ -112,160 +113,74 @@ void CLI_Functions::Print_Self_Command()
 
 void CLI_Functions::Upload_File_Network(char input[], int length)
 {
-    char file_Location[150];
-    char file_Name[80];
 
-    int file_Location_Counter=0;
-    int file_Name_Counter=0;
-
-    file_Location[0] = '\0';
-    file_Name[0] = '\0';
-
-    bool is_Command=true;
-    bool is_File_Location=true;
-    bool is_File_Name=true;
-
-    for(int i=0; i<length; i++)
+    int *positions;
+    positions = Arguement_Positions( input, length);
+    if(*(positions+0) == 0 || *(positions+1) == 0)
     {
-        if(is_Command)
-        {
-            if(input[i] == ' ')
-                is_Command=false;
-        }
-        else
-        {
-            if(is_File_Location)
-            {
-                if(input[i] != ' ')
-                {
-                    file_Location[file_Location_Counter] = input[i];
-                    file_Location_Counter++;
-                }
-                else
-                {
-                    is_File_Location=false;
-                }
-            }
-            else
-            {
-                if(is_File_Name)
-                {
-                    if((input[i] != ' ') | (input[i] == '\0') | (input[i] == '\n'))
-                    {
-                        file_Name[file_Name_Counter] = input[i];
-                        file_Name_Counter++;
-                    }
-                    else
-                    {
-                        is_File_Name=false;
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-        }
-
+        std::cout << "Error: not enough pramaters\n";
+        return;
     }
 
+    Major_Functions::Upload_File_To_Network(input + *(positions+0), input + *(positions+1) );
 
-    if(file_Location[0] == '\0')
-    {
-        std::cout << "file_Location[0] == \\0 running default values";
-        Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft");
-    }
-    else
-    {
-        Major_Functions::Upload_File_To_Network(file_Location, file_Name );
 
-    }
 
 }
 
 
 void CLI_Functions::Downlaod_File_Network(char input[], int length)
 {
-    char checksum[150];
-    char fileID[80];
 
-    int checksum_Counter=0;
-    int fileID_Counter=0;
-
-    checksum[0] = '\0';
-    fileID[0] = '\0';
-
-    bool is_Command=true;
-    bool is_File_Location=true;
-    bool is_File_Name=true;
-
-    for(int i=0; i<length; i++)
+    int *positions;
+    positions = Arguement_Positions( input, length);
+    if(*(positions+0) == 0 || *(positions+1) == 0)
     {
-        if(is_Command)
-        {
-            if(input[i] == ' ')
-                is_Command=false;
-        }
-        else
-        {
-            if(is_File_Location)
-            {
-                if(input[i] != ' ')
-                {
-                    checksum[checksum_Counter] = input[i];
-                    checksum_Counter++;
-                }
-                else
-                {
-                    is_File_Location=false;
-                }
-            }
-            else
-            {
-                if(is_File_Name)
-                {
-                    if((input[i] != ' ') | (input[i] == '\0') | (input[i] == '\n'))
-                    {
-                        fileID[fileID_Counter] = input[i];
-                        fileID_Counter++;
-                    }
-                    else
-                    {
-                        is_File_Name=false;
-                    }
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-        }
-
+        std::cout << "Error: not enough pramaters\n";
+        return;
     }
 
+    //Major_Functions::Upload_File_To_Network(input + *(positions+0), input + *(positions+1) );
 
-    if(checksum[0] == '\0')
+}
+
+
+void CLI_Functions::Ping(char input[], int length)
+{
+    int *positions;
+    positions = Arguement_Positions( input, length);
+
+    if(*(positions+0) == 0 || *(positions+1) == 0)
     {
-        std::cout << "Error no parameters given\n";
+        std::cout << "Error: not enough pramaters\n";
+        return;
     }
-    else
-    {
 
-        //Major_Functions::Find_File_On_Network( fileID );
-
-        //Needs to download after this
-
-    }
+    MainClient Client(input + *(positions+0), input + *(positions+1));
+    Client.Ping();
 
 }
 
 
 
 
+int* CLI_Functions::Arguement_Positions(char input[], int length)
+{
+    static int positions[10] = {0,0,0,0,0,0,0,0,0,0};
+    int positionsCounter=0;
+    for(int i=0;i<length;i++)
+    {
+        if(input[i] == ' ')
+        {
+            positions[positionsCounter] = i+1;
+            positionsCounter++;
+            input[i] = '\0';
+        }
 
+    }
+    return positions;
 
+}
 
 
 

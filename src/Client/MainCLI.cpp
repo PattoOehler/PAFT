@@ -11,7 +11,7 @@
 #include <iostream>
 #include <random>
 
-#define INPUT_BUFFER_LENGTH 100
+#define INPUT_BUFFER_LENGTH 1000
 
 
 using namespace paft;
@@ -27,8 +27,11 @@ int MainCli::Start_Client()
         std::cin.getline(command, INPUT_BUFFER_LENGTH);
         std::cin.clear();
 
-
-        MainCli::Command_Parser(command, INPUT_BUFFER_LENGTH);
+        int i;
+        for(i=0;i<INPUT_BUFFER_LENGTH;i++)
+            if(command[i] == '\0')
+                break;
+        MainCli::Command_Parser(command, i);
 
     }
 }
@@ -40,6 +43,9 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
     else if(String_Compare(Input, "self_ping"))
         CLI_Functions::Self_Ping_Command();
+
+    else if(String_Compare(Input, "ping"))
+        CLI_Functions::Ping(Input, Input_len);
 
     else if(String_Compare(Input, "print_dht"))
         DHT::Print_DHT();
