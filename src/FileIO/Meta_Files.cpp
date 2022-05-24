@@ -153,7 +153,7 @@ void Meta_Files::Write_File()
 
     metaFile.close();
 
-    std::cout << "Download string 'IMPLETMENT " << sha256(buf, bufCounter) << " ";
+    std::cout << "Download string 'IMPLEMENT " << sha256(buf, bufCounter) << " ";
     DHT::Print_ID(id);
     std::cout << "'\n";
 

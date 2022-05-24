@@ -22,7 +22,7 @@ void CLI_Functions::Help_Command()
     std::cout << "print_files                                         -- prints the stored files\n";
     std::cout << "make_meta_file                                      -- makes a metadata file\n";
     std::cout << "self_find_random_node_network                       -- Recursively find closest 3 peers in network\n";
-    std::cout << "store_file_on_network [C:\\File_Location] [Filename]-- stores a file on the network\n";
+    std::cout << "store_file_on_network [C:\\File_Location] [Filename] -- stores a file on the network\n";
     std::cout << "download_file_on_network [SHA-CHECKSUM] [FileID]    -- downloads a file from the network\n";
     std::cout << "store_file_net_and_get_meta_back                    -- For Testing\n";
     std::cout << "store_file_net_and_get_chunk_back                   -- For Testing\n";

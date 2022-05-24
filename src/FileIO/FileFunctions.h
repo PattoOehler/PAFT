@@ -13,8 +13,8 @@ namespace paft
     private:
 
     public:
-        static long getMetaFileLen(_160bitnumber id);
-
+        static void makePaftlFile(_160bitnumber id, const char *fileLocation);
+        static void setIdString(char *idString, _160bitnumber id);
     };
 
 }

@@ -313,7 +313,7 @@
 	<winsock2.h>
 	"../DHT/DHT.h"
 
-1652994902 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
+1652997747 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.cpp
 	"MainCLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -459,7 +459,7 @@
 	<Windows.h>
 	<iostream>
 
-1651593968 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1653412971 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -467,6 +467,7 @@
 	"Main_Client.h"
 	"../FileIO/Meta_Files.h"
 	"../FileIO/sha256.h"
+	"../FileIO/FileFunctions.h"
 	<iostream>
 	<fstream>
 	<unistd.h>
@@ -494,10 +495,12 @@
 	"Main_Client.h"
 	<iostream>
 
-1646084804 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.cpp
+1653412721 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.cpp
 	"FileFunctions.h"
+	<iostream>
+	<fstream>
 
-1646084637 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.h
+1653412984 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.h
 	"../DHT/DHT.h"
 	<iostream>
 
