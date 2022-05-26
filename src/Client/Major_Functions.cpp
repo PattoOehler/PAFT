@@ -84,8 +84,6 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
     DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
 
-    //Create a .paftl file that just contains the location of the file TODO
-    FileFunctions::makePaftlFile(created_File_ID, local_file_location);
 
     three_DHT closest_In_Network = Three_Closest_Peers_In_Network(created_File_ID);
     for(int i=0;i<3;i++)
@@ -121,8 +119,6 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
     DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
 
-    //Create a .paftl file that just contains the location of the file TODO
-    FileFunctions::makePaftlFile(fileID, local_file_location);
 
     three_DHT closest_In_Network = Three_Closest_Peers_In_Network(fileID);
     for(int i=0;i<3;i++)

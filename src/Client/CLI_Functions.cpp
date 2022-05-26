@@ -15,6 +15,7 @@ void CLI_Functions::Help_Command()
     std::cout << "self_ping                                           -- Ping self \n";
     std::cout << "ping [ip] [port]                                    -- Ping\n";
     std::cout << "print_dht                                           -- Print the dht\n";
+    std::cout << "print_local_files                                   -- Prints all the local files\n";
     std::cout << "test_dht                                            -- pings the DHT at position 159*20\n";
     std::cout << "self_find_random_peer                               -- finds the closest 3 peers to a random id in own DHT\n";
     std::cout << "self_find_random_file                               -- finds the closest 3 peers/files to a random id in own DHT\n";
@@ -28,6 +29,8 @@ void CLI_Functions::Help_Command()
     std::cout << "store_file_net_and_get_chunk_back                   -- For Testing\n";
     std::cout << "manual_tests                                        -- Runs all of the manual tests\n";
     std::cout << "print_self                                          -- For Testing\n";
+    std::cout << "save_state                                          -- Saves the DHT\n";
+    std::cout << "load_state                                          -- Load in the DHT from the previous save\n";
     std::cout << "exit                                                -- Exit the program\n";
     std::cout << "\n\n";
 

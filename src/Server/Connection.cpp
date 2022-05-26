@@ -246,7 +246,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
         {
             //Client is asking for FULL file
             // Depreciated TODO delete
-            Connection::Send_File((LPVOID)long_client.client);
+            //Connection::Send_File((LPVOID)long_client.client);
 
         }
         else if(buf[0] == 0x02)
@@ -278,7 +278,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
         else if(buf[0] == 0x05)
         {
             //Lookup File
-            std::cout << "Client is asking to store a file ID\n";
+            std::cout << "Client is asking me to store a file ID\n";
 
             Store_File((LPVOID)long_client.client, buf, len, long_client.from.sin_addr);
 

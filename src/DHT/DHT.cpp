@@ -568,7 +568,7 @@ void DHT::Print_Files()
         if(tmp.is_set)
         {
             DHT::Print_ID(tmp.id);
-            std::cout << "    In part " << std::dec << (i) << "\n";
+            std::cout << "    In part " << i << "\n";
         }
 
     }
@@ -595,7 +595,19 @@ _160bitnumber DHT::Random_ID()
 
 
 
+void DHT::Print_File_Locations()
+{
 
+    for(int i=0;i<100;i++)
+    {
+        std::string local_File = DHT_Access::Get_Local_File_Location(i);
+        if(!local_File.empty())
+            std::cout << i << " " << local_File << "\n";
+
+    }
+
+
+}
 
 
 

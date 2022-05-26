@@ -5,6 +5,8 @@
 #include "../DHT/DHT.h"
 
 #include <iostream>
+#include <vector>
+#include <string>
 
 namespace paft
 {
@@ -13,8 +15,18 @@ namespace paft
     private:
 
     public:
-        static void makePaftlFile(_160bitnumber id, const char *fileLocation);
-        static void setIdString(char *idString, _160bitnumber id);
+        static void loadState();
+        static void saveState();
+
+        static void saveDHTEntries();
+        static void saveFileEntries();
+        static void saveLocalFileLocations();
+
+        static void loadDHTEntries();
+        static void loadFileEntries();
+        static void loadLocalFileLocations();
+
+        static std::vector<std::string> get_all_files_names_within_folder(std::string folder);
     };
 
 }

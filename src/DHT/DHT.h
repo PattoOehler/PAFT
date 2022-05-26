@@ -74,6 +74,8 @@ namespace paft
 
         static DHT_Single_Entry Next_Closest_In_Bucket(int bucket, _160bitnumber id, _160bitnumber previous_id);
 
+
+        static void Print_File_Locations();
     };
 
 }

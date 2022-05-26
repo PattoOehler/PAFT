@@ -7,6 +7,7 @@
 #include "Major_Functions.h"
 #include "../UnitTests/MainUnitTests.h"
 #include "CLI_Functions.h"
+#include "../FILEIO/FileFunctions.h"
 
 #include <iostream>
 #include <random>
@@ -50,6 +51,9 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     else if(String_Compare(Input, "print_dht"))
         DHT::Print_DHT();
 
+    else if(String_Compare(Input, "print_local_files"))
+        DHT::Print_File_Locations();
+
     else if(String_Compare(Input, "test_dht"))
         CLI_Functions::Test_DHT_Command();
 
@@ -88,6 +92,12 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
     else if(String_Compare(Input, "print_self"))
         CLI_Functions::Print_Self_Command();
+
+    else if(String_Compare(Input, "load_state"))
+        FileFunctions::loadState();
+
+    else if(String_Compare(Input, "save_state"))
+        FileFunctions::saveState();
 
     else if(String_Compare(Input, "exit"))
         exit(0);
