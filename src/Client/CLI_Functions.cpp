@@ -121,7 +121,7 @@ void CLI_Functions::Upload_File_Network(char input[], int length)
     positions = Arguement_Positions( input, length);
     if(*(positions+0) == 0 || *(positions+1) == 0)
     {
-        std::cout << "Error: not enough pramaters\n";
+        std::cout << "Error: not enough parameters\n";
         return;
     }
 
@@ -139,13 +139,49 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     positions = Arguement_Positions( input, length);
     if(*(positions+0) == 0 || *(positions+1) == 0)
     {
-        std::cout << "Error: not enough pramaters\n";
+        std::cout << "Error: not enough parameters\n";
         return;
     }
 
     //Major_Functions::Upload_File_To_Network(input + *(positions+0), input + *(positions+1) );
 
+
+
+    Char_To_160bit(input + *(positions+1));
+
 }
+
+
+
+_160bitnumber CLI_Functions::Char_To_160bit(char *input)
+{
+    _160bitnumber returning;
+    for(int i=0; i<40; i+= 2)
+    {
+        unsigned char bytenum=0;
+        if(input[i] <= '9' && input[i] >= '0')
+            bytenum += (input[i] - '0') * 16;
+        else
+            bytenum += ((input[i] - 'A')+10) * 16;
+
+        if(input[i+1] <= '9' && input[i+1] >= '0')
+            bytenum += (input[i+1] - '0');
+        else
+            bytenum += (input[i+1] - 'A') + 10;
+
+        memcpy((char*)&returning+(i/2),(char*)&bytenum,1);
+
+
+
+    }
+    DHT::Print_ID(returning);
+
+    return returning;
+}
+
+
+
+
 
 
 void CLI_Functions::Ping(char input[], int length)
@@ -155,7 +191,7 @@ void CLI_Functions::Ping(char input[], int length)
 
     if(*(positions+0) == 0 || *(positions+1) == 0)
     {
-        std::cout << "Error: not enough pramaters\n";
+        std::cout << "Error: not enough parameters\n";
         return;
     }
 

@@ -522,9 +522,10 @@
 1649104285 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.h
 	<iostream>
 
-1652994519 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
+1654216648 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
+	"../DHT/DHT.h"
 
-1653593176 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
+1654218033 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
 	"CLI_Functions.h"
 	"Main_Client.h"
 	"../DHT/DHT_Access.h"

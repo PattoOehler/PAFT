@@ -2,7 +2,7 @@
 
 #ifndef __PAFT_CLI_FUNCTIONS_H
 #define __PAFT_CLI_FUNCTIONS_H
-
+#include "../DHT/DHT.h"
 
 using namespace std;
 
@@ -20,6 +20,7 @@ namespace paft
         static void Downlaod_File_Network(char input[], int length);
         static void Ping(char input[], int length);
         static int* Arguement_Positions(char input[], int length);
+        static _160bitnumber Char_To_160bit(char *input);
     };
 
 }
