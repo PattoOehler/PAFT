@@ -38,19 +38,11 @@ void DHT_Access::Set_Local_File_Location(std::string local_File_Location, int po
 
 int DHT_Access::Find_Stored_File(_160bitnumber entry)
 {
-    std::cout << "DHT_Access::Find_Stored_File looking for ";
-    DHT::Print_ID(entry);
-    std::cout << " \n";
-
     for(int i=0; i<DHT_File_Len; i++)
     {
         DHT_Single_Entry a = Access_FileIds(i);
         if(a.is_set)
         {
-
-            std::cout << "DHT_Access::Find_Stored_File looking at ";
-            DHT::Print_ID(a.id);
-            std::cout << " \n";
             if(DHT::IsEqual(a.id, entry))
             {
 

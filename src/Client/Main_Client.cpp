@@ -32,6 +32,17 @@
 using namespace paft;
 
 
+in_addr MainClient::NULL_Addr()
+{
+    in_addr a;
+    unsigned int b = 0;
+    memcpy((char *)&a,(char *)& b, 4);
+    return a;
+
+}
+
+
+
 void MainClient::Shutdown_Connection_Gracefully()
 {
     if(!setUpProperly)
@@ -97,7 +108,7 @@ void MainClient::Store_File_To_DHT(char recvbuf[], int length)
         file_To_Store.port = Server_Port;
         file_To_Store.is_set = true;
 
-        DHT::Store_FileId(file_To_Store);
+        DHT::Id(file_To_Store);
 
 
     }
@@ -663,22 +674,58 @@ int MainClient::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
 
     DHT_Single_Entry current_Connection = Add_Received_Entry_To_DHT_And_Return_Entry(recvbuf, iResult);
 
+
+
+
     three_DHT received_Nodes = Return_Received_Nodes(recvbuf, iResult);
+
+
 
     Shutdown_Connection_Gracefully();
 
 
 
-    three_DHT current_Three = DHT_Lookup::Access_Three_DHT(lookup_Identifier);
 
-    if( (!DHT::IsEqual(fileID, received_Nodes.entry[0].id)) | (!DHT::IsEqual(fileID, current_Three.entry[0].id)) )
+    /*unsigned int a = 0;
+    unsigned int b;
+    memcpy( (char *)&b, (char *)&received_Nodes.entry[0].addr, 4);
+    if(a == b)
+        std::cout << "MainClient::Find_File_Recursive received_Nodes.entry[0].addr = 0.0.0.0\n"; */
+
+    //Check for an entry for the correct ID as well as a IP of 0.0.0.0
+    unsigned int a;
+    memcpy((char *)&a, (char *) &received_Nodes.entry[0].addr, 4);
+    if(DHT::IsEqual(fileID, received_Nodes.entry[0].id) && a == 0)
     {
-        //Write this connection to lookup_DHT if they are closer then currently stored
-        Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, fileID);
+        std::cout << "They are saying that they have the file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        //Add in this entry to the top and end the search
 
-        //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
-        Minor_Functions::Do_Lookup_If_Closer(lookup_Identifier, received_Nodes, fileID);
+        received_Nodes.entry[0].addr = Server_IP;
+        Minor_Functions::Write_Single_Entry_To_DHT_Lookup(received_Nodes.entry[0], lookup_Identifier, fileID);
+
+        return 0;
     }
+    else
+    {
+        std::cout << "They DO NOT HAVE THE FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nID:";
+        DHT::Print_ID(received_Nodes.entry[0].id);
+        std::cout << " with an addr of " << a << "\n\n";
+
+    }
+
+    //Write this connection to lookup_DHT if they are closer then currently stored
+    Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, fileID);
+
+
+    //TEST TODO ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
+    Minor_Functions::Do_Lookup_If_Closer(lookup_Identifier, received_Nodes, fileID);
+
+
+    //Needs to do something if the ID is the same as requested
+
+
     return 0;
 
 
@@ -758,6 +805,9 @@ three_DHT MainClient::Return_Received_Nodes(char recvbuf[], int length)
             recived_Nodes.entry[i].addr = addr;
             recived_Nodes.entry[i].port = port;
             recived_Nodes.entry[i].id = sender_Id;
+            recived_Nodes.entry[i].is_set = true;
+
+
 
         }
 

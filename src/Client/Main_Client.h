@@ -35,6 +35,8 @@ namespace paft
         DHT_Single_Entry Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length);
         int Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier);
 
+
+        static in_addr NULL_Addr();
     };
 
 }

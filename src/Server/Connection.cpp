@@ -157,12 +157,13 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
 
     if(len < 43)
-    {
         return;
-    }
+
 
     _160bitnumber a;
     memcpy((char*)&a, buf+23, 20);
+
+
     three_DHT closest_Three = DHT::Find_Value(a);
 
     int counter=0;
@@ -172,6 +173,7 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
         memcpy(sendbuf+40, (char*)&closest_Three.entry[0].port, 2);
         memcpy(sendbuf+42, (char*)&closest_Three.entry[0].addr, 4);
         counter=1;
+
 
     }
     if(closest_Three.entry[1].is_set)
@@ -190,6 +192,9 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
         counter=3;
 
     }
+
+
+
     send(current_client,sendbuf,20+26*counter,0);
 
 }
@@ -198,10 +203,6 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
 void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current_client_ip)
 {
-    //TODO
-    //Currently uses the position 159*20 to check for ip address 127.0.0.1 - but needs to be more robust
-    // i.e. use something along the lines of 0.0.0.0 or force 127.0.0.1 and not allow 127.0.1.1
-
     SOCKET current_client = (SOCKET)lpParam;
 
 
@@ -222,12 +223,16 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
     memcpy((char*)&file_To_Add.port, buf+43,2);
     memcpy((char*)&file_To_Add.addr, buf+45, 4);
 
-    DHT_Single_Entry self_entry = DHT_Access::Access_DHT(159*20);
     int *aa = (int *)&file_To_Add.addr;
-    int *bb = (int *)&self_entry.addr;
 
-    if(&aa == &bb)
+    //Uses 0.0.0.0 to check if the person storing the file has the file.
+    if( (*aa) == 0)
+    {
         file_To_Add.addr = current_client_ip;
+        std::cout << "Connection::Store_File IP address is 0\n";
+    }
+    else
+        std::cout << "Connection::Store_File IP address is " << *aa << "\n";
 
     DHT_Access::Store_FileId(file_To_Add);
 

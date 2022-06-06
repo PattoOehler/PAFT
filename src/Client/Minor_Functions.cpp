@@ -15,12 +15,15 @@ using namespace paft;
 void Minor_Functions::Do_Lookup_If_Closer(int lookupID, three_DHT received_values, _160bitnumber lookingFor)
 {
 
+
+
     three_DHT current_Three = DHT_Lookup::Access_Three_DHT(lookupID);
 
 
     //If one of the values is not set(should be sorted) lookup all
     if(!current_Three.entry[2].is_set)
     {
+
         if(received_values.entry[0].is_set)
         {
             MainClient client1(received_values.entry[0].addr, received_values.entry[0].port);

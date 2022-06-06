@@ -27,7 +27,6 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
     {
         if(in_DHT.entry[i].is_set)
         {
-            std::cout << "Major_Functions::Three_Closest_Peers_In_Network entry[" << i << "] is set\n";
             MainClient client = MainClient(in_DHT.entry[i].addr, in_DHT.entry[i].port);
             client.Find_Node_Recursive(id, dht_Identifier);
         }
@@ -50,22 +49,23 @@ three_DHT Major_Functions::Find_File_On_Network(_160bitnumber id)
     {
         if(in_DHT.entry[i].is_set)
         {
-            std::cout << "Major_Functions::Find_File_On_Network entry[" << i << "] is set\n";
             MainClient client = MainClient(in_DHT.entry[i].addr, in_DHT.entry[i].port);
             client.Find_File_Recursive(id, dht_Identifier);
         }
 
     }
 
+    three_DHT found_Values = DHT_Lookup::Access_Three_DHT(dht_Identifier);
+
     DHT_Lookup::Write_To_Three_DHT_Is_Available(true, dht_Identifier);
 
-    //Todo - double check this return
-    return in_DHT;
+    //Todo - this returns the lookup-make it return the received entries
+    return found_Values;
 }
 
 
 
-void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name)
+/*void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name)
 {
     _160bitnumber created_File_ID = DHT::Random_ID();
 
@@ -79,6 +79,43 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
     }
 
     self.id = created_File_ID;
+    self.
+    int fileIDpos = DHT_Access::Store_FileId(self);
+
+    DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
+
+
+    three_DHT closest_In_Network = Three_Closest_Peers_In_Network(created_File_ID);
+    for(int i=0;i<3;i++)
+    {
+        if(closest_In_Network.entry[i].is_set)
+        {
+            MainClient client = MainClient(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
+            client.Store_File(self);
+        }
+    }
+
+
+
+
+} */
+
+
+
+
+void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name)
+{
+    _160bitnumber created_File_ID = DHT::Random_ID();
+
+    Meta_Files::Make_File(local_file_location, public_File_Name, created_File_ID);
+
+    DHT_Single_Entry self;
+    self.is_set = true;
+    self.id = created_File_ID;
+    unsigned int z=0;
+    memcpy((char *)&self.addr,(char *) &z, 4);
+    self.port = DHT_Access::Get_Self_Port();
+
 
     int fileIDpos = DHT_Access::Store_FileId(self);
 
@@ -99,6 +136,9 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 
 }
+
+
+
 
 
 void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name, _160bitnumber fileID)

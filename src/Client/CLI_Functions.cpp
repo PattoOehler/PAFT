@@ -3,6 +3,7 @@
 #include "Main_Client.h"
 #include "../DHT/DHT_Access.h"
 #include "Major_Functions.h"
+#include "../DHT/DHT.h"
 
 #include <iostream>
 
@@ -142,12 +143,28 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
         std::cout << "Error: not enough parameters\n";
         return;
     }
+    //(input + *(positions+0), input + *(positions+1) ) how to call the arguemnts
 
-    //Major_Functions::Upload_File_To_Network(input + *(positions+0), input + *(positions+1) );
+    _160bitnumber file_ID = Char_To_160bit(input + *(positions+1));
+    three_DHT net_Closest = Major_Functions::Find_File_On_Network(file_ID);
 
 
+    if( DHT::IsEqual( net_Closest.entry[0].id , file_ID) )
+    {
+        Major_Functions::getMetaDataFile(file_ID, input + *(positions+0), net_Closest.entry[0]);
+        std::cout << "Got the metadata file\n";
+    }
+    else
+    {
+        std::cout << "Expected ";
+        DHT::Print_ID(file_ID);
+        std::cout << " got -> ";
+        DHT::Print_ID(net_Closest.entry[0].id);
+        std::cout << "RETURNING\n\n";
+        return;
+    }
 
-    Char_To_160bit(input + *(positions+1));
+
 
 }
 
@@ -174,7 +191,7 @@ _160bitnumber CLI_Functions::Char_To_160bit(char *input)
 
 
     }
-    DHT::Print_ID(returning);
+    //DHT::Print_ID(returning);
 
     return returning;
 }
