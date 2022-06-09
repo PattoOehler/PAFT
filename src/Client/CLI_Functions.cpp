@@ -181,8 +181,13 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     //Get the file by chunks
     int fileChunks = Meta_Files::getChunks("Test_Metafiles\\meta.paft");
     for(int i=0; i<fileChunks; i++ )
-        Major_Functions::getFileChunk(file_ID, " ", net_Closest.entry[0], i );
+    {
+        std::string metaCheckSum = Meta_Files::getCheckSum(i, "Test_Metafiles\\meta.paft");
 
+        Major_Functions::getFileChunk(file_ID, metaCheckSum, net_Closest.entry[0], i );
+    }
+
+    std::cout << "Finished Downloading the file\n";
 
 }
 
