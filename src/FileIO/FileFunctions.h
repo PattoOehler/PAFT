@@ -27,6 +27,11 @@ namespace paft
         static void loadLocalFileLocations();
 
         static std::vector<std::string> get_all_files_names_within_folder(std::string folder);
+
+
+        static void allocate_File();
+        static long Get_File_Length(std::string filename);
+
     };
 
 }

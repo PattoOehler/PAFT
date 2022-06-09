@@ -1,10 +1,12 @@
 #include "FileFunctions.h"
 #include "../DHT/DHT_Access.h"
+#include "Meta_Files.h"
 
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
-
+#include <sys/stat.h>
 
 
 using namespace paft;
@@ -264,5 +266,30 @@ void FileFunctions::saveLocalFileLocations()
 
 
 
+void FileFunctions::allocate_File()
+{
+    int fileChunks = Meta_Files::getChunks("Test_Metafiles\\meta.paft");
+
+    std::ofstream wf("Test_Metafiles\\Downloaded_File", std::ios::out | std::ios::binary);
+    if(!wf) {
+        std::cout << "Cannot open file!" << "\n";
+        return;
+    }
+    int Eight_MiB = 8000000;
+    char *EightMB = (char *) malloc(Eight_MiB);
+
+    for(int i=0; i<fileChunks-1; i++)
+        wf.write(EightMB, Eight_MiB);
+    wf.close();
+    free(EightMB);
 
 
+}
+
+
+long FileFunctions::Get_File_Length(std::string filename)
+{
+    struct stat stat_buf;
+    int rc = stat(filename.c_str(), &stat_buf);
+    return rc == 0 ? stat_buf.st_size : -1;
+}

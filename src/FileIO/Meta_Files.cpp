@@ -3,6 +3,7 @@
 #include "linkedlist.h"
 #include "sha256.h"
 #include "../DHT/DHT.h"
+#include "FileFunctions.h"
 
 #include <iostream>
 #include <fstream>
@@ -118,6 +119,7 @@ void Meta_Files::Write_File()
 
     std::ofstream metaFile;
     metaFile.open(output_File_Name, std::ios::out | std::ios::binary);
+
     if(!metaFile)
     {
         std::cout << "Error opening the output file!\n";
@@ -204,6 +206,40 @@ void Meta_Files::Make_File(const char *input_File, const char *output_File, _160
 
     mf->Write_File();
 
+
+}
+
+
+
+
+std::string Meta_Files::getCheckSum(int chunk, std::string metaFile)
+{
+    std::ifstream rf(metaFile, std::ios::out | std::ios::binary);
+    if(!rf) {
+        std::cout << "Cannot open file!\n";
+        return "Error";
+    }
+
+    rf.seekg(112+64*chunk);
+
+    char checksum[64];
+    rf.read(checksum, 64);
+
+    std::string myString(checksum, 64);
+
+    return myString;
+}
+
+
+int Meta_Files::getChunks(std::string metaFile)
+{
+    long metafilelen = FileFunctions::Get_File_Length(metaFile);
+    std::cout << "Length of the metadata file is " << metafilelen << " in FileFunctions::allocate_File\n";
+
+    int fileChunks = (metafilelen - 112) / 64;
+    std::cout << "Chunks in the file is " << fileChunks << " \n";
+
+    return fileChunks;
 
 }
 

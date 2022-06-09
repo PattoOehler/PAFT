@@ -4,6 +4,8 @@
 #include "../DHT/DHT_Access.h"
 #include "Major_Functions.h"
 #include "../DHT/DHT.h"
+#include "../FileIO/FileFunctions.h"
+#include "../FileIO/Meta_Files.h"
 
 #include <iostream>
 
@@ -151,8 +153,14 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
 
     if( DHT::IsEqual( net_Closest.entry[0].id , file_ID) )
     {
-        Major_Functions::getMetaDataFile(file_ID, input + *(positions+0), net_Closest.entry[0]);
-        std::cout << "Got the metadata file\n";
+        int error_Check = Major_Functions::getMetaDataFile(file_ID, input + *(positions+0), net_Closest.entry[0]);
+        if(error_Check == 0)
+            std::cout << "Got the metadata file\n";
+        else
+        {
+            std::cout << "Metadata file had an unexpected error\n";
+            return;
+        }
     }
     else
     {
@@ -164,6 +172,16 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
         return;
     }
 
+
+
+    //Allocate the amount of space necessary for the file
+    FileFunctions::allocate_File();
+
+
+    //Get the file by chunks
+    int fileChunks = Meta_Files::getChunks("Test_Metafiles\\meta.paft");
+    for(int i=0; i<fileChunks; i++ )
+        Major_Functions::getFileChunk(file_ID, " ", net_Closest.entry[0], i );
 
 
 }

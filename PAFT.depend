@@ -249,7 +249,7 @@
 	<random>
 	<ctime>
 
-1650759763 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
+1654484193 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
 	"DHT_Access.h"
 	<iostream>
 
@@ -295,7 +295,7 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1654483174 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+1654484163 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
@@ -422,7 +422,7 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1646085800 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.h
+1654637714 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.h
 	<iostream>
 	"linkedlist.h"
 	"../DHT/DHT.h"
@@ -439,11 +439,12 @@
 1639010641 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\sha256.h
 	<string>
 
-1654277672 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.cpp
+1654637878 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.cpp
 	"Meta_Files.h"
 	"linkedlist.h"
 	"sha256.h"
 	"../DHT/DHT.h"
+	"FileFunctions.h"
 	<iostream>
 	<fstream>
 
@@ -460,7 +461,7 @@
 	<Windows.h>
 	<iostream>
 
-1654484067 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1654742065 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -473,7 +474,7 @@
 	<fstream>
 	<unistd.h>
 
-1651595166 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
+1654564296 c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.h
 	"../DHT/DHT.h"
 	<iostream>
 
@@ -496,13 +497,16 @@
 	"Main_Client.h"
 	<iostream>
 
-1653592825 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.cpp
+1654637820 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.cpp
 	"FileFunctions.h"
 	"../DHT/DHT_Access.h"
+	"Meta_Files.h"
 	<iostream>
 	<fstream>
+	<filesystem>
+	<sys/stat.h>
 
-1653592841 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.h
+1654566394 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\filefunctions.h
 	"../DHT/DHT.h"
 	<iostream>
 	<vector>
@@ -525,11 +529,13 @@
 1654216648 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
 	"../DHT/DHT.h"
 
-1654484085 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
+1654742300 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
 	"CLI_Functions.h"
 	"Main_Client.h"
 	"../DHT/DHT_Access.h"
 	"Major_Functions.h"
 	"../DHT/DHT.h"
+	"../FileIO/FileFunctions.h"
+	"../FileIO/Meta_Files.h"
 	<iostream>
 

@@ -24,9 +24,14 @@ public:
 
     Meta_Files(int chunk_Size, const char *fileName, long long int total_Bytes, linked_list a, _160bitnumber fileID);
     void Write_File();
+
     static void Make_File(const char *input_File, const char *output_File, _160bitnumber fileID);
 
     static std::string getOutput_File_Name(_160bitnumber id);
+
+
+    static std::string getCheckSum(int chunk, std::string metaFile);
+    static int getChunks(std::string metaFile);
 
 private:
     void set_File_Name(const char *fileName);
