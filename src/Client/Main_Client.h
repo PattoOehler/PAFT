@@ -1,24 +1,23 @@
 
-#ifndef __PAFT_MAINCLIENT_H
-#define __PAFT_MAINCLIENT_H
+#ifndef __PAFT_MAIN_CLIENT_H
+#define __PAFT_MAIN_CLIENT_H
 #include <winsock2.h>
 #include "../DHT/DHT.h"
 
 namespace paft
 {
-    class MainClient{
+    class Main_Client{
     private:
-        SOCKET Socket;
-        in_addr Server_IP;
-        unsigned short int Server_Port;
+        SOCKET server_Socket;
+        in_addr server_IP;
+        unsigned short int server_Port;
 
-        bool setUpProperly=true;
+        bool set_Up_Properly=true;
 
     public:
-        int GetFile(char *filename);
         int Ping();
-        MainClient(const char *addr,const char *port);
-        MainClient(in_addr addr, unsigned short int port);
+        Main_Client(const char *addr,const char *port);
+        Main_Client(in_addr addr, unsigned short int port);
         int Find_Node(_160bitnumber node);
         void Add_Self(char buf[]);
         void Shutdown_Connection_Gracefully();
@@ -27,8 +26,8 @@ namespace paft
         void Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file);
         int Find_File(_160bitnumber file);
         int Store_File(DHT_Single_Entry file);
-        char *Get_MetaData_File(_160bitnumber fileid);
-        char *GetFileChunk(_160bitnumber fileid, int chunk);
+        char *Get_MetaData_File(_160bitnumber fileid);  //TODO Is metadata 1 word or 2
+        char *Get_File_Chunk(_160bitnumber fileid, int chunk);
 
         int Find_Node_Recursive(_160bitnumber node, int lookup_Identifier);
         three_DHT Return_Received_Nodes(char recvbuf[], int length);
@@ -45,4 +44,4 @@ namespace paft
 
 
 
-#endif // __PAFT_MAINCLIENT_H
+#endif // __PAFT_MAIN_CLIENT_H

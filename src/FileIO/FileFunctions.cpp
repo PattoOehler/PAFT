@@ -287,6 +287,27 @@ void FileFunctions::allocate_File()
 }
 
 
+void FileFunctions::allocate_File( std::string metafilename )
+{
+    int fileChunks = Meta_Files::getChunks(  metafilename );
+
+    std::ofstream wf("Test_Metafiles\\Downloaded_File", std::ios::out | std::ios::binary);
+    if(!wf) {
+        std::cout << "Cannot open file!" << "\n";
+        return;
+    }
+    int Eight_MiB = 8000000;
+    char *EightMB = (char *) malloc(Eight_MiB);
+
+    for(int i=0; i<fileChunks-1; i++)
+        wf.write(EightMB, Eight_MiB);
+    wf.close();
+    free(EightMB);
+
+
+}
+
+
 long FileFunctions::Get_File_Length(std::string filename)
 {
     struct stat stat_buf;

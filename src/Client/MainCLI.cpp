@@ -42,6 +42,9 @@ int MainCli::Command_Parser(char Input[], int Input_len)
     if(String_Compare(Input, "help"))
         CLI_Functions::Help_Command();
 
+    else if(String_Compare(Input, "testing_help"))
+        CLI_Functions::Testing_Help_Command();
+
     else if(String_Compare(Input, "self_ping"))
         CLI_Functions::Self_Ping_Command();
 
@@ -80,6 +83,9 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 
     else if(String_Compare(Input, "download_file_on_network"))
         CLI_Functions::Downlaod_File_Network(Input, Input_len);
+
+    else if(String_Compare(Input, "self_download_file_on_network"))
+        CLI_Functions::Self_Downlaod_File_Network(Input, Input_len);
 
     else if(String_Compare(Input, "store_file_net_and_get_meta_back"))
         CLI_Functions::Store_File_Net_And_Get_Meta_Back_Command();
@@ -151,7 +157,7 @@ void MainCli::Self_Find_Random_Node()
 
 
 
-    MainClient Client("127.0.0.1", "1234");
+    Main_Client Client("127.0.0.1", "1234");
     Client.Find_Node(Testing);
 
 
@@ -176,7 +182,7 @@ void MainCli::Self_Find_Random_File()
     _160bitnumber Testing = DHT::Random_ID();
 
 
-    MainClient Client("127.0.0.1", "1234");
+    Main_Client Client("127.0.0.1", "1234");
 
     Client.Find_File(Testing);
 
@@ -195,7 +201,7 @@ void MainCli::Self_Store_Random_File()
     file.id = Testing;
 
 
-    MainClient Client("127.0.0.1", "1234");
+    Main_Client Client("127.0.0.1", "1234");
 
     Client.Store_File(file);
 

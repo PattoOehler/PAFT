@@ -30,6 +30,7 @@ namespace paft
 
 
         static void allocate_File();
+        static void allocate_File(std::string filename);
         static long Get_File_Length(std::string filename);
 
     };

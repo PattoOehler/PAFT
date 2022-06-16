@@ -32,7 +32,7 @@
 using namespace paft;
 
 
-in_addr MainClient::NULL_Addr()
+in_addr Main_Client::NULL_Addr()
 {
     in_addr a;
     unsigned int b = 0;
@@ -43,17 +43,17 @@ in_addr MainClient::NULL_Addr()
 
 
 
-void MainClient::Shutdown_Connection_Gracefully()
+void Main_Client::Shutdown_Connection_Gracefully()
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return;
 
     char recvbuf[DEFAULT_BUFLEN];
     // shutdown the connection since no more data will be sent
-    int iResult = shutdown(Socket, SD_SEND);
+    int iResult = shutdown(server_Socket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
         printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return;
     }
@@ -62,7 +62,7 @@ void MainClient::Shutdown_Connection_Gracefully()
 
     // Receive until the peer closes the connection
     do {
-        iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+        iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
         if ( iResult > 0 )
             printf("Bytes received: %d\n", iResult);
         else if ( iResult == 0 )
@@ -73,7 +73,7 @@ void MainClient::Shutdown_Connection_Gracefully()
     } while( iResult > 0 );
 
     // cleanup
-    closesocket(Socket);
+    closesocket(server_Socket);
     WSACleanup();
 
 
@@ -82,7 +82,7 @@ void MainClient::Shutdown_Connection_Gracefully()
 
 
 
-void MainClient::Add_Self(char buf[])
+void Main_Client::Add_Self(char buf[])
 {
     _160bitnumber self = DHT_Access::Get_SELF_ID();
     memcpy(buf+1, (char*)&self, 20); // 160/8=20
@@ -121,9 +121,9 @@ void MainClient::Store_File_To_DHT(char recvbuf[], int length)
 */
 
 
-void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
+void Main_Client::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return;
 
     if(length >= 20)
@@ -135,9 +135,9 @@ void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 
 
         DHT_Single_Entry sender_DHT_Entry;
-        sender_DHT_Entry.addr = Server_IP;
+        sender_DHT_Entry.addr = server_IP;
         sender_DHT_Entry.id = sender_Id;
-        sender_DHT_Entry.port = Server_Port;
+        sender_DHT_Entry.port = server_Port;
         sender_DHT_Entry.is_set = true;
 
 
@@ -151,9 +151,9 @@ void MainClient::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 }
 
 
-void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file)
+void Main_Client::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return;
 
     for(int i=0; i<3;i++)
@@ -184,7 +184,7 @@ void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _16
             else
             {
                 //Ping Node if its up
-                MainClient received_Client(addr, port);
+                Main_Client received_Client(addr, port);
                 received_Client.Ping();
 
             }
@@ -198,9 +198,9 @@ void MainClient::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _16
 
 
 
-void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
+void Main_Client::Ping_Received_Nodes(char recvbuf[], int length)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return;
 
 
@@ -219,7 +219,7 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 
             //Create a new thread and ping
 
-            MainClient received_Client(addr, port);
+            Main_Client received_Client(addr, port);
 
             received_Client.Ping();
         }
@@ -230,9 +230,9 @@ void MainClient::Ping_Received_Nodes(char recvbuf[], int length)
 
 
 
-int MainClient::Store_File(DHT_Single_Entry file)
+int Main_Client::Store_File(DHT_Single_Entry file)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return -1;
 
     int bufLen = 49;
@@ -247,22 +247,22 @@ int MainClient::Store_File(DHT_Single_Entry file)
 
 
 
-    int iResult = send( Socket, sendbuf, bufLen, 0 );
+    int iResult = send( server_Socket, sendbuf, bufLen, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
 
     char recvbuf[DEFAULT_BUFLEN];
-    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("recv failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -282,9 +282,9 @@ int MainClient::Store_File(DHT_Single_Entry file)
 
 
 
-int MainClient::Find_File(_160bitnumber file)
+int Main_Client::Find_File(_160bitnumber file)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return -1;
 
     char sendbuf[43];
@@ -295,22 +295,22 @@ int MainClient::Find_File(_160bitnumber file)
 
 
 
-    int iResult = send( Socket, sendbuf, 43, 0 );
+    int iResult = send( server_Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
 
     char recvbuf[DEFAULT_BUFLEN];
-    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("recv failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -336,9 +336,9 @@ int MainClient::Find_File(_160bitnumber file)
 
 
 
-int MainClient::Find_Node(_160bitnumber node)
+int Main_Client::Find_Node(_160bitnumber node)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return -1;
 
     char sendbuf[43];
@@ -349,22 +349,22 @@ int MainClient::Find_Node(_160bitnumber node)
 
 
 
-    int iResult = send( Socket, sendbuf, 43, 0 );
+    int iResult = send( server_Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
 
     char recvbuf[DEFAULT_BUFLEN];
-    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("recv failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -384,9 +384,9 @@ int MainClient::Find_Node(_160bitnumber node)
 }
 
 
-char *MainClient::Get_MetaData_File(_160bitnumber fileid)
+char *Main_Client::Get_MetaData_File(_160bitnumber fileid)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return nullptr;
 
     char sendbuf[47];
@@ -400,11 +400,11 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
     memcpy(sendbuf+27, (char*)&fileid, 20);
 
 
-    int iResult = send( Socket, sendbuf, 47, 0 );
+    int iResult = send( server_Socket, sendbuf, 47, 0 );
 
     if (iResult == SOCKET_ERROR) {
         printf("MainClient::Get_MetaData_File send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return nullptr;
     }
@@ -416,11 +416,11 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
 
     char buf[DEFAULT_BUFLEN];
 
-    iResult = recv(Socket, buf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, buf, DEFAULT_BUFLEN, 0);
     if (iResult == SOCKET_ERROR)
     {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return nullptr;
     }
@@ -442,12 +442,12 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
     iResult = 1;
     while(iResult > 0)
     {
-        iResult = recv(Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
         std::cout << "MainClient::Get_MetaData_File received a message of length(for the file) " << iResult << "\n\n";
         if (iResult == SOCKET_ERROR)
         {
             printf("send failed with error: %d\n", WSAGetLastError());
-            closesocket(Socket);
+            closesocket(server_Socket);
             WSACleanup();
             return nullptr;
         }
@@ -477,9 +477,9 @@ char *MainClient::Get_MetaData_File(_160bitnumber fileid)
 
 
 
-char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
+char *Main_Client::Get_File_Chunk(_160bitnumber fileid, int chunk)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return nullptr;
     if(chunk < 0)
         return nullptr;
@@ -494,11 +494,11 @@ char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
     memcpy(sendbuf+27, (char*)&fileid, 20);
 
 
-    int iResult = send( Socket, sendbuf, 47, 0 );
+    int iResult = send( server_Socket, sendbuf, 47, 0 );
 
     if (iResult == SOCKET_ERROR) {
         printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return nullptr;
     }
@@ -510,11 +510,11 @@ char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
 
     char buf[DEFAULT_BUFLEN];
 
-    iResult = recv(Socket, buf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, buf, DEFAULT_BUFLEN, 0);
     if (iResult == SOCKET_ERROR)
     {
         printf("MainClient::GetFileChunk Send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return nullptr;
     }
@@ -537,7 +537,7 @@ char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
     int totalRecievedBytes=0;
     while(iResult > 0)
     {
-        iResult = recv(Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
         totalRecievedBytes += iResult;
         std::cout << "MainClient::GetFileChunk received a message of length(for the file) " << iResult << " << total " << totalRecievedBytes << "\n";
         if (iResult == SOCKET_ERROR)
@@ -550,7 +550,7 @@ char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
 
             }
             printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
-            closesocket(Socket);
+            closesocket(server_Socket);
             WSACleanup();
             return nullptr;
         }
@@ -582,9 +582,9 @@ char *MainClient::GetFileChunk(_160bitnumber fileid, int chunk)
 
 
 
-int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
+int Main_Client::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return -1;
 
 
@@ -596,22 +596,22 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 
 
 
-    int iResult = send( Socket, sendbuf, 43, 0 );
+    int iResult = send( server_Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
 
     char recvbuf[DEFAULT_BUFLEN];
-    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("recv failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -638,9 +638,9 @@ int MainClient::Find_Node_Recursive(_160bitnumber node, int lookup_Identifier)
 
 
 
-int MainClient::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
+int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return -1;
 
 
@@ -652,22 +652,22 @@ int MainClient::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
 
 
 
-    int iResult = send( Socket, sendbuf, 43, 0 );
+    int iResult = send( server_Socket, sendbuf, 43, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
 
     char recvbuf[DEFAULT_BUFLEN];
-    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
 
     if (iResult == SOCKET_ERROR) {
         printf("recv failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -700,7 +700,7 @@ int MainClient::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
         std::cout << "They are saying that they have the file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         //Add in this entry to the top and end the search
 
-        received_Nodes.entry[0].addr = Server_IP;
+        received_Nodes.entry[0].addr = server_IP;
         Minor_Functions::Write_Single_Entry_To_DHT_Lookup(received_Nodes.entry[0], lookup_Identifier, fileID);
 
         return 0;
@@ -740,9 +740,9 @@ int MainClient::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier)
 
 
 
-DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length)
+DHT_Single_Entry Main_Client::Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length)
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
     {
         DHT_Single_Entry a;
         return a;
@@ -759,9 +759,9 @@ DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char rec
 
 
         DHT_Single_Entry sender_DHT_Entry;
-        sender_DHT_Entry.addr = Server_IP;
+        sender_DHT_Entry.addr = server_IP;
         sender_DHT_Entry.id = sender_Id;
-        sender_DHT_Entry.port = Server_Port;
+        sender_DHT_Entry.port = server_Port;
         sender_DHT_Entry.is_set = true;
 
 
@@ -782,10 +782,10 @@ DHT_Single_Entry MainClient::Add_Received_Entry_To_DHT_And_Return_Entry(char rec
 
 
 
-three_DHT MainClient::Return_Received_Nodes(char recvbuf[], int length)
+three_DHT Main_Client::Return_Received_Nodes(char recvbuf[], int length)
 {
     three_DHT recived_Nodes;
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return recived_Nodes;
 
 
@@ -821,9 +821,9 @@ three_DHT MainClient::Return_Received_Nodes(char recvbuf[], int length)
 
 
 
-int MainClient::Ping()
+int Main_Client::Ping()
 {
-    if(!setUpProperly)
+    if(!set_Up_Properly)
         return -1;
 
     char sendbuf[23];
@@ -833,12 +833,12 @@ int MainClient::Ping()
 
     Add_Self(sendbuf);
 
-    int iResult = send( Socket, sendbuf, 23, 0 );
+    int iResult = send( server_Socket, sendbuf, 23, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -847,10 +847,10 @@ int MainClient::Ping()
     char recvbuf[DEFAULT_BUFLEN];
 
     //Get the ping back
-    iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
     if (iResult == SOCKET_ERROR) {
         printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
+        closesocket(server_Socket);
         WSACleanup();
         return 1;
     }
@@ -865,99 +865,8 @@ int MainClient::Ping()
 
 
 
-
-//DEPRECIATED
-int MainClient::GetFile(char *filename)
-{
-    // \x01 is the command byte
-    if(!setUpProperly)
-        return -1;
-
-    char command[21];
-    command[0] = '\x01';
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
-    memcpy(command+1, (char*)&self, 20); // 160/8=20
-
-    std::cout << self.top << ' ' << self.mid << ' ' << self.bot << '\n';
-
-
-    Sleep(1);
-    printf("SENDING!!---------------------------------------------\n");
-
-
-    // Send a buffer telling the server to send a file
-    int iResult = send( Socket, command, 21, 0 );
-    if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
-        WSACleanup();
-        return 1;
-    }
-
-    //std::cout << "Output bytes = " << iResult << std::endl;
-    Sleep(1);
-
-    char recvbuf[DEFAULT_BUFLEN];
-    int res=0;
-    FILE *fp;
-    fp = fopen("CLIENT_FILES/asdf.txt", "w+b");
-    while(true)
-    {
-        // Getting file loop
-        res = recv(Socket,recvbuf,sizeof(recvbuf),0); // recv file
-        std::cout << "RES: " << res << std::endl;
-        Sleep(1);
-
-        fwrite(recvbuf, res, 1, fp);
-
-        if(res != 512)
-            break;
-
-
-
-    }
-    fclose(fp);
-
-
-
-
-
-    // shutdown the connection since no more data will be sent
-    iResult = shutdown(Socket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(Socket);
-        WSACleanup();
-        return 1;
-    }
-
-    // Receive until the peer closes the connection
-    do {
-
-        iResult = recv(Socket, recvbuf, DEFAULT_BUFLEN, 0);
-        if ( iResult > 0 )
-            printf("Bytes received: %d\n", iResult);
-        else if ( iResult == 0 )
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    } while( iResult > 0 );
-
-    // cleanup
-    closesocket(Socket);
-    WSACleanup();
-
-
-    std::cout << "Exited the connection on the client side";
-    return 0;
-}
-
-
-
-
 //INCREADIBLY INEFFICENT TODO
-MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
+Main_Client::Main_Client(in_addr addr_In, unsigned short int port_In)
 {
     char *addr = inet_ntoa(addr_In);
     char port[10];
@@ -977,7 +886,7 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
-        setUpProperly=false;
+        set_Up_Properly=false;
         return;
     }
 
@@ -993,7 +902,7 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
-        setUpProperly=false;
+        set_Up_Properly=false;
         return;
     }
 
@@ -1007,7 +916,7 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %d\n", WSAGetLastError());
             WSACleanup();
-            setUpProperly=false;
+            set_Up_Properly=false;
             return;
         }
 
@@ -1026,15 +935,15 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        setUpProperly=false;
+        set_Up_Properly=false;
         return;
     }
-    MainClient::Socket = ConnectSocket;
+    Main_Client::server_Socket = ConnectSocket;
 
     unsigned long tmpa  = inet_addr(addr);
-    Server_IP = (in_addr&)tmpa;
+    server_IP = (in_addr&)tmpa;
 
-    Server_Port = (unsigned short int)atoi(port);
+    server_Port = (unsigned short int)atoi(port);
 
 
 }
@@ -1042,7 +951,7 @@ MainClient::MainClient(in_addr addr_In, unsigned short int port_In)
 
 
 
-MainClient::MainClient(const char *addr, const char *port)
+Main_Client::Main_Client(const char *addr, const char *port)
 {
     printf("Mainclient(*addr, *port) being created\n\n");
 
@@ -1058,7 +967,7 @@ MainClient::MainClient(const char *addr, const char *port)
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
         printf("WSAStartup failed with error: %d\n", iResult);
-        setUpProperly=false;
+        set_Up_Properly=false;
         return;
     }
 
@@ -1072,7 +981,7 @@ MainClient::MainClient(const char *addr, const char *port)
     if ( iResult != 0 ) {
         printf("getaddrinfo failed with error: %d\n", iResult);
         WSACleanup();
-        setUpProperly=false;
+        set_Up_Properly=false;
         return;
     }
 
@@ -1085,7 +994,7 @@ MainClient::MainClient(const char *addr, const char *port)
         if (ConnectSocket == INVALID_SOCKET) {
             printf("socket failed with error: %d\n", WSAGetLastError());
             WSACleanup();
-            setUpProperly=false;
+            set_Up_Properly=false;
             return;
         }
 
@@ -1104,15 +1013,15 @@ MainClient::MainClient(const char *addr, const char *port)
     if (ConnectSocket == INVALID_SOCKET) {
         printf("Unable to connect to server!\n");
         WSACleanup();
-        setUpProperly=false;
+        set_Up_Properly=false;
         return;
     }
-    MainClient::Socket = ConnectSocket;
+    Main_Client::server_Socket = ConnectSocket;
 
     unsigned long tmpa  = inet_addr(addr);
-    Server_IP = (in_addr&)tmpa;
+    server_IP = (in_addr&)tmpa;
 
-    Server_Port = (unsigned short int)atoi(port);
+    server_Port = (unsigned short int)atoi(port);
 
 
 

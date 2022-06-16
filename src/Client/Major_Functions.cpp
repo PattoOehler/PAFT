@@ -27,7 +27,7 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
     {
         if(in_DHT.entry[i].is_set)
         {
-            MainClient client = MainClient(in_DHT.entry[i].addr, in_DHT.entry[i].port);
+            Main_Client client = Main_Client(in_DHT.entry[i].addr, in_DHT.entry[i].port);
             client.Find_Node_Recursive(id, dht_Identifier);
         }
 
@@ -49,7 +49,7 @@ three_DHT Major_Functions::Find_File_On_Network(_160bitnumber id)
     {
         if(in_DHT.entry[i].is_set)
         {
-            MainClient client = MainClient(in_DHT.entry[i].addr, in_DHT.entry[i].port);
+            Main_Client client = Main_Client(in_DHT.entry[i].addr, in_DHT.entry[i].port);
             client.Find_File_Recursive(id, dht_Identifier);
         }
 
@@ -127,7 +127,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
     {
         if(closest_In_Network.entry[i].is_set)
         {
-            MainClient client = MainClient(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
+            Main_Client client = Main_Client(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
             client.Store_File(self);
         }
     }
@@ -165,7 +165,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
     {
         if(closest_In_Network.entry[i].is_set)
         {
-            MainClient client = MainClient(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
+            Main_Client client = Main_Client(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
             client.Store_File(self);
         }
     }
@@ -177,11 +177,11 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 
 //Returns 0 upon success anything else for an error
-int Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
+int Major_Functions::Get_MetaData_File(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
 {
     std::cout << "Major Functions -- client.Get_MetaData_File\n";
     sleep(2);
-    MainClient client = MainClient(entry.addr, entry.port);
+    Main_Client client = Main_Client(entry.addr, entry.port);
     char *recvbuf = client.Get_MetaData_File(ID);
     std::cout << "Major Functions -- client.Get_MetaData_File done!\n";
 
@@ -222,58 +222,15 @@ int Major_Functions::getMetaDataFile(_160bitnumber ID, std::string checksum_expe
 
 
 
-/*
-void Major_Functions::getFileChunk(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry, int chunkNum)
+
+void Major_Functions::Get_File_Chunk(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry, int chunkNum)
 {
     if(chunkNum < 0)
         return;
 
     sleep(2);
-    MainClient client = MainClient(entry.addr, entry.port);
-    char *recvbuf = client.GetFileChunk(ID, chunkNum);
-
-    int len;
-    memcpy((char *)&len,recvbuf,4);
-
-    std::string checksum_received = sha256(recvbuf+4, len-4);
-    //TODO verify checksum
-    std::cout << "Checksum(len= " << len-4 << "): " << checksum_received << "\n";
-
-
-    //Write to the file
-    if(len -4 > 0)
-    {
-        std::ofstream wf("Test_Metafiles/chunk.paft", std::ios::out | std::ios::binary);
-        if(!wf) {
-          std::cout << "Cannot open file!\n" << std::endl;
-          return;
-        }
-
-        wf.write(recvbuf+4, len-4);
-        wf.close();
-    }
-    else
-    {
-        std::cout << "Major_Functions::getFileChunk length is <= 0! (len=" << len-4 << ")\n";
-
-    }
-
-}
-
-
-*/
-
-
-
-
-void Major_Functions::getFileChunk(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry, int chunkNum)
-{
-    if(chunkNum < 0)
-        return;
-
-    sleep(2);
-    MainClient client = MainClient(entry.addr, entry.port);
-    char *recvbuf = client.GetFileChunk(ID, chunkNum);
+    Main_Client client = Main_Client(entry.addr, entry.port);
+    char *recvbuf = client.Get_File_Chunk(ID, chunkNum);
 
     int len;
     memcpy((char *)&len,recvbuf,4);

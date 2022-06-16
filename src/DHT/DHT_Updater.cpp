@@ -18,7 +18,7 @@ using namespace paft;
 
 void DHT_Updater::Call_Ping(DHT_Single_Entry entry)
 {
-    MainClient *a = new MainClient(entry.addr, entry.port);
+    Main_Client *a = new Main_Client(entry.addr, entry.port);
     a->Ping();
 
     std::cout << "Fixed timed out entry!!!\n";
