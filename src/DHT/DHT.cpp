@@ -62,7 +62,7 @@ DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_fin
 three_DHT DHT::Lookup(_160bitnumber id)
 {
 
-    int bucket = Distance(id, DHT_Access::Get_SELF_ID());
+    int bucket = Distance(id, DHT_Access::Get_Self_ID());
     three_DHT closest = Lookup_One_Bucket(id, bucket);
     int entryCounter = 0;
 
@@ -137,7 +137,7 @@ three_DHT DHT::Lookup(_160bitnumber id)
 
 
 
-bool DHT::IsEqual(_160bitnumber id,_160bitnumber id2)
+bool DHT::Is_Equal(_160bitnumber id,_160bitnumber id2)
 {
     if(id.top == id2.top)
     {
@@ -163,10 +163,10 @@ three_DHT DHT::Find_Value(_160bitnumber id)
 
     for(int i=0;i<100;i++)
     {
-        DHT_Single_Entry tmp = DHT_Access::Access_FileIds(i);
+        DHT_Single_Entry tmp = DHT_Access::Access_File_IDs(i);
         if(tmp.is_set)
         {
-            if(IsEqual(id, tmp.id))
+            if(Is_Equal(id, tmp.id))
             {
                 if(closest_counter < 3)
                     closest.entry[closest_counter] = tmp;
@@ -301,7 +301,7 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 
 
 
-int DHT::Log2(unsigned long long int n)
+int DHT::Log_Base_2(unsigned long long int n)
 {
     if (n == 0)
     {
@@ -331,17 +331,17 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 
 
     if(top_distance != 0)
-        return Log2(top_distance);
+        return Log_Base_2(top_distance);
 
     else
     {
         if(mid_distance != 0)
-            return 64+Log2(mid_distance);
+            return 64+Log_Base_2(mid_distance);
 
         else
         {
             if(bot_distance != 0)
-                return 128+Log2((unsigned long long int)bot_distance);
+                return 128+Log_Base_2((unsigned long long int)bot_distance);
             else
                 return  159;
         }
@@ -358,7 +358,7 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 void DHT::Update_Time(DHT_Single_Entry Update)
 {
 
-    int distance = Distance(Update.id, DHT_Access::Get_SELF_ID());
+    int distance = Distance(Update.id, DHT_Access::Get_Self_ID());
 
     for(int i=0; i<20; i++)
     {
@@ -367,7 +367,7 @@ void DHT::Update_Time(DHT_Single_Entry Update)
         if(tmp.is_set == true)
         {
 
-            if(IsEqual(tmp.id, Update.id))
+            if(Is_Equal(tmp.id, Update.id))
             {
                 Update.time_To_Timeout = time(0)+60*60; // 1 hour
                 Update.is_set = true;
@@ -416,7 +416,7 @@ void DHT::Init()
 int DHT::Add_Entry(DHT_Single_Entry Entry)
 {
 
-    int distance = DHT::Distance(Entry.id, DHT_Access::Get_SELF_ID());
+    int distance = DHT::Distance(Entry.id, DHT_Access::Get_Self_ID());
 
 
     for(int i=0; i<20; i++)
@@ -463,7 +463,7 @@ int DHT::Add_Entry_All_Buckets()
     long unsigned int tmp_bot;
 
 
-    _160bitnumber SELF = DHT_Access::Get_SELF_ID();
+    _160bitnumber SELF = DHT_Access::Get_Self_ID();
     Testing.id.bot = SELF.bot;
     Testing.id.mid = SELF.mid;
 
@@ -564,7 +564,7 @@ void DHT::Print_Files()
     for(int i=0;i<100;i++)
     {
 
-        DHT_Single_Entry tmp = DHT_Access::Access_FileIds(i);
+        DHT_Single_Entry tmp = DHT_Access::Access_File_IDs(i);
         if(tmp.is_set)
         {
             DHT::Print_ID(tmp.id);

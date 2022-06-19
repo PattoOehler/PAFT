@@ -55,7 +55,7 @@ void DHT_Updater::Update_File_DHT()
 {
     for(int i=0;i<DHT_File_Len;i++)
     {
-        DHT_Single_Entry entry = DHT_Access::Access_FileIds(i);
+        DHT_Single_Entry entry = DHT_Access::Access_File_IDs(i);
         if(entry.is_set)
         {
 
@@ -63,7 +63,7 @@ void DHT_Updater::Update_File_DHT()
             {
                 std::cout << "Found a timed out file entry\n";
                 entry.is_set = false;
-                DHT_Access::Write_To_FileIds(entry,i);
+                DHT_Access::Write_To_File_IDs(entry,i);
 
             }
 

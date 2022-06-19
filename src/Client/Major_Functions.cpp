@@ -117,7 +117,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
     self.port = DHT_Access::Get_Self_Port();
 
 
-    int fileIDpos = DHT_Access::Store_FileId(self);
+    int fileIDpos = DHT_Access::Store_File_ID(self);
 
     DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
 
@@ -155,7 +155,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
     self.id = fileID;
 
-    int fileIDpos = DHT_Access::Store_FileId(self);
+    int fileIDpos = DHT_Access::Store_File_ID(self);
 
     DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
 
@@ -177,12 +177,12 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 
 //Returns 0 upon success anything else for an error
-int Major_Functions::Get_MetaData_File(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
+int Major_Functions::Get_Metadata_File(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
 {
     std::cout << "Major Functions -- client.Get_MetaData_File\n";
     sleep(2);
     Main_Client client = Main_Client(entry.addr, entry.port);
-    char *recvbuf = client.Get_MetaData_File(ID);
+    char *recvbuf = client.Get_Metadata_File(ID);
     std::cout << "Major Functions -- client.Get_MetaData_File done!\n";
 
     int len;

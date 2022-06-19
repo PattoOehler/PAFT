@@ -44,12 +44,12 @@ void Minor_Functions::Do_Lookup_If_Closer(int lookupID, three_DHT received_value
     }
 
 
-    bool is_0_In_Current_Three = DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[0].id) | DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[1].id) |
-                                            DHT::IsEqual(received_values.entry[0].id,  current_Three.entry[2].id);
-    bool is_1_In_Current_Three = DHT::IsEqual(received_values.entry[1].id,  current_Three.entry[0].id) | DHT::IsEqual(received_values.entry[1].id,  current_Three.entry[1].id) |
-                                            DHT::IsEqual(received_values.entry[1].id,  current_Three.entry[2].id);
-    bool is_2_In_Current_Three = DHT::IsEqual(received_values.entry[2].id,  current_Three.entry[0].id) | DHT::IsEqual(received_values.entry[2].id,  current_Three.entry[1].id) |
-                                            DHT::IsEqual(received_values.entry[2].id,  current_Three.entry[2].id);
+    bool is_0_In_Current_Three = DHT::Is_Equal(received_values.entry[0].id,  current_Three.entry[0].id) | DHT::Is_Equal(received_values.entry[0].id,  current_Three.entry[1].id) |
+                                            DHT::Is_Equal(received_values.entry[0].id,  current_Three.entry[2].id);
+    bool is_1_In_Current_Three = DHT::Is_Equal(received_values.entry[1].id,  current_Three.entry[0].id) | DHT::Is_Equal(received_values.entry[1].id,  current_Three.entry[1].id) |
+                                            DHT::Is_Equal(received_values.entry[1].id,  current_Three.entry[2].id);
+    bool is_2_In_Current_Three = DHT::Is_Equal(received_values.entry[2].id,  current_Three.entry[0].id) | DHT::Is_Equal(received_values.entry[2].id,  current_Three.entry[1].id) |
+                                            DHT::Is_Equal(received_values.entry[2].id,  current_Three.entry[2].id);
 
     //If any of the values gathered is closer then the furthest away one stored & not already searched then perform the search.
     bool is0Closer = DHT::Compare(received_values.entry[0].id, current_Three.entry[2].id, lookingFor);

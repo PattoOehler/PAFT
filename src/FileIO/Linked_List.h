@@ -1,5 +1,5 @@
-#ifndef LINKEDLIST
-#define LINKEDLIST
+#ifndef LINKED_LIST
+#define LINKED_LIST
 
 
 struct node
@@ -8,20 +8,20 @@ struct node
     node *next;
 };
 
-class linked_list
+class Linked_List
 {
 public:
     node *head,*tail;
     int length;
 
-    linked_list()
+    Linked_List()
     {
         head = NULL;
         tail = NULL;
         length = 0;
     }
 
-    void add_node(std::string n)
+    void Add_Node(std::string n)
     {
         node *tmp = new node;
         tmp->data = n;
@@ -40,7 +40,7 @@ public:
         length ++;
     }
 
-    std::string pop_head()
+    std::string Pop_Head()
     {
         if(head==NULL)
             return "";
@@ -61,4 +61,4 @@ public:
 };
 
 
-#endif // LINKEDLIST
+#endif // LINKED_LIST

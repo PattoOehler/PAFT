@@ -22,7 +22,7 @@ namespace paft
         static std::mutex* all_Peers_Mutex;
         static std::mutex* all_Files_Mutex;
 
-        static DHT_Single_Entry SELF;
+        static DHT_Single_Entry self;
 
 
     public:
@@ -30,16 +30,16 @@ namespace paft
         static void Write_To_DHT(DHT_Single_Entry write, int position);
 
 
-        static DHT_Single_Entry Access_FileIds(int position);
-        static void Write_To_FileIds(DHT_Single_Entry write, int position);
-        static int Store_FileId(DHT_Single_Entry entry);
+        static DHT_Single_Entry Access_File_IDs(int position);
+        static void Write_To_File_IDs(DHT_Single_Entry write, int position);
+        static int Store_File_ID(DHT_Single_Entry entry);
 
         static int Find_Stored_File(_160bitnumber entry);
 
-        static _160bitnumber Get_SELF_ID();
+        static _160bitnumber Get_Self_ID();
         static void Set_Self_ID(_160bitnumber own_Id);
 
-        static DHT_Single_Entry Get_SELF();
+        static DHT_Single_Entry Get_Self();
         static void Set_Self(DHT_Single_Entry own_Id);
 
 

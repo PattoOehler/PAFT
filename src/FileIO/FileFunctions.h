@@ -10,27 +10,27 @@
 
 namespace paft
 {
-    class FileFunctions
+    class File_Functions
     {
     private:
 
     public:
-        static void loadState();
-        static void saveState();
+        static void Load_State();
+        static void Save_State();
 
-        static void saveDHTEntries();
-        static void saveFileEntries();
-        static void saveLocalFileLocations();
+        static void Save_DHT_Entries();
+        static void Save_File_Entries();
+        static void Save_Local_File_Locations();
 
-        static void loadDHTEntries();
-        static void loadFileEntries();
-        static void loadLocalFileLocations();
+        static void Load_DHT_Entries();
+        static void Load_File_Entries();
+        static void Load_Local_File_Locations();
 
-        static std::vector<std::string> get_all_files_names_within_folder(std::string folder);
+        static std::vector<std::string> Get_All_Files_Names_Within_Folder(std::string folder);
 
 
-        static void allocate_File();
-        static void allocate_File(std::string filename);
+        static void Allocate_File();
+        static void Allocate_File(std::string filename);
         static long Get_File_Length(std::string filename);
 
     };

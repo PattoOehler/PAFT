@@ -26,7 +26,7 @@ void DHT_TESTS::DHT__IsEqual()
 {
     _160bitnumber num = DHT::Random_ID();
 
-    if(!DHT::IsEqual(num, num))
+    if(!DHT::Is_Equal(num, num))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::IsEqual is not performing as expected\n";
@@ -35,7 +35,7 @@ void DHT_TESTS::DHT__IsEqual()
     _160bitnumber num2 = num;
 
     num2.bot += 1;
-    if(DHT::IsEqual(num, num2))
+    if(DHT::Is_Equal(num, num2))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::IsEqual is not performing as expected\n";
@@ -43,7 +43,7 @@ void DHT_TESTS::DHT__IsEqual()
 
     num2.bot -= 1;
     num2.mid += 1;
-    if(DHT::IsEqual(num, num2))
+    if(DHT::Is_Equal(num, num2))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::IsEqual is not performing as expected\n";
@@ -51,7 +51,7 @@ void DHT_TESTS::DHT__IsEqual()
 
     num2.mid -= 1;
     num2.top += 1;
-    if(DHT::IsEqual(num, num2))
+    if(DHT::Is_Equal(num, num2))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::IsEqual is not performing as expected\n";
@@ -102,37 +102,37 @@ void DHT_TESTS::DHT__Random_ID()
     _160bitnumber id4 = DHT::Random_ID();
     _160bitnumber id5 = DHT::Random_ID();
 
-    if(DHT::IsEqual(id, id2))
+    if(DHT::Is_Equal(id, id2))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
     }
-    if(DHT::IsEqual(id2, id3))
+    if(DHT::Is_Equal(id2, id3))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
     }
-    if(DHT::IsEqual(id3, id4))
+    if(DHT::Is_Equal(id3, id4))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
     }
-    if(DHT::IsEqual(id4, id5))
+    if(DHT::Is_Equal(id4, id5))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
     }
-    if(DHT::IsEqual(id2, id4))
+    if(DHT::Is_Equal(id2, id4))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
     }
-    if(DHT::IsEqual(id2, id5))
+    if(DHT::Is_Equal(id2, id5))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";
     }
-    if(DHT::IsEqual(id3, id5))
+    if(DHT::Is_Equal(id3, id5))
     {
         std::cout << "\n\nUNIT TEST ERROR!!!\n\n";
         std::cout << "DHT::Random_ID() Is not producing randomIDs\n";

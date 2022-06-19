@@ -13,7 +13,7 @@ int main()
 
     std::thread thread(paft::MainServer::Start_Server);
 
-    paft::MainCli::Start_Client();
+    paft::Main_CLI::Start_Client();
 
 
     return 0;

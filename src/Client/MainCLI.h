@@ -6,7 +6,7 @@
 
 namespace paft
 {
-    class MainCli{
+    class Main_CLI{
     public:
         static int Start_Client();
         static void Self_Find_Random_Node();

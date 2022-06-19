@@ -26,7 +26,7 @@ namespace paft
         void Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _160bitnumber file);
         int Find_File(_160bitnumber file);
         int Store_File(DHT_Single_Entry file);
-        char *Get_MetaData_File(_160bitnumber fileid);  //TODO Is metadata 1 word or 2
+        char *Get_Metadata_File(_160bitnumber fileid);
         char *Get_File_Chunk(_160bitnumber fileid, int chunk);
 
         int Find_Node_Recursive(_160bitnumber node, int lookup_Identifier);

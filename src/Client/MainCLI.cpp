@@ -17,7 +17,7 @@
 
 using namespace paft;
 
-int MainCli::Start_Client()
+int Main_CLI::Start_Client()
 {
     std::cout << "Type help for a list of commands\n";
 
@@ -32,12 +32,12 @@ int MainCli::Start_Client()
         for(i=0;i<INPUT_BUFFER_LENGTH;i++)
             if(command[i] == '\0')
                 break;
-        MainCli::Command_Parser(command, i);
+        Main_CLI::Command_Parser(command, i);
 
     }
 }
 
-int MainCli::Command_Parser(char Input[], int Input_len)
+int Main_CLI::Command_Parser(char Input[], int Input_len)
 {
     if(String_Compare(Input, "help"))
         CLI_Functions::Help_Command();
@@ -100,10 +100,10 @@ int MainCli::Command_Parser(char Input[], int Input_len)
         CLI_Functions::Print_Self_Command();
 
     else if(String_Compare(Input, "load_state"))
-        FileFunctions::loadState();
+        File_Functions::Load_State();
 
     else if(String_Compare(Input, "save_state"))
-        FileFunctions::saveState();
+        File_Functions::Save_State();
 
     else if(String_Compare(Input, "exit"))
         exit(0);
@@ -117,7 +117,7 @@ int MainCli::Command_Parser(char Input[], int Input_len)
 }
 
 
-bool MainCli::String_Compare(char* string1, const char* string2)
+bool Main_CLI::String_Compare(char* string1, const char* string2)
 {
     for(int i = 0;;i++)
     {
@@ -150,7 +150,7 @@ bool MainCli::String_Compare(char* string1, const char* string2)
 }
 
 
-void MainCli::Self_Find_Random_Node()
+void Main_CLI::Self_Find_Random_Node()
 {
     _160bitnumber Testing = DHT::Random_ID();
 
@@ -165,7 +165,7 @@ void MainCli::Self_Find_Random_Node()
 
 }
 
-void MainCli::Self_Find_Random_Node_Network()
+void Main_CLI::Self_Find_Random_Node_Network()
 {
     _160bitnumber Testing = DHT::Random_ID();
 
@@ -176,7 +176,7 @@ void MainCli::Self_Find_Random_Node_Network()
 
 }
 
-void MainCli::Self_Find_Random_File()
+void Main_CLI::Self_Find_Random_File()
 {
 
     _160bitnumber Testing = DHT::Random_ID();
@@ -190,7 +190,7 @@ void MainCli::Self_Find_Random_File()
 
 }
 
-void MainCli::Self_Store_Random_File()
+void Main_CLI::Self_Store_Random_File()
 {
 
     _160bitnumber Testing = DHT::Random_ID();

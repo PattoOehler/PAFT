@@ -16,18 +16,18 @@ using namespace paft;
 
 
 
-void FileFunctions::loadState()
+void File_Functions::Load_State()
 {
 
-    loadDHTEntries();
-    loadFileEntries();
-    loadLocalFileLocations();
+    Load_DHT_Entries();
+    Load_File_Entries();
+    Load_Local_File_Locations();
 
 
 }
 
 
-void FileFunctions::loadDHTEntries()
+void File_Functions::Load_DHT_Entries()
 {
 
     std::ifstream rf("Saves/DHTEntries.pafts", std::ios::out | std::ios::binary);
@@ -60,7 +60,7 @@ void FileFunctions::loadDHTEntries()
 
 
 
-void FileFunctions::loadFileEntries()
+void File_Functions::Load_File_Entries()
 {
 
     std::ifstream rf("Saves/DHTFileEntries.pafts", std::ios::out | std::ios::binary);
@@ -76,7 +76,7 @@ void FileFunctions::loadFileEntries()
         DHT_Single_Entry curr_Entry;
         rf.read((char *) &curr_Entry, sizeof(DHT_Single_Entry));
 
-        DHT_Access::Write_To_FileIds(curr_Entry, i);
+        DHT_Access::Write_To_File_IDs(curr_Entry, i);
     }
 
 
@@ -94,7 +94,7 @@ void FileFunctions::loadFileEntries()
 
 
 
-void FileFunctions::loadLocalFileLocations()
+void File_Functions::Load_Local_File_Locations()
 {
 
     std::ifstream rf("Saves/DHTFileLocations.pafts", std::ios::out | std::ios::binary);
@@ -142,27 +142,18 @@ void FileFunctions::loadLocalFileLocations()
 
 
 
-
-
-
-
-
-
-
-
-
-void FileFunctions::saveState()
+void File_Functions::Save_State()
 {
-    saveDHTEntries();
-    saveFileEntries();
-    saveLocalFileLocations();
+    Save_DHT_Entries();
+    Save_File_Entries();
+    Save_Local_File_Locations();
 
 }
 
 
 
 
-void FileFunctions::saveDHTEntries()
+void File_Functions::Save_DHT_Entries()
 {
 
     std::ofstream wf("Saves/DHTEntries.pafts", std::ios::out | std::ios::binary);
@@ -195,7 +186,7 @@ void FileFunctions::saveDHTEntries()
 
 
 
-void FileFunctions::saveFileEntries()
+void File_Functions::Save_File_Entries()
 {
 
     std::ofstream wf("Saves/DHTFileEntries.pafts", std::ios::out | std::ios::binary);
@@ -207,7 +198,7 @@ void FileFunctions::saveFileEntries()
 
     for(int i=0; i<100; i++)
     {
-        DHT_Single_Entry curr_Entry = DHT_Access::Access_FileIds(i);
+        DHT_Single_Entry curr_Entry = DHT_Access::Access_File_IDs(i);
         wf.write( (char *) &curr_Entry, sizeof(DHT_Single_Entry));
 
     }
@@ -226,7 +217,7 @@ void FileFunctions::saveFileEntries()
 
 
 
-void FileFunctions::saveLocalFileLocations()
+void File_Functions::Save_Local_File_Locations()
 {
 
     std::ofstream wf("Saves/DHTFileLocations.pafts", std::ios::out | std::ios::binary);
@@ -266,7 +257,7 @@ void FileFunctions::saveLocalFileLocations()
 
 
 
-void FileFunctions::allocate_File()
+void File_Functions::Allocate_File()
 {
     int fileChunks = Meta_Files::getChunks("Test_Metafiles\\meta.paft");
 
@@ -287,7 +278,7 @@ void FileFunctions::allocate_File()
 }
 
 
-void FileFunctions::allocate_File( std::string metafilename )
+void File_Functions::Allocate_File( std::string metafilename )
 {
     int fileChunks = Meta_Files::getChunks(  metafilename );
 
@@ -308,7 +299,7 @@ void FileFunctions::allocate_File( std::string metafilename )
 }
 
 
-long FileFunctions::Get_File_Length(std::string filename)
+long File_Functions::Get_File_Length(std::string filename)
 {
     struct stat stat_buf;
     int rc = stat(filename.c_str(), &stat_buf);

@@ -40,7 +40,7 @@ void Connection::Ping(LPVOID lpParam)
 
 
     char sendbuf[20];
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
+    _160bitnumber self = DHT_Access::Get_Self_ID();
     memcpy(sendbuf, (char*)&self, 20);
 
 
@@ -99,7 +99,7 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
+    _160bitnumber self = DHT_Access::Get_Self_ID();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
 
@@ -150,7 +150,7 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
+    _160bitnumber self = DHT_Access::Get_Self_ID();
     memcpy(sendbuf, (char*)&self, 20);
 
 
@@ -207,7 +207,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
 
 
     char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
+    _160bitnumber self = DHT_Access::Get_Self_ID();
     memcpy(sendbuf, (char*)&self, 20); // 160/8=20
 
     if(len < 49)
@@ -234,7 +234,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
     else
         std::cout << "Connection::Store_File IP address is " << *aa << "\n";
 
-    DHT_Access::Store_FileId(file_To_Add);
+    DHT_Access::Store_File_ID(file_To_Add);
 
     send(current_client,sendbuf,20,0);
 

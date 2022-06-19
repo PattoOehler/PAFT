@@ -54,10 +54,10 @@ namespace paft
         static std::mt19937_64 gen;
 
         static three_DHT Find_Value(_160bitnumber id);
-        static bool IsEqual(_160bitnumber id,_160bitnumber id2);
+        static bool Is_Equal(_160bitnumber id,_160bitnumber id2);
 
 
-        static int Log2(unsigned long long int n);
+        static int Log_Base_2(unsigned long long int n);
         static void Init();
 
         static int Add_Entry_All_Buckets();

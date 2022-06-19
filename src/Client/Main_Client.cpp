@@ -84,7 +84,7 @@ void Main_Client::Shutdown_Connection_Gracefully()
 
 void Main_Client::Add_Self(char buf[])
 {
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
+    _160bitnumber self = DHT_Access::Get_Self_ID();
     memcpy(buf+1, (char*)&self, 20); // 160/8=20
     short unsigned int port = DHT_Access::Get_Self_Port();
     memcpy(buf+21, (char*)&port, 2);
@@ -171,7 +171,7 @@ void Main_Client::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _1
 
 
             //Create a new thread and ping
-            if(DHT::IsEqual(file, sent_Id))
+            if(DHT::Is_Equal(file, sent_Id))
             {
                 //Store file
                 DHT_Single_Entry storing;
@@ -179,7 +179,7 @@ void Main_Client::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _1
                 storing.addr = addr;
                 storing.port = port;
                 storing.is_set = true;
-                DHT_Access::Store_FileId(storing);
+                DHT_Access::Store_File_ID(storing);
             }
             else
             {
@@ -384,7 +384,7 @@ int Main_Client::Find_Node(_160bitnumber node)
 }
 
 
-char *Main_Client::Get_MetaData_File(_160bitnumber fileid)
+char *Main_Client::Get_Metadata_File(_160bitnumber fileid)
 {
     if(!set_Up_Properly)
         return nullptr;
@@ -695,7 +695,7 @@ int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier
     //Check for an entry for the correct ID as well as a IP of 0.0.0.0
     unsigned int a;
     memcpy((char *)&a, (char *) &received_Nodes.entry[0].addr, 4);
-    if(DHT::IsEqual(fileID, received_Nodes.entry[0].id) && a == 0)
+    if(DHT::Is_Equal(fileID, received_Nodes.entry[0].id) && a == 0)
     {
         std::cout << "They are saying that they have the file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
         //Add in this entry to the top and end the search

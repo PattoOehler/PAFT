@@ -1,6 +1,6 @@
 
 #include "Meta_Files.h"
-#include "linkedlist.h"
+#include "Linked_List.h"
 #include "sha256.h"
 #include "../DHT/DHT.h"
 #include "FileFunctions.h"
@@ -13,7 +13,7 @@
 using namespace paft;
 
 
-Meta_Files::Meta_Files(int chunk_Size, const char *fileName,long long int total_Bytes, linked_list a, _160bitnumber fileID)
+Meta_Files::Meta_Files(int chunk_Size, const char *fileName,long long int total_Bytes, Linked_List a, _160bitnumber fileID)
 {
     id=fileID;
     set_File_Name(fileName);
@@ -145,7 +145,7 @@ void Meta_Files::Write_File()
     for(int i=0; i<len; i++)
     {
         //Keeping the change of string to char* on 2 seperate lines fixed a problem - keep it
-        std::string strChunkHash = hash_List.pop_head();
+        std::string strChunkHash = hash_List.Pop_Head();
         const char *chunkHash= strChunkHash.c_str();
 
         metaFile.write(chunkHash, 64);
@@ -184,12 +184,12 @@ void Meta_Files::Make_File(const char *input_File, const char *output_File, _160
 
     int readBytes=0;
     long long totalBytes=0;
-    linked_list a;
+    Linked_List a;
     do
     {
         readBytes = fread(buf, 1, Eight_MiB, fp);
         std::string output1 = sha256(buf, readBytes);
-        a.add_node(output1);
+        a.Add_Node(output1);
 
         totalBytes += readBytes;
 
@@ -233,7 +233,7 @@ std::string Meta_Files::getCheckSum(int chunk, std::string metaFile)
 
 int Meta_Files::getChunks(std::string metaFile)
 {
-    long metafilelen = FileFunctions::Get_File_Length(metaFile);
+    long metafilelen = File_Functions::Get_File_Length(metaFile);
     std::cout << "Length of the metadata file is " << metafilelen << " in FileFunctions::allocate_File\n";
 
     int fileChunks = (metafilelen - 112) / 64;

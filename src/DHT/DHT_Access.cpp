@@ -11,7 +11,7 @@ DHT_Single_Entry* DHT_Access::all_Files = new DHT_Single_Entry[DHT_File_Len]; //
 std::string *DHT_Access::local_File_Locations = new std::string[DHT_File_Len];
 
 
-DHT_Single_Entry DHT_Access::SELF;
+DHT_Single_Entry DHT_Access::self;
 
 std::mutex DHT_Access::own_ID_Mutex;
 std::mutex* DHT_Access::all_Peers_Mutex = new std::mutex[160*20];
@@ -40,10 +40,10 @@ int DHT_Access::Find_Stored_File(_160bitnumber entry)
 {
     for(int i=0; i<DHT_File_Len; i++)
     {
-        DHT_Single_Entry a = Access_FileIds(i);
+        DHT_Single_Entry a = Access_File_IDs(i);
         if(a.is_set)
         {
-            if(DHT::IsEqual(a.id, entry))
+            if(DHT::Is_Equal(a.id, entry))
             {
 
 
@@ -92,7 +92,7 @@ void DHT_Access::Write_To_DHT(DHT_Single_Entry write, int position)
 
 
 
-DHT_Single_Entry DHT_Access::Access_FileIds(int position)
+DHT_Single_Entry DHT_Access::Access_File_IDs(int position)
 {
     if((position >= DHT_File_Len) | (position<0))
     {
@@ -107,7 +107,7 @@ DHT_Single_Entry DHT_Access::Access_FileIds(int position)
     return tmp;
 }
 
-void DHT_Access::Write_To_FileIds(DHT_Single_Entry write, int position)
+void DHT_Access::Write_To_File_IDs(DHT_Single_Entry write, int position)
 {
     if((position >= DHT_File_Len) | (position<0))
     {
@@ -120,19 +120,19 @@ void DHT_Access::Write_To_FileIds(DHT_Single_Entry write, int position)
     all_Files_Mutex[position].unlock();
 }
 
-int DHT_Access::Store_FileId(DHT_Single_Entry entry)
+int DHT_Access::Store_File_ID(DHT_Single_Entry entry)
 {
 
     printf("Storing a file ID...\n\n");
 
     for(int i=0;i<DHT_File_Len;i++)
     {
-        DHT_Single_Entry tmp_File = Access_FileIds(i);
+        DHT_Single_Entry tmp_File = Access_File_IDs(i);
         if(!tmp_File.is_set)
         {
             entry.is_set = true;
             entry.time_To_Timeout = time(0)+60*60; // 1 hour
-            Write_To_FileIds(entry, i);
+            Write_To_File_IDs(entry, i);
             return i;
         }
 
@@ -145,19 +145,19 @@ int DHT_Access::Store_FileId(DHT_Single_Entry entry)
 
 
 
-_160bitnumber DHT_Access::Get_SELF_ID()
+_160bitnumber DHT_Access::Get_Self_ID()
 {
     own_ID_Mutex.lock();
-    _160bitnumber returning = SELF.id;
+    _160bitnumber returning = self.id;
     own_ID_Mutex.unlock();
     return returning;
 
 }
 
-void DHT_Access::Set_Self_ID(_160bitnumber self)
+void DHT_Access::Set_Self_ID(_160bitnumber id)
 {
     own_ID_Mutex.lock();
-    SELF.id = self;
+    self.id = id;
     own_ID_Mutex.unlock();
 
 
@@ -167,19 +167,19 @@ void DHT_Access::Set_Self_ID(_160bitnumber self)
 
 
 
-DHT_Single_Entry DHT_Access::Get_SELF()
+DHT_Single_Entry DHT_Access::Get_Self()
 {
     own_ID_Mutex.lock();
-    DHT_Single_Entry returning = SELF;
+    DHT_Single_Entry returning = self;
     own_ID_Mutex.unlock();
     return returning;
 
 }
 
-void DHT_Access::Set_Self(DHT_Single_Entry self)
+void DHT_Access::Set_Self(DHT_Single_Entry entry)
 {
     own_ID_Mutex.lock();
-    SELF = self;
+    self = entry;
     own_ID_Mutex.unlock();
 }
 
@@ -188,7 +188,7 @@ void DHT_Access::Set_Self(DHT_Single_Entry self)
 unsigned short int DHT_Access::Get_Self_Port()
 {
     own_ID_Mutex.lock();
-    unsigned short int own_Port = SELF.port;
+    unsigned short int own_Port = self.port;
     own_ID_Mutex.unlock();
     return own_Port;
 
@@ -197,7 +197,7 @@ unsigned short int DHT_Access::Get_Self_Port()
 void DHT_Access::Set_Self_Port(unsigned short int port)
 {
     own_ID_Mutex.lock();
-    SELF.port = port;
+    self.port = port;
     own_ID_Mutex.unlock();
 
 }

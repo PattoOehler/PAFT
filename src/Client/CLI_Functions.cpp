@@ -85,7 +85,7 @@ void CLI_Functions::Store_File_Net_And_Get_Meta_Back_Command()
 
 
 
-    Major_Functions::Get_MetaData_File(ID, "asdf", a);
+    Major_Functions::Get_Metadata_File(ID, "asdf", a);
 
 
     std::cout << "Done!!!\n";
@@ -118,7 +118,7 @@ void CLI_Functions::Store_File_Net_And_Get_Chunk_Back_Command()
 
 void CLI_Functions::Print_Self_Command()
 {
-    _160bitnumber self = DHT_Access::Get_SELF_ID();
+    _160bitnumber self = DHT_Access::Get_Self_ID();
     std::cout << "SELF: ";
     DHT::Print_ID(self);
     std::cout << "\n";
@@ -161,9 +161,9 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     three_DHT net_Closest = Major_Functions::Find_File_On_Network(file_ID);
 
 
-    if( DHT::IsEqual( net_Closest.entry[0].id , file_ID) )
+    if( DHT::Is_Equal( net_Closest.entry[0].id , file_ID) )
     {
-        int error_Check = Major_Functions::Get_MetaData_File(file_ID, input + *(positions+0), net_Closest.entry[0]);
+        int error_Check = Major_Functions::Get_Metadata_File(file_ID, input + *(positions+0), net_Closest.entry[0]);
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else
@@ -185,7 +185,7 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
 
     std::string output_File_Name = Meta_Files::getOutput_File_Name( file_ID );
     //Allocate the amount of space necessary for the file
-    FileFunctions::allocate_File( output_File_Name );
+    File_Functions::Allocate_File( output_File_Name );
 
 
     //Get the file by chunks
@@ -219,9 +219,9 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
     three_DHT net_Closest = Major_Functions::Find_File_On_Network(file_ID);
 
 
-    if( DHT::IsEqual( net_Closest.entry[0].id , file_ID) )
+    if( DHT::Is_Equal( net_Closest.entry[0].id , file_ID) )
     {
-        int error_Check = Major_Functions::Get_MetaData_File(file_ID, input + *(positions+0), net_Closest.entry[0]);
+        int error_Check = Major_Functions::Get_Metadata_File(file_ID, input + *(positions+0), net_Closest.entry[0]);
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else
@@ -243,7 +243,7 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
 
 
     //Allocate the amount of space necessary for the file
-    FileFunctions::allocate_File();
+    File_Functions::Allocate_File();
 
 
     //Get the file by chunks
