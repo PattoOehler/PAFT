@@ -13,18 +13,18 @@
 using namespace paft;
 
 
-Meta_Files::Meta_Files(int chunk_Size, const char *fileName,long long int total_Bytes, Linked_List a, _160bitnumber fileID)
+Meta_Files::Meta_Files(int chunkSize, const char *fileName,long long int total_Bytes, Linked_List a, _160bitnumber fileID)
 {
     id=fileID;
-    set_File_Name(fileName);
-    chunkSize = chunk_Size;
+    Set_File_Name(fileName);
+    chunk_Size = chunkSize;
     hash_List = a;
-    fileLength = total_Bytes;
-    set_Output_File_Name();
+    file_Length = total_Bytes;
+    Set_Output_File_Name();
 
 }
 
-void Meta_Files::set_File_Name(const char* fileName)
+void Meta_Files::Set_File_Name(const char* fileName)
 {
     int i=0;
     bool zero=false;
@@ -43,7 +43,7 @@ void Meta_Files::set_File_Name(const char* fileName)
 
 }
 
-std::string Meta_Files::getOutput_File_Name(_160bitnumber file_id)
+std::string Meta_Files::Get_Output_File_Name(_160bitnumber file_id)
 {
     std::string filepath;
 
@@ -98,10 +98,10 @@ std::string Meta_Files::getOutput_File_Name(_160bitnumber file_id)
 
 
 
-void Meta_Files::set_Output_File_Name()
+void Meta_Files::Set_Output_File_Name()
 {
 
-    std::string filepath = getOutput_File_Name(id);
+    std::string filepath = Get_Output_File_Name(id);
 
     for(unsigned int i=0;i<filepath.size();i++)
     {
@@ -136,8 +136,8 @@ void Meta_Files::Write_File()
 
     memcpy(buf, FILEID, 20);
     memcpy(buf+20, (char *)&file_Name, 80);
-    memcpy(buf+100, (char *)&fileLength, 8);
-    memcpy(buf+108, (char *)&chunkSize, 4 );
+    memcpy(buf+100, (char *)&file_Length, 8);
+    memcpy(buf+108, (char *)&chunk_Size, 4 );
 
     metaFile.write(buf, 112);
 
@@ -212,7 +212,7 @@ void Meta_Files::Make_File(const char *input_File, const char *output_File, _160
 
 
 
-std::string Meta_Files::getCheckSum(int chunk, std::string metaFile)
+std::string Meta_Files::Get_Check_Sum(int chunk, std::string metaFile)
 {
     std::ifstream rf(metaFile, std::ios::out | std::ios::binary);
     if(!rf) {
@@ -231,7 +231,7 @@ std::string Meta_Files::getCheckSum(int chunk, std::string metaFile)
 }
 
 
-int Meta_Files::getChunks(std::string metaFile)
+int Meta_Files::Get_Chunks(std::string metaFile)
 {
     long metafilelen = File_Functions::Get_File_Length(metaFile);
     std::cout << "Length of the metadata file is " << metafilelen << " in FileFunctions::allocate_File\n";

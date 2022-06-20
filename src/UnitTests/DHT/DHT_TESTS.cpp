@@ -22,7 +22,7 @@ void DHT_TESTS::Manual_DHT__Print_ID()
 
 
 
-void DHT_TESTS::DHT__IsEqual()
+void DHT_TESTS::DHT__Is_Equal()
 {
     _160bitnumber num = DHT::Random_ID();
 

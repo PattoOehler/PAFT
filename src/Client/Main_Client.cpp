@@ -539,7 +539,6 @@ char *Main_Client::Get_File_Chunk(_160bitnumber fileid, int chunk)
     {
         iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
         totalRecievedBytes += iResult;
-        std::cout << "MainClient::GetFileChunk received a message of length(for the file) " << iResult << " << total " << totalRecievedBytes << "\n";
         if (iResult == SOCKET_ERROR)
         {
             if(totalRecievedBytes == Eight_MiB)

@@ -11,13 +11,12 @@ class Meta_Files
 public:
     Linked_List hash_List;
 
-    char FILEID_o[21] = "\xfa\xff\xbb\xcc\xdd\xee\x00\xaa\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13"; // 20 byte File ID
     _160bitnumber id;
 
     char file_Name[80];
     char output_File_Name[60];
-    long long int fileLength; //In bytes
-    long long int chunkSize;
+    long long int file_Length; //In bytes
+    long long int chunk_Size;
 
 
 
@@ -27,15 +26,15 @@ public:
 
     static void Make_File(const char *input_File, const char *output_File, _160bitnumber fileID);
 
-    static std::string getOutput_File_Name(_160bitnumber id);
+    static std::string Get_Output_File_Name(_160bitnumber id);
 
 
-    static std::string getCheckSum(int chunk, std::string metaFile);
-    static int getChunks(std::string metaFile);
+    static std::string Get_Check_Sum(int chunk, std::string metaFile);
+    static int Get_Chunks(std::string metaFile);
 
 private:
-    void set_File_Name(const char *fileName);
-    void set_Output_File_Name();
+    void Set_File_Name(const char *fileName);
+    void Set_Output_File_Name();
 };
 
 

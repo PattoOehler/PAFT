@@ -1,4 +1,4 @@
-#include "FileFunctions.h"
+#include "File_Functions.h"
 #include "../DHT/DHT_Access.h"
 #include "Meta_Files.h"
 
@@ -259,7 +259,7 @@ void File_Functions::Save_Local_File_Locations()
 
 void File_Functions::Allocate_File()
 {
-    int fileChunks = Meta_Files::getChunks("Test_Metafiles\\meta.paft");
+    int fileChunks = Meta_Files::Get_Chunks("Test_Metafiles\\meta.paft");
 
     std::ofstream wf("Test_Metafiles\\Downloaded_File", std::ios::out | std::ios::binary);
     if(!wf) {
@@ -280,7 +280,7 @@ void File_Functions::Allocate_File()
 
 void File_Functions::Allocate_File( std::string metafilename )
 {
-    int fileChunks = Meta_Files::getChunks(  metafilename );
+    int fileChunks = Meta_Files::Get_Chunks(  metafilename );
 
     std::ofstream wf("Test_Metafiles\\Downloaded_File", std::ios::out | std::ios::binary);
     if(!wf) {

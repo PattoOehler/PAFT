@@ -346,7 +346,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     {
         std::cout << "Connection::Send_File_Chunk Desired Chunk == -1\n";
         //The meta-data file is what needs to be returned
-        std::string metafilePath = Meta_Files::getOutput_File_Name(FileID);
+        std::string metafilePath = Meta_Files::Get_Output_File_Name(FileID);
         int Eight_MiB = 8000000;
 
         char *buf;

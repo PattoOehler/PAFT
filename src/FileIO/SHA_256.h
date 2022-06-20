@@ -1,9 +1,9 @@
 
-#ifndef SHA256_H
-#define SHA256_H
+#ifndef SHA_256_H
+#define SHA_256_H
 #include <string>
 
-class SHA256
+class SHA_256
 {
 protected:
     typedef unsigned char uint8;
@@ -52,4 +52,5 @@ std::string sha256(char *input, int len);
            | ((uint32) *((str) + 1) << 16)    \
            | ((uint32) *((str) + 0) << 24);   \
 }
+
 #endif

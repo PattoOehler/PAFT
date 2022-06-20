@@ -16,7 +16,7 @@ void MainUnitTests::Run_All_Manual_Tests()
 
 void MainUnitTests::Run_All_Auto_Tests()
 {
-    DHT_TESTS::DHT__IsEqual();
+    DHT_TESTS::DHT__Is_Equal();
     DHT_TESTS::DHT__Compare();
     DHT_TESTS::DHT__Random_ID();
 }

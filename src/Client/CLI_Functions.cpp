@@ -183,16 +183,16 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     }
 
 
-    std::string output_File_Name = Meta_Files::getOutput_File_Name( file_ID );
+    std::string output_File_Name = Meta_Files::Get_Output_File_Name( file_ID );
     //Allocate the amount of space necessary for the file
     File_Functions::Allocate_File( output_File_Name );
 
 
     //Get the file by chunks
-    int fileChunks = Meta_Files::getChunks( output_File_Name );
+    int fileChunks = Meta_Files::Get_Chunks( output_File_Name );
     for(int i=0; i<fileChunks; i++ )
     {
-        std::string metaCheckSum = Meta_Files::getCheckSum(i, output_File_Name);
+        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
 
         Major_Functions::Get_File_Chunk(file_ID, metaCheckSum, net_Closest.entry[0], i );
     }
@@ -247,10 +247,10 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
 
 
     //Get the file by chunks
-    int fileChunks = Meta_Files::getChunks("Test_Metafiles\\meta.paft");
+    int fileChunks = Meta_Files::Get_Chunks("Test_Metafiles\\meta.paft");
     for(int i=0; i<fileChunks; i++ )
     {
-        std::string metaCheckSum = Meta_Files::getCheckSum(i, "Test_Metafiles\\meta.paft");
+        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, "Test_Metafiles\\meta.paft");
 
         Major_Functions::Get_File_Chunk(file_ID, metaCheckSum, net_Closest.entry[0], i );
     }
