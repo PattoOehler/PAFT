@@ -304,9 +304,8 @@ three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
 int DHT::Log_Base_2(unsigned long long int n)
 {
     if (n == 0)
-    {
         return 0;
-    }
+
 
     int logValue = -1;
     while (n!=0)
@@ -396,16 +395,14 @@ void DHT::Init()
     std::thread thread(DHT_Updater::Keep_DHT_Updated);
     thread.detach();
 
+    _160bitnumber ownID = DHT::Random_ID();
 
-    _160bitnumber SELF = DHT::Random_ID();
+    std::cout << "SELF: " << DHT::ID_To_String(ownID) << "\n";
 
-
-    std::cout << "SELF: ";
-    DHT::Print_ID(SELF);
-    std::cout << "\n";
-
-
-    DHT_Access::Set_Self_ID(SELF);
+    DHT_Single_Entry self = DHT_Access::Get_Self();
+    self.id = ownID;
+    self.is_set = true;
+    DHT_Access::Set_Self(self);
 
 
     return;
@@ -447,10 +444,10 @@ int DHT::Add_Entry_All_Buckets()
     DHT_Single_Entry Testing;
 
 
-    DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
+    DHT_Single_Entry a = DHT_Access::Get_Self();
     if(!a.is_set)
     {
-        std::cout << "DHT Position 159*20 IS NOT SET DHT::Add_Entry_All_Buckets cannot run!\n\n";
+        std::cout << "DHT_Access::Get_Self() IS NOT SET DHT::Add_Entry_All_Buckets cannot run!\n\n";
         return -1;
     }
 
@@ -512,25 +509,22 @@ void DHT::Print_DHT()
         {
             DHT_Single_Entry tmp = DHT_Access::Access_DHT(20*i+j);
             if(tmp.is_set)
-            {
-                DHT::Print_ID(tmp.id);
-                std::cout << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time "<<
-                ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
-            }
-
+                std::cout << DHT::ID_To_String(tmp.id) << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time " << ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
 
         }
-
     }
-
-
-    return;
 }
 
 
-void DHT::Print_ID(_160bitnumber id_to_print)
+
+
+
+
+std::string DHT::ID_To_String(_160bitnumber id)
 {
-    unsigned char *pointer =  (unsigned char *) &id_to_print;
+    std::string returningID;
+
+    unsigned char *pointer =  (unsigned char *) &id;
     for(int i=0; i<20; i++)
     {
         int counter =0;
@@ -548,14 +542,17 @@ void DHT::Print_ID(_160bitnumber id_to_print)
                 currentLetter = 'A' + amount[i]-10;
             else
                 currentLetter = '0' + amount[i];
-            std::cout << currentLetter;
+            returningID.push_back(currentLetter);
         }
 
     }
-
-
+    return returningID;
 
 }
+
+
+
+
 
 
 void DHT::Print_Files()
@@ -563,18 +560,12 @@ void DHT::Print_Files()
 
     for(int i=0;i<100;i++)
     {
-
-        DHT_Single_Entry tmp = DHT_Access::Access_File_IDs(i);
-        if(tmp.is_set)
-        {
-            DHT::Print_ID(tmp.id);
-            std::cout << "    In part " << i << "\n";
-        }
+        DHT_Single_Entry fileEntry = DHT_Access::Access_File_IDs(i);
+        if(fileEntry.is_set)
+            std::cout << DHT::ID_To_String(fileEntry.id) << "    In part " << i << "\n";
 
     }
 
-
-    return;
 }
 
 

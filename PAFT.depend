@@ -147,11 +147,11 @@
 	<stdio.h>
 	<winsock.h>
 
-1655669721 source:c:\users\peyto-w\desktop\paft\github\paft\main.cpp
+1655922374 source:c:\users\peyto-w\desktop\paft\github\paft\main.cpp
 	<iostream>
 	<thread>
-	"src/Server/MainServer.h"
-	"src/Client/MainCLI.h"
+	"src/Server/Main_Server.h"
+	"src/Client/Main_CLI.h"
 	"src/DHT/DHT.h"
 	"src/UnitTests/MainUnitTests.h"
 
@@ -230,7 +230,7 @@
 	<iostream>
 	<random>
 
-1655671617 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
+1655923343 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.cpp
 	"DHT.h"
 	"DHT_Access.h"
 	"DHT_Updater.h"
@@ -242,37 +242,37 @@
 	<ws2tcpip.h>
 	<thread>
 
-1655669908 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
+1655922359 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht.h
 	<stdint.h>
 	<mutex>
 	<winsock.h>
 	<random>
 	<ctime>
 
-1655671654 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
+1655921654 source:c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.cpp
 	"DHT_Access.h"
 	<iostream>
 
-1655691756 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
+1655922817 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.cpp
 	<winsock2.h>
 	<winsock.h>
 	<windows.h>
 	<stdlib.h>
 	<stdio.h>
 	"Connection.h"
-	"MainServer.h"
+	"Main_Server.h"
 	"../DHT/dht.h"
 	"../DHT/DHT_Access.h"
 	"../FileIO/Meta_Files.h"
 	<ws2tcpip.h>
 	<iostream>
 
-1646259181 c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.h
+1655922695 c:\users\peyto-w\desktop\paft\github\paft\src\server\connection.h
 	<winsock.h>
 	<windows.h>
 	<stdlib.h>
 	<stdio.h>
-	"MainServer.h"
+	"Main_Server.h"
 
 1637523572 c:\users\peyto-w\desktop\paft\github\paft\src\server\mainserver.h
 	<winsock.h>
@@ -282,7 +282,7 @@
 
 1655669684 c:\users\peyto-w\desktop\paft\github\paft\src\client\maincli.h
 
-1646861268 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\mainserver.cpp
+1655921944 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\mainserver.cpp
 	"MainServer.h"
 	"Connection.h"
 	"../DHT/DHT.h"
@@ -295,7 +295,7 @@
 	<ws2tcpip.h>
 	<iostream>
 
-1655692613 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
+1655922676 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
@@ -326,7 +326,7 @@
 	<iostream>
 	<random>
 
-1655671644 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.h
+1655921453 c:\users\peyto-w\desktop\paft\github\paft\src\dht\dht_access.h
 	<stdint.h>
 	<mutex>
 	<winsock.h>
@@ -439,12 +439,12 @@
 1655692048 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\sha256.h
 	<string>
 
-1655691944 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.cpp
+1655922795 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\meta_files.cpp
 	"Meta_Files.h"
 	"Linked_List.h"
-	"sha256.h"
+	"SHA_256.h"
 	"../DHT/DHT.h"
-	"FileFunctions.h"
+	"File_Functions.h"
 	<iostream>
 	<fstream>
 
@@ -461,15 +461,15 @@
 	<Windows.h>
 	<iostream>
 
-1655671504 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
+1655921483 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
 	"../DHT/DHT_Access.h"
 	"Main_Client.h"
 	"../FileIO/Meta_Files.h"
-	"../FileIO/sha256.h"
-	"../FileIO/FileFunctions.h"
+	"../FileIO/SHA_256.h"
+	"../FileIO/File_Functions.h"
 	<iostream>
 	<fstream>
 	<unistd.h>
@@ -512,14 +512,14 @@
 	<vector>
 	<string>
 
-1655692906 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.cpp
+1655923718 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.cpp
 	"DHT_TESTS.h"
 
-1655692900 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.h
+1655923661 c:\users\peyto-w\desktop\paft\github\paft\src\unittests\dht\dht_tests.h
 	"../../DHT/DHT.h"
 	<iostream>
 
-1655692914 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.cpp
+1655923698 source:c:\users\peyto-w\desktop\paft\github\paft\src\unittests\mainunittests.cpp
 	"MainUnitTests.h"
 	"DHT/DHT_TESTS.h"
 
@@ -529,13 +529,13 @@
 1655395205 c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.h
 	"../DHT/DHT.h"
 
-1655691867 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
+1655922640 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\cli_functions.cpp
 	"CLI_Functions.h"
 	"Main_Client.h"
 	"../DHT/DHT_Access.h"
 	"Major_Functions.h"
 	"../DHT/DHT.h"
-	"../FileIO/FileFunctions.h"
+	"../FileIO/File_Functions.h"
 	"../FileIO/Meta_Files.h"
 	<iostream>
 
@@ -549,7 +549,7 @@
 1655692048 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\sha_256.h
 	<string>
 
-1655692753 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_cli.cpp
+1655921460 source:c:\users\peyto-w\desktop\paft\github\paft\src\client\main_cli.cpp
 	"Main_CLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -558,9 +558,45 @@
 	"Major_Functions.h"
 	"../UnitTests/MainUnitTests.h"
 	"CLI_Functions.h"
-	"../FILEIO/FileFunctions.h"
+	"../FILEIO/File_Functions.h"
 	<iostream>
 	<random>
 
 1655669684 c:\users\peyto-w\desktop\paft\github\paft\src\client\main_cli.h
+
+1655693016 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\file_functions.cpp
+	"File_Functions.h"
+	"../DHT/DHT_Access.h"
+	"Meta_Files.h"
+	<iostream>
+	<fstream>
+	<filesystem>
+	<sys/stat.h>
+
+1655671873 c:\users\peyto-w\desktop\paft\github\paft\src\fileio\file_functions.h
+	"../DHT/DHT.h"
+	<iostream>
+	<vector>
+	<string>
+
+1639256409 source:c:\users\peyto-w\desktop\paft\github\paft\src\fileio\linked_list.cpp
+
+1637523572 c:\users\peyto-w\desktop\paft\github\paft\src\server\main_server.h
+	<winsock.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+
+1655922702 source:c:\users\peyto-w\desktop\paft\github\paft\src\server\main_server.cpp
+	"Main_Server.h"
+	"Connection.h"
+	"../DHT/DHT.h"
+	"../DHT/DHT_Access.h"
+	<winsock.h>
+	<winsock2.h>
+	<windows.h>
+	<stdlib.h>
+	<stdio.h>
+	<ws2tcpip.h>
+	<iostream>
 

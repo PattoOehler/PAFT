@@ -70,7 +70,7 @@ namespace paft
 
         static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);
 
-        static void Print_ID(_160bitnumber id_to_print);
+        static std::string ID_To_String(_160bitnumber id_to_print);
 
         static DHT_Single_Entry Next_Closest_In_Bucket(int bucket, _160bitnumber id, _160bitnumber previous_id);
 

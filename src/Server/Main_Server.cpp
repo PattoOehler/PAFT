@@ -1,4 +1,4 @@
-#include "MainServer.h"
+#include "Main_Server.h"
 #include "Connection.h"
 #include "../DHT/DHT.h"
 #include "../DHT/DHT_Access.h"
@@ -46,6 +46,7 @@ int MainServer::Start_Server()
 
     unsigned short int b = 1234;
     DHT_Access::Set_Self_Port(b);
+    DHT_Access::Set_Self_Address("127.0.0.1");
     server.sin_port=htons(b); // listen on port
 
     // create our socket

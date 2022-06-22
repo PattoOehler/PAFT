@@ -5,8 +5,8 @@
 #include "../DHT/DHT_Access.h"
 #include "Main_Client.h"
 #include "../FileIO/Meta_Files.h"
-#include "../FileIO/sha256.h"
-#include "../FileIO/FileFunctions.h"
+#include "../FileIO/SHA_256.h"
+#include "../FileIO/File_Functions.h"
 
 
 #include <iostream>

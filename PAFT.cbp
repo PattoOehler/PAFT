@@ -55,8 +55,8 @@
 		<Unit filename="src/FileIO/SHA_256.h" />
 		<Unit filename="src/Server/Connection.cpp" />
 		<Unit filename="src/Server/Connection.h" />
-		<Unit filename="src/Server/MainServer.cpp" />
-		<Unit filename="src/Server/MainServer.h" />
+		<Unit filename="src/Server/Main_Server.cpp" />
+		<Unit filename="src/Server/Main_Server.h" />
 		<Unit filename="src/UnitTests/DHT/DHT_TESTS.cpp" />
 		<Unit filename="src/UnitTests/DHT/DHT_TESTS.h" />
 		<Unit filename="src/UnitTests/MainUnitTests.cpp" />

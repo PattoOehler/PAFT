@@ -1,9 +1,9 @@
 
 #include "Meta_Files.h"
 #include "Linked_List.h"
-#include "sha256.h"
+#include "SHA_256.h"
 #include "../DHT/DHT.h"
-#include "FileFunctions.h"
+#include "File_Functions.h"
 
 #include <iostream>
 #include <fstream>
@@ -155,9 +155,7 @@ void Meta_Files::Write_File()
 
     metaFile.close();
 
-    std::cout << "Download string 'download_file_on_network " << sha256(buf, bufCounter) << " ";
-    DHT::Print_ID(id);
-    std::cout << "'\n";
+    std::cout << "Download string 'download_file_on_network " << sha256(buf, bufCounter) << " " << DHT::ID_To_String(id) << "'\n";
 
     free(buf);
 

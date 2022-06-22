@@ -4,7 +4,7 @@
 #include "../DHT/DHT_Access.h"
 #include "Major_Functions.h"
 #include "../DHT/DHT.h"
-#include "../FileIO/FileFunctions.h"
+#include "../FileIO/File_Functions.h"
 #include "../FileIO/Meta_Files.h"
 
 #include <iostream>
@@ -43,7 +43,7 @@ void CLI_Functions::Testing_Help_Command()
     std::cout << "self_find_random_peer                                -- finds the closest 3 peers to a random id in own DHT\n";
     std::cout << "self_find_random_file                                -- finds the closest 3 peers/files to a random id in own DHT\n";
     std::cout << "self_store_random_file                               -- sends store file RPC to self\n";
-    std::cout << "test_dht                                             -- pings the DHT at position 159*20\n";
+    std::cout << "test_dht                                             -- puts SELF in each bucket of the DHT\n";
     std::cout << "print_local_files                                    -- Prints all the local files\n";
     std::cout << "\n\n";
 }
@@ -51,22 +51,22 @@ void CLI_Functions::Testing_Help_Command()
 
 void CLI_Functions::Self_Ping_Command()
 {
-    Main_Client Client("127.0.0.1", "1234");
-    Client.Ping();
+    Main_Client client("127.0.0.1", "1234");
+    client.Ping();
 
 }
 
 
 void CLI_Functions::Test_DHT_Command()
 {
-    DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
+    DHT_Single_Entry a = DHT_Access::Get_Self();
     if(a.is_set)
     {
         DHT::Add_Entry_All_Buckets();
     }
     else
     {
-        std::cout << "The DHT at position 159*20 is not set\n";
+        std::cout << "DHT_Access::SELF is not set\n";
     }
 }
 
@@ -119,9 +119,7 @@ void CLI_Functions::Store_File_Net_And_Get_Chunk_Back_Command()
 void CLI_Functions::Print_Self_Command()
 {
     _160bitnumber self = DHT_Access::Get_Self_ID();
-    std::cout << "SELF: ";
-    DHT::Print_ID(self);
-    std::cout << "\n";
+    std::cout << "SELF: " << DHT::ID_To_String(self) << "\n";
 }
 
 
@@ -157,13 +155,13 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     }
     //(input + *(positions+0), input + *(positions+1) ) how to call the arguemnts
 
-    _160bitnumber file_ID = Char_To_160bit(input + *(positions+1));
-    three_DHT net_Closest = Major_Functions::Find_File_On_Network(file_ID);
+    _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
+    three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
 
 
-    if( DHT::Is_Equal( net_Closest.entry[0].id , file_ID) )
+    if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
     {
-        int error_Check = Major_Functions::Get_Metadata_File(file_ID, input + *(positions+0), net_Closest.entry[0]);
+        int error_Check = Major_Functions::Get_Metadata_File(fileID, input + *(positions+0), net_Closest.entry[0]);
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else
@@ -174,16 +172,12 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     }
     else
     {
-        std::cout << "Expected ";
-        DHT::Print_ID(file_ID);
-        std::cout << " got -> ";
-        DHT::Print_ID(net_Closest.entry[0].id);
-        std::cout << "RETURNING\n\n";
+        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
         return;
     }
 
 
-    std::string output_File_Name = Meta_Files::Get_Output_File_Name( file_ID );
+    std::string output_File_Name = Meta_Files::Get_Output_File_Name( fileID );
     //Allocate the amount of space necessary for the file
     File_Functions::Allocate_File( output_File_Name );
 
@@ -194,7 +188,7 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     {
         std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
 
-        Major_Functions::Get_File_Chunk(file_ID, metaCheckSum, net_Closest.entry[0], i );
+        Major_Functions::Get_File_Chunk(fileID, metaCheckSum, net_Closest.entry[0], i );
     }
 
     std::cout << "Finished Downloading the file\n";
@@ -232,11 +226,7 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
     }
     else
     {
-        std::cout << "Expected ";
-        DHT::Print_ID(file_ID);
-        std::cout << " got -> ";
-        DHT::Print_ID(net_Closest.entry[0].id);
-        std::cout << "RETURNING\n\n";
+        std::cout << "Expected " << DHT::ID_To_String(file_ID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
         return;
     }
 

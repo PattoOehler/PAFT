@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
-#include "src/Server/MainServer.h"
-#include "src/Client/MainCLI.h"
+#include "src/Server/Main_Server.h"
+#include "src/Client/Main_CLI.h"
 #include "src/DHT/DHT.h"
 #include "src/UnitTests/MainUnitTests.h"
 

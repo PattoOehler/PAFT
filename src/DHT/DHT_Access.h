@@ -46,6 +46,8 @@ namespace paft
         static void Set_Self_Port(unsigned short int port);
         static unsigned short int Get_Self_Port();
 
+        static void Set_Self_Address(const char *ip);
+
         static void Set_Local_File_Location(std::string local_File_Location, int position);
         static std::string Get_Local_File_Location(int position);
 

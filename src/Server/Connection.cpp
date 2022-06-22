@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 #include "Connection.h"
-#include "MainServer.h"
+#include "Main_Server.h"
 #include "../DHT/dht.h"
 #include "../DHT/DHT_Access.h"
 #include "../FileIO/Meta_Files.h"
@@ -334,9 +334,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     int FileLocation = DHT_Access::Find_Stored_File(FileID);
     if(FileLocation == -1)
     {
-        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - ";
-        DHT::Print_ID(FileID);
-        std::cout << "\n\n";
+        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - " << DHT::ID_To_String(FileID) << "\n\n";
         return; //We don't have the file stored so exit the connection
     }
 

@@ -202,6 +202,25 @@ void DHT_Access::Set_Self_Port(unsigned short int port)
 
 }
 
+void DHT_Access::Set_Self_Address(const char *ip)
+{
+    unsigned long addr = inet_addr(ip);
+
+    in_addr tmp;
+    memcpy((char *)&tmp, (char *)&addr, 4);
+
+    if(addr != INADDR_NONE)
+    {
+        own_ID_Mutex.lock();
+        self.addr = tmp;
+        own_ID_Mutex.unlock();
+    }
+    else
+    {
+        std::cout << "ERROR SETTING SELF ADDRESS IN DHT_Access::Set_Self_Address\n";
+
+    }
+}
 
 
 

@@ -706,9 +706,8 @@ int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier
     }
     else
     {
-        std::cout << "They DO NOT HAVE THE FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nID:";
-        DHT::Print_ID(received_Nodes.entry[0].id);
-        std::cout << " with an addr of " << a << "\n\n";
+        std::cout << "They DO NOT HAVE THE FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nID:" << DHT::ID_To_String(received_Nodes.entry[0].id)
+        << " with an addr of " << a << "\n\n";
 
     }
 
