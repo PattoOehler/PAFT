@@ -43,17 +43,13 @@ namespace paft
 {
     class DHT{
     private:
-        static int Distance(_160bitnumber id, _160bitnumber id2);
-        static int Add_Entry(DHT_Single_Entry Entry);
-        static three_DHT Lookup_One_Bucket(_160bitnumber id, int bucket);
-
-
 
 
     public:
+
         static std::mt19937_64 gen;
 
-        static three_DHT Find_Value(_160bitnumber id);
+
         static bool Is_Equal(_160bitnumber id,_160bitnumber id2);
 
 
@@ -61,10 +57,10 @@ namespace paft
         static void Init();
 
         static int Add_Entry_All_Buckets();
-        static void Print_DHT();
+
         static void Update_Time(DHT_Single_Entry Update);
-        static three_DHT Lookup(_160bitnumber id);
-        static void Print_Files();
+
+
 
         static _160bitnumber Random_ID();
 
@@ -72,10 +68,12 @@ namespace paft
 
         static std::string ID_To_String(_160bitnumber id_to_print);
 
-        static DHT_Single_Entry Next_Closest_In_Bucket(int bucket, _160bitnumber id, _160bitnumber previous_id);
+        static int Distance(_160bitnumber id, _160bitnumber id2);
+        static int Add_Entry(DHT_Single_Entry Entry);
 
 
-        static void Print_File_Locations();
+
+
     };
 
 }

@@ -43,8 +43,12 @@
 		<Unit filename="src/DHT/DHT_Access.h" />
 		<Unit filename="src/DHT/DHT_Lookup.cpp" />
 		<Unit filename="src/DHT/DHT_Lookup.h" />
+		<Unit filename="src/DHT/DHT_Search.cpp" />
+		<Unit filename="src/DHT/DHT_Search.h" />
 		<Unit filename="src/DHT/DHT_Updater.cpp" />
 		<Unit filename="src/DHT/DHT_Updater.h" />
+		<Unit filename="src/DHT/Print_DHT.cpp" />
+		<Unit filename="src/DHT/Print_DHT.h" />
 		<Unit filename="src/FileIO/File_Functions.cpp" />
 		<Unit filename="src/FileIO/File_Functions.h" />
 		<Unit filename="src/FileIO/Linked_List.cpp" />

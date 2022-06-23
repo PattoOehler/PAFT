@@ -8,8 +8,9 @@
 
 #include "Connection.h"
 #include "Main_Server.h"
-#include "../DHT/dht.h"
+#include "../DHT/DHT.h"
 #include "../DHT/DHT_Access.h"
+#include "../DHT/DHT_Search.h"
 #include "../FileIO/Meta_Files.h"
 
 #include <ws2tcpip.h>
@@ -112,7 +113,7 @@ void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 
     _160bitnumber a;
     memcpy((char*)&a, buf+23, 20);
-    three_DHT closest_Three = DHT::Lookup(a);
+    three_DHT closest_Three = DHT_Search::Lookup(a);
 
     int counter=0;
     if(closest_Three.entry[0].is_set)
@@ -164,7 +165,7 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
     memcpy((char*)&a, buf+23, 20);
 
 
-    three_DHT closest_Three = DHT::Find_Value(a);
+    three_DHT closest_Three = DHT_Search::Find_Value(a);
 
     int counter=0;
     if(closest_Three.entry[0].is_set)

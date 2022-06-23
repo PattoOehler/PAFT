@@ -7,7 +7,7 @@
 #include "../FileIO/Meta_Files.h"
 #include "../FileIO/SHA_256.h"
 #include "../FileIO/File_Functions.h"
-
+#include "../DHT/DHT_Search.h"
 
 #include <iostream>
 #include <fstream>
@@ -21,7 +21,7 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
 {
     int dht_Identifier = DHT_Lookup::Get_Available_Three_DHT();
 
-    three_DHT in_DHT = DHT::Lookup(id);
+    three_DHT in_DHT = DHT_Search::Lookup(id);
     DHT_Lookup::Write_To_Three_DHT(in_DHT, dht_Identifier);
     for(int i=0;i<3;i++)
     {
@@ -43,7 +43,7 @@ three_DHT Major_Functions::Find_File_On_Network(_160bitnumber id)
 {
     int dht_Identifier = DHT_Lookup::Get_Available_Three_DHT();
 
-    three_DHT in_DHT = DHT::Lookup(id);
+    three_DHT in_DHT = DHT_Search::Lookup(id);
     DHT_Lookup::Write_To_Three_DHT(in_DHT, dht_Identifier);
     for(int i=0;i<3;i++)
     {

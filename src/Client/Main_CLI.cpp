@@ -8,6 +8,7 @@
 #include "../UnitTests/MainUnitTests.h"
 #include "CLI_Functions.h"
 #include "../FILEIO/File_Functions.h"
+#include "../DHT/Print_DHT.h"
 
 #include <iostream>
 #include <random>
@@ -52,10 +53,10 @@ int Main_CLI::Command_Parser(char Input[], int Input_len)
         CLI_Functions::Ping(Input, Input_len);
 
     else if(String_Compare(Input, "print_dht"))
-        DHT::Print_DHT();
+        Print_DHT::Print_Main_DHT();
 
     else if(String_Compare(Input, "print_local_files"))
-        DHT::Print_File_Locations();
+        Print_DHT::Print_File_Locations();
 
     else if(String_Compare(Input, "test_dht"))
         CLI_Functions::Test_DHT_Command();
@@ -70,7 +71,7 @@ int Main_CLI::Command_Parser(char Input[], int Input_len)
         Self_Store_Random_File();
 
     else if(String_Compare(Input, "print_files"))
-        DHT::Print_Files();
+        Print_DHT::Print_Files();
 
     else if(String_Compare(Input, "make_meta_file"))
         Meta_Files::Make_File("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", DHT::Random_ID());

@@ -1,6 +1,7 @@
 #include "DHT.h"
 #include "DHT_Access.h"
 #include "DHT_Updater.h"
+#include "DHT_Search.h"
 
 #include <random>
 #include <iostream>
@@ -17,191 +18,30 @@ using namespace paft;
 std::mt19937_64 DHT::gen(time(nullptr));
 
 
-DHT_Single_Entry DHT::Next_Closest_In_Bucket(int bucket, _160bitnumber id_to_find, _160bitnumber previous_id)
+
+
+
+
+_160bitnumber DHT::Random_ID()
 {
-    if((bucket > 159) | (bucket < 0))
-    {
-        DHT_Single_Entry tmp;
-        tmp.is_set = false;
-        return tmp;
-    }
+    _160bitnumber random_ID;
 
+    //Produces pseudo-random Numbers based upon startup time.
+    //TODO make random numbers cryptographically secure
+    random_ID.top = gen();
+    random_ID.mid = gen();
+    random_ID.bot = gen() >> 32;
 
-    DHT_Single_Entry closest;
-    DHT_Single_Entry access;
-
-    closest.is_set = false;
-    access.is_set = false;
-
-    for(int i=0;i<20;i++)
-    {
-        access = DHT_Access::Access_DHT(bucket*20+i);
-        if(access.is_set)
-        {
-            if(!closest.is_set)
-            {
-                if(Compare(previous_id, access.id, id_to_find))
-                    closest=access;
-            }
-            else
-            {
-                if(Compare(access.id, closest.id, id_to_find) && Compare(previous_id, access.id, id_to_find))
-                    closest=access;
-
-
-            }
-        }
-
-    }
-
-    return closest;
-
+    return random_ID;
 }
-
-
-three_DHT DHT::Lookup(_160bitnumber id)
-{
-
-    int bucket = Distance(id, DHT_Access::Get_Self_ID());
-    three_DHT closest = Lookup_One_Bucket(id, bucket);
-    int entryCounter = 0;
-
-    if(closest.entry[2].is_set)
-        return closest;
-    else if(closest.entry[1].is_set)
-        entryCounter = 2;
-    else if(closest.entry[0].is_set)
-        entryCounter = 1;
-    else
-        entryCounter = 0;
-
-
-
-
-    int bucket_counter=1;
-    _160bitnumber previous_UpID = id;
-    _160bitnumber previous_DownID = id;
-
-    DHT_Single_Entry upEntry;
-    DHT_Single_Entry downEntry;
-
-    while( ((bucket+bucket_counter <= 159) | (bucket-bucket_counter >= 0)) & (entryCounter < 3 ))
-    {
-        upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
-        downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
-
-        while( (upEntry.is_set | downEntry.is_set) & (entryCounter < 3) )
-        {
-            if(upEntry.is_set && downEntry.is_set)
-            {
-                if(Compare(upEntry.id, downEntry.id, id))
-                {
-                    closest.entry[entryCounter] = upEntry;
-                    previous_UpID = upEntry.id;
-                    upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
-                }
-                else
-                {
-                    closest.entry[entryCounter] = downEntry;
-                    previous_DownID = downEntry.id;
-                    downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
-                }
-                entryCounter++;
-            }
-            else
-            {
-                if(upEntry.is_set)
-                {
-                    closest.entry[entryCounter] = upEntry;
-                    previous_UpID = upEntry.id;
-                    upEntry =   Next_Closest_In_Bucket(bucket+bucket_counter, id, previous_UpID);
-                }
-                else
-                {
-                    closest.entry[entryCounter] = downEntry;
-                    previous_DownID = downEntry.id;
-                    downEntry = Next_Closest_In_Bucket(bucket-bucket_counter, id, previous_DownID);
-                }
-            }
-        }
-
-        bucket_counter++;
-    }
-
-    return closest;
-
-}
-
-
-
-
-
 
 bool DHT::Is_Equal(_160bitnumber id,_160bitnumber id2)
 {
-    if(id.top == id2.top)
-    {
-        if(id.mid == id2.mid)
-        {
-            if(id.bot == id2.bot)
-                return true;
-        }
+    if( (id.top == id2.top) && (id.mid == id2.mid) && (id.bot == id2.bot) )
+        return true;
 
-    }
     return false;
-
-
 }
-
-three_DHT DHT::Find_Value(_160bitnumber id)
-{
-    //Returns a three_DHT either an exact match in the FileIds or the closest peers
-    //(In that order)
-
-    three_DHT closest;
-    int closest_counter=0;
-
-    for(int i=0;i<100;i++)
-    {
-        DHT_Single_Entry tmp = DHT_Access::Access_File_IDs(i);
-        if(tmp.is_set)
-        {
-            if(Is_Equal(id, tmp.id))
-            {
-                if(closest_counter < 3)
-                    closest.entry[closest_counter] = tmp;
-                closest_counter++;
-
-            }
-
-        }
-
-    }
-
-    if(closest_counter == 0)
-        return Lookup(id);
-    else if(closest_counter >=3)
-        return closest;
-    else
-    {
-        int tmp_counter=0;
-        three_DHT tmp = Lookup(id);
-        while(closest_counter<3)
-        {
-            closest.entry[closest_counter] = tmp.entry[tmp_counter];
-            tmp_counter++;
-            closest_counter++;
-
-        }
-    }
-    return closest;
-
-
-
-}
-
-
-
 
 
 
@@ -231,95 +71,7 @@ bool DHT::Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To)
         return false;
 
 
-
 }
-
-
-
-
-three_DHT DHT::Lookup_One_Bucket(_160bitnumber id, int bucket)
-{
-
-    three_DHT closest;
-    for(int i=0;i<3;i++)
-        closest.entry[i].is_set =false;
-
-
-    DHT_Single_Entry tmp, tmp2;
-    DHT_Single_Entry access;
-    for(int i=0;i<20;i++)
-    {
-        access = DHT_Access::Access_DHT(bucket*20+i);
-        if(access.is_set)
-        {
-            if(closest.entry[0].is_set)
-            {
-                if(Compare(access.id,closest.entry[0].id, id))
-                {
-                    //The new DHT_ALL is closer then closest.entry[0]
-                    //Move set the closest[0] and move the rest down
-                    tmp = closest.entry[0];
-                    closest.entry[0] = access;
-                    tmp2 = closest.entry[1];
-                    closest.entry[1] = tmp;
-                    closest.entry[2] = tmp2;
-                }
-                else if(Compare(access.id,closest.entry[1].id, id))
-                {
-                    tmp = closest.entry[1];
-                    closest.entry[1] = access;
-                    closest.entry[2] = tmp;
-
-                }
-                else if(Compare(access.id,closest.entry[2].id, id))
-                {
-                    closest.entry[2] = access;
-
-                }
-
-            }
-            else
-            {
-                closest.entry[0] = access;
-
-            }
-
-
-        }
-
-    }
-
-    return closest;
-
-
-
-}
-
-
-
-
-
-
-
-int DHT::Log_Base_2(unsigned long long int n)
-{
-    if (n == 0)
-        return 0;
-
-
-    int logValue = -1;
-    while (n!=0)
-    {
-        logValue++;
-        n >>= 1;
-    }
-    return logValue;
-
-}
-
-
-
-
 
 
 int DHT::Distance(_160bitnumber id, _160bitnumber id2)
@@ -347,11 +99,7 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
     }
 
 
-
-
 }
-
-
 
 
 void DHT::Update_Time(DHT_Single_Entry Update)
@@ -410,6 +158,7 @@ void DHT::Init()
 }
 
 
+
 int DHT::Add_Entry(DHT_Single_Entry Entry)
 {
 
@@ -435,6 +184,36 @@ int DHT::Add_Entry(DHT_Single_Entry Entry)
 }
 
 
+
+std::string DHT::ID_To_String(_160bitnumber id)
+{
+    std::string returningID;
+
+    unsigned char *pointer =  (unsigned char *) &id;
+    for(int i=0; i<20; i++)
+    {
+        int counter =0;
+        while(pointer[i] != 0)
+        {
+            pointer[i] --;
+            counter++;
+        }
+
+        int amount[2] = {counter/16, counter%16};
+        char currentLetter;
+        for(int i=0;i < 2; i++)
+        {
+            if(amount[i] > 9)
+                currentLetter = 'A' + amount[i]-10;
+            else
+                currentLetter = '0' + amount[i];
+            returningID.push_back(currentLetter);
+        }
+
+    }
+    return returningID;
+
+}
 
 
 
@@ -500,121 +279,24 @@ int DHT::Add_Entry_All_Buckets()
     return 0;
 }
 
-void DHT::Print_DHT()
-{
 
-    for(int i=0;i<160;i++)
+
+
+
+int DHT::Log_Base_2(unsigned long long int n)
+{
+    if (n == 0)
+        return 0;
+
+
+    int logValue = -1;
+    while (n!=0)
     {
-        for(int j=0;j<20;j++)
-        {
-            DHT_Single_Entry tmp = DHT_Access::Access_DHT(20*i+j);
-            if(tmp.is_set)
-                std::cout << DHT::ID_To_String(tmp.id) << "    In k-bucket " << std::dec << (i) << " position " << j << " with timeout time " << ctime(&tmp.time_To_Timeout ); //ctime has a \n at the end
-
-        }
+        logValue++;
+        n >>= 1;
     }
-}
-
-
-
-
-
-
-std::string DHT::ID_To_String(_160bitnumber id)
-{
-    std::string returningID;
-
-    unsigned char *pointer =  (unsigned char *) &id;
-    for(int i=0; i<20; i++)
-    {
-        int counter =0;
-        while(pointer[i] != 0)
-        {
-            pointer[i] --;
-            counter++;
-        }
-
-        int amount[2] = {counter/16, counter%16};
-        char currentLetter;
-        for(int i=0;i < 2; i++)
-        {
-            if(amount[i] > 9)
-                currentLetter = 'A' + amount[i]-10;
-            else
-                currentLetter = '0' + amount[i];
-            returningID.push_back(currentLetter);
-        }
-
-    }
-    return returningID;
+    return logValue;
 
 }
-
-
-
-
-
-
-void DHT::Print_Files()
-{
-
-    for(int i=0;i<100;i++)
-    {
-        DHT_Single_Entry fileEntry = DHT_Access::Access_File_IDs(i);
-        if(fileEntry.is_set)
-            std::cout << DHT::ID_To_String(fileEntry.id) << "    In part " << i << "\n";
-
-    }
-
-}
-
-
-_160bitnumber DHT::Random_ID()
-{
-    _160bitnumber random_ID;
-
-    //Produces pseudo-random Numbers based upon startup time.
-    //TODO make random numbers cryptographically secure
-    random_ID.top = gen();
-    random_ID.mid = gen();
-    random_ID.bot = gen() >> 32;
-
-    return random_ID;
-}
-
-
-
-
-
-void DHT::Print_File_Locations()
-{
-
-    for(int i=0;i<100;i++)
-    {
-        std::string local_File = DHT_Access::Get_Local_File_Location(i);
-        if(!local_File.empty())
-            std::cout << i << " " << local_File << "\n";
-
-    }
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
