@@ -215,7 +215,7 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
 
     if( DHT::Is_Equal( net_Closest.entry[0].id , file_ID) )
     {
-        int error_Check = Major_Functions::Get_Metadata_File(file_ID, input + *(positions+0), net_Closest.entry[0]);
+        int error_Check = Major_Functions::Get_Metadata_File_Self(file_ID, input + *(positions+0), net_Closest.entry[0]);
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else

@@ -177,7 +177,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 
 //Returns 0 upon success anything else for an error
-int Major_Functions::Get_Metadata_File(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
+int Major_Functions::Get_Metadata_File_Self(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
 {
     std::cout << "Major Functions -- client.Get_MetaData_File\n";
     sleep(2);
@@ -204,6 +204,52 @@ int Major_Functions::Get_Metadata_File(_160bitnumber ID, std::string checksum_ex
     if(len -4 > 0)
     {
         std::ofstream wf("Test_Metafiles/meta.paft", std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return -1;
+        }
+
+        wf.write(recvbuf+4, len-4);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::getMetaDataFile length is <= 0! (=" << len-4 << ")\n";
+
+    }
+    return 0;
+}
+
+
+
+//Returns 0 upon success anything else for an error
+int Major_Functions::Get_Metadata_File(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
+{
+    std::cout << "Major Functions -- client.Get_MetaData_File\n";
+    sleep(2);
+    Main_Client client = Main_Client(entry.addr, entry.port);
+    char *recvbuf = client.Get_Metadata_File(ID);
+    std::cout << "Major Functions -- client.Get_MetaData_File done!\n";
+
+    int len;
+    memcpy((char *)&len,recvbuf,4);
+
+    std::string checksum_received = sha256(recvbuf+4, len-4);
+    if(checksum_expected == checksum_received)
+    {
+        std::cout << "CHECKSUM CONFIRMED!!!! Writing the metadata to a file!\n";
+    }
+    else
+    {
+        std::cout << "CHECKSUM INCORRECT!!!! EXITING!\n";
+        return -1;
+    }
+
+
+    //Write to the file
+    if(len -4 > 0)
+    {
+        std::ofstream wf(Meta_Files::Get_Output_File_Name(ID), std::ios::out | std::ios::binary);
         if(!wf) {
           std::cout << "Cannot open file!\n" << std::endl;
           return -1;
