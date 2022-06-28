@@ -21,6 +21,7 @@ namespace paft
         static void DHT__Is_Equal();
         static void DHT__Compare();
         static void DHT__Random_ID();
+        static void DHT__Log_Base_2();
 
     };
 

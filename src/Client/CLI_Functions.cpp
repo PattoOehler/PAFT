@@ -153,7 +153,7 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
         std::cout << "Error: not enough parameters\n";
         return;
     }
-    //(input + *(positions+0), input + *(positions+1) ) how to call the arguemnts
+    //(input + *(positions+0), input + *(positions+1) ) how to call the arguments
 
     _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
     three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);

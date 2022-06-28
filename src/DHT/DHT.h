@@ -12,9 +12,9 @@ typedef struct
 {
     //160 bits total
 
-    unsigned long long int top=0; //64 bits -- 0     STARTS HERE
+    unsigned long long int top=0; //64 bits -- 0
     unsigned long long int mid=0; //64 bits -- 128
-    unsigned long int bot=0;      //32 bits -- 160    TAIL END
+    unsigned long int bot=0;      //32 bits -- 160
 
 
 }_160bitnumber;
@@ -49,19 +49,14 @@ namespace paft
 
         static std::mt19937_64 gen;
 
-
-        static bool Is_Equal(_160bitnumber id,_160bitnumber id2);
-
-
-        static int Log_Base_2(unsigned long long int n);
         static void Init();
 
+
+        static bool Is_Equal(_160bitnumber id,_160bitnumber id2);
+        static int Log_Base_2(unsigned long long int n);
         static int Add_Entry_All_Buckets();
 
         static void Update_Time(DHT_Single_Entry Update);
-
-
-
         static _160bitnumber Random_ID();
 
         static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);

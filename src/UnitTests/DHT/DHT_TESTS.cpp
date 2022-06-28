@@ -138,3 +138,34 @@ void DHT_TESTS::DHT__Random_ID()
     }
 }
 
+
+void DHT_TESTS::DHT__Log_Base_2()
+{
+    unsigned long long int num=0;
+
+    if(DHT::Log_Base_2(num) != 0)
+        std::cout << "DHT::Log_Base_2 Not working as expected\n";
+
+    num=1;
+    if(DHT::Log_Base_2(num) != 0)
+        std::cout << "DHT::Log_Base_2 Not working as expected\n";
+
+    num=400;
+    if(DHT::Log_Base_2(num) != 8)
+        std::cout << "DHT::Log_Base_2 Not working as expected\n";
+
+    num=100000000000;
+    if(DHT::Log_Base_2(num) != 36)
+        std::cout << "DHT::Log_Base_2 Not working as expected\n";
+
+    num=-1;
+    if(DHT::Log_Base_2(num) != 63)
+        std::cout << "DHT::Log_Base_2 Not working as expected\n";
+
+
+}
+
+
+
+
+

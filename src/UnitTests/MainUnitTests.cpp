@@ -20,5 +20,6 @@ void MainUnitTests::Run_All_Auto_Tests()
     DHT_TESTS::DHT__Compare();
     DHT_TESTS::DHT__Random_ID();
     DHT_TESTS::DHT__ID_To_String();
+    DHT_TESTS::DHT__Log_Base_2();
     std::cout << "All tests have been ran\n";
 }
