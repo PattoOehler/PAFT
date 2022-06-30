@@ -34,7 +34,6 @@ void CLI_Functions::Testing_Help_Command()
 {
     std::cout << "self_ping                                            -- Ping self \n";
     std::cout << "self_download_file_on_network [SHA-CHECKSUM] [FileID]-- downloads a file from yourself\n";
-    std::cout << "store_file_net_and_get_meta_back                     -- For Testing\n";
     std::cout << "store_file_net_and_get_chunk_back                    -- For Testing\n";
     std::cout << "manual_tests                                         -- Runs all of the manual tests\n";
     std::cout << "print_self                                           -- For Testing\n";
@@ -68,28 +67,6 @@ void CLI_Functions::Test_DHT_Command()
     {
         std::cout << "DHT_Access::SELF is not set\n";
     }
-}
-
-void CLI_Functions::Store_File_Net_And_Get_Meta_Back_Command()
-{
-
-    DHT_Single_Entry a = DHT_Access::Access_DHT(159*20);
-    if(!a.is_set)
-    {
-        printf("The DHT at position 159*20 is not set\n");
-        return;
-    }
-
-    _160bitnumber ID = DHT::Random_ID();
-    Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", ID);
-
-
-
-    Major_Functions::Get_Metadata_File(ID, "asdf", a);
-
-
-    std::cout << "Done!!!\n";
-
 }
 
 

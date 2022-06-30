@@ -88,9 +88,6 @@ int Main_CLI::Command_Parser(char Input[], int Input_len)
     else if(String_Compare(Input, "self_download_file_on_network"))
         CLI_Functions::Self_Downlaod_File_Network(Input, Input_len);
 
-    else if(String_Compare(Input, "store_file_net_and_get_meta_back"))
-        CLI_Functions::Store_File_Net_And_Get_Meta_Back_Command();
-
     else if(String_Compare(Input, "store_file_net_and_get_chunk_back"))
         CLI_Functions::Store_File_Net_And_Get_Chunk_Back_Command();
 

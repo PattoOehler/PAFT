@@ -51,47 +51,6 @@ void Connection::Ping(LPVOID lpParam)
 }
 
 
-//DEPRECIATED
-void Connection::Send_File(LPVOID lpParam)
-{
-
-    // set our socket to the socket passed in as a parameter
-    SOCKET current_client = (SOCKET)lpParam;
-
-    static char FileName[] = "SERVER_FILES/asdf.txt";
-    char Filebuf[512];
-    FILE *asdf = fopen( FileName, "rb" );
-
-
-    fseek(asdf, 0L, SEEK_END);
-    int filesize = ftell(asdf);
-
-    int counter=0;
-    while(filesize > 512*counter)
-    {
-
-        if(counter == 0)
-            fseek(asdf, 0, SEEK_SET);
-        //fgets(Filebuf, 512, (FILE*)asdf);
-        fread(Filebuf, 512, 1, (FILE*)asdf);
-
-
-        //Calculate how many bytes are going to be sent
-        int Bytes_To_Send=512;
-        if(filesize-512 < 512*counter)
-            Bytes_To_Send = filesize - (512*counter);
-
-        send(current_client,Filebuf,Bytes_To_Send,0);
-        counter++;
-        Sleep(10);
-
-
-    }
-
-    Sleep(20);
-    fclose(asdf);
-}
-
 
 void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 {
@@ -230,7 +189,7 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
     if( (*aa) == 0)
     {
         file_To_Add.addr = current_client_ip;
-        std::cout << "Connection::Store_File IP address is 0\n";
+        std::cout << "Connection::Store_File IP address is 0 so storing used IP\n";
     }
     else
         std::cout << "Connection::Store_File IP address is " << *aa << "\n";
