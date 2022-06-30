@@ -58,7 +58,6 @@ void DHT_Updater::Update_File_DHT()
         DHT_Single_Entry entry = DHT_Access::Access_File_IDs(i);
         if(entry.is_set)
         {
-
             if(entry.time_To_Timeout < time(0))
             {
                 std::cout << "Found a timed out file entry\n";
@@ -78,7 +77,7 @@ void DHT_Updater::Keep_DHT_Updated()
 {
     while(true)
     {
-        Sleep(60 * 1000); // 30seconds
+        Sleep(5 * 60 * 1000); // 5 minutes
 
         std::cout << "Keeping the DHT Updated\n";
         Update_Main_DHT();

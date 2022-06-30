@@ -146,14 +146,9 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
     Meta_Files::Make_File(local_file_location, public_File_Name, fileID);
 
-    DHT_Single_Entry self = DHT_Access::Access_DHT(159*20);
-    if(!self.is_set)
-    {
-        std::cout << "ERROR in Upload_File_To_Network -- DHT[159*20] isn't set to SELF!!!\n";
-        return;
-    }
-
+    DHT_Single_Entry self = DHT_Access::Get_Self();
     self.id = fileID;
+    self.addr = Main_Client::NULL_Addr();
 
     int fileIDpos = DHT_Access::Store_File_ID(self);
 
@@ -170,10 +165,40 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
         }
     }
 
+}
 
 
+
+void Major_Functions::Upload_To_Network(const char *local_file_location, _160bitnumber fileID)
+{
+
+    //Meta_Files::Make_File(local_file_location, public_File_Name, fileID);
+
+    DHT_Single_Entry self = DHT_Access::Get_Self();
+    self.id = fileID;
+    self.addr = Main_Client::NULL_Addr();
+
+    int fileIDpos = DHT_Access::Store_File_ID(self);
+
+    DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
+
+
+    three_DHT closest_In_Network = Three_Closest_Peers_In_Network(fileID);
+    for(int i=0;i<3;i++)
+    {
+        if(closest_In_Network.entry[i].is_set)
+        {
+            Main_Client client = Main_Client(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
+            client.Store_File(self);
+        }
+    }
 
 }
+
+
+
+
+
 
 
 //Returns 0 upon success anything else for an error

@@ -191,7 +191,8 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
         Major_Functions::Get_File_Chunk(fileID, metaCheckSum, net_Closest.entry[0], i );
     }
 
-    std::cout << "Finished Downloading the file\n";
+    std::cout << "Finished Downloading the file now uploading\n";
+    Major_Functions::Upload_To_Network("Test_Metafiles/Downloaded_File", fileID);
 
 }
 

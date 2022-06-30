@@ -20,6 +20,7 @@ namespace paft
         static int Get_Metadata_File_Self(_160bitnumber ID, std::string checksum, DHT_Single_Entry entry);
         static void Get_File_Chunk(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry, int chunkNum);
         static three_DHT Find_File_On_Network(_160bitnumber id);
+        static void Upload_To_Network(const char *local_file_location, _160bitnumber fileID);
 
     };
 
