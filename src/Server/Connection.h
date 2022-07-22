@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Main_Server.h"
-
+#include "../Messages/Base_Message.h"
 
 
 namespace paft{
@@ -14,7 +14,7 @@ namespace paft{
     {
     private:
         static void Run_Proper_Command(char *buf, longsocket long_client, int len);
-        static void Update_DHT(longsocket client, char recvdata[]);
+        static void Update_DHT(longsocket client, Base_Return data);
 
 
     public:

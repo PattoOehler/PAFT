@@ -57,6 +57,10 @@
 		<Unit filename="src/FileIO/Meta_Files.h" />
 		<Unit filename="src/FileIO/SHA_256.cpp" />
 		<Unit filename="src/FileIO/SHA_256.h" />
+		<Unit filename="src/Messages/Base_Message.cpp" />
+		<Unit filename="src/Messages/Base_Message.h" />
+		<Unit filename="src/Messages/Message_Ping.cpp" />
+		<Unit filename="src/Messages/Message_Ping.h" />
 		<Unit filename="src/Server/Connection.cpp" />
 		<Unit filename="src/Server/Connection.h" />
 		<Unit filename="src/Server/Main_Server.cpp" />

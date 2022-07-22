@@ -4,6 +4,7 @@
 #include "../DHT/DHT_Access.h"
 #include "Minor_Functions.h"
 #include "../DHT/DHT_Lookup.h"
+#include "../Messages/Message_Ping.h"
 
 #include <iostream>
 
@@ -91,35 +92,6 @@ void Main_Client::Add_Self(char buf[])
 
 }
 
-/*
-void MainClient::Store_File_To_DHT(char recvbuf[], int length)
-{
-
-    if(length >= 49)
-    {
-
-
-
-        DHT_Single_Entry file_To_Store;
-
-        memcpy((void*)&file_To_Store.id, recvbuf+20, 20);
-
-        file_To_Store.addr = Server_IP;
-        file_To_Store.port = Server_Port;
-        file_To_Store.is_set = true;
-
-        DHT::Id(file_To_Store);
-
-
-    }
-    else
-    {
-        printf("Entry too short in MainClient::Store_File_To_DHT()\n");
-    }
-
-}
-*/
-
 
 void Main_Client::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 {
@@ -148,6 +120,21 @@ void Main_Client::Add_Received_Entry_To_DHT(char recvbuf[], int length)
     {
         printf("Entry too short in MainClient::Add_Received_Entry_To_DHT()\n");
     }
+}
+
+
+void Main_Client::Add_Received_Entry_To_DHT(_160bitnumber ID)
+{
+    DHT_Single_Entry sender_DHT_Entry;
+
+    sender_DHT_Entry.addr = server_IP;
+    sender_DHT_Entry.id = ID;
+    sender_DHT_Entry.port = server_Port;
+    sender_DHT_Entry.is_set = true;
+
+
+    DHT::Update_Time(sender_DHT_Entry);
+
 }
 
 
@@ -824,14 +811,9 @@ int Main_Client::Ping()
     if(!set_Up_Properly)
         return -1;
 
-    char sendbuf[23];
-    sendbuf[0] = 0x02;
-
-
-
-    Add_Self(sendbuf);
-
+    char *sendbuf = Message_Ping::Ping_Create_Request();
     int iResult = send( server_Socket, sendbuf, 23, 0 );
+    delete[] sendbuf;
 
 
     if (iResult == SOCKET_ERROR) {
@@ -853,7 +835,9 @@ int Main_Client::Ping()
         return 1;
     }
 
-    Add_Received_Entry_To_DHT(recvbuf, iResult);
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(recvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
 
 
     Shutdown_Connection_Gracefully();
@@ -863,7 +847,13 @@ int Main_Client::Ping()
 
 
 
-//INCREADIBLY INEFFICENT TODO
+
+
+
+
+
+
+//INEFFICENT TODO
 Main_Client::Main_Client(in_addr addr_In, unsigned short int port_In)
 {
     char *addr = inet_ntoa(addr_In);

@@ -12,6 +12,7 @@
 #include "../DHT/DHT_Access.h"
 #include "../DHT/DHT_Search.h"
 #include "../FileIO/Meta_Files.h"
+#include "../Messages/Message_Ping.h"
 
 #include <ws2tcpip.h>
 
@@ -39,14 +40,9 @@ void Connection::Ping(LPVOID lpParam)
 {
     SOCKET current_client = (SOCKET)lpParam;
 
-
-    char sendbuf[20];
-    _160bitnumber self = DHT_Access::Get_Self_ID();
-    memcpy(sendbuf, (char*)&self, 20);
-
-
+    char *sendbuf = Message_Ping::Create_Ping_Responce();
     send(current_client,sendbuf,20,0);
-
+    delete[] sendbuf;
 
 }
 
@@ -209,16 +205,14 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 
     if(buf[0] == 0x01)
         {
-            //Client is asking for FULL file
-            // Depreciated TODO delete
-            //Connection::Send_File((LPVOID)long_client.client);
+            //Ping Command
+            Connection::Ping((LPVOID)long_client.client);
 
         }
         else if(buf[0] == 0x02)
         {
-            //Pinging
-            //std::cout << "Client is asking for a ping response " << buf +1 << std::endl;
-            Connection::Ping((LPVOID)long_client.client);
+
+
 
 
 
@@ -380,15 +374,15 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 
 
 
-void Connection::Update_DHT(longsocket client, char recvdata[])
+void Connection::Update_DHT(longsocket client, Base_Return data)
 {
-    _160bitnumber sender_Id;
-    memcpy((void*)&sender_Id, recvdata+1, 20);
 
     DHT_Single_Entry sender_DHT_Entry;
     sender_DHT_Entry.addr = client.from.sin_addr;
-    sender_DHT_Entry.id = sender_Id;
-    sender_DHT_Entry.port = 1234;
+    sender_DHT_Entry.id = data.ID;
+
+    sender_DHT_Entry.port = data.port; //TODO
+
     sender_DHT_Entry.is_set = true;
 
     DHT::Update_Time(sender_DHT_Entry);
@@ -403,11 +397,11 @@ void Connection::Handle_Client(LPVOID lpParam)
     //casting to longsocket
     longsocket long_client = *(longsocket *)(lpParam);
 
-    //if((long_client.client == INVALID_SOCKET))
-    //{
-        //std::cout << "INVALID SOCKET IN Connection::Handle_Client";
-        //ExitThread(7);
-    //}
+    if((long_client.client == INVALID_SOCKET))
+    {
+        std::cout << "INVALID SOCKET IN Connection::Handle_Client";
+        return ;
+    }
 
 
     char receivedData[512];
@@ -420,7 +414,9 @@ void Connection::Handle_Client(LPVOID lpParam)
         ExitThread(0);
     }
 
-    Update_DHT(long_client, receivedData);
+    Base_Return data = Base_Message::Read_Base(receivedData, res);
+
+    Update_DHT(long_client, data);
     Run_Proper_Command( receivedData, long_client, res);
 
 

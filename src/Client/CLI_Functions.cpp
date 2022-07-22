@@ -32,7 +32,7 @@ void CLI_Functions::Help_Command()
 
 void CLI_Functions::Testing_Help_Command()
 {
-    std::cout << "self_ping                                            -- Ping self \n";
+    std::cout << "\n\n";
     std::cout << "self_download_file_on_network [SHA-CHECKSUM] [FileID]-- downloads a file from yourself\n";
     std::cout << "store_file_net_and_get_chunk_back                    -- For Testing\n";
     std::cout << "manual_tests                                         -- Runs all of the manual tests\n";
@@ -44,7 +44,7 @@ void CLI_Functions::Testing_Help_Command()
     std::cout << "self_store_random_file                               -- sends store file RPC to self\n";
     std::cout << "test_dht                                             -- puts SELF in each bucket of the DHT\n";
     std::cout << "print_local_files                                    -- Prints all the local files\n";
-    std::cout << "\n\n";
+    std::cout << "\n";
 }
 
 
