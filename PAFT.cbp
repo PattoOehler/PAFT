@@ -61,6 +61,8 @@
 		<Unit filename="src/Messages/Base_Message.h" />
 		<Unit filename="src/Messages/Message_Ping.cpp" />
 		<Unit filename="src/Messages/Message_Ping.h" />
+		<Unit filename="src/Messages/Message_Proxy.cpp" />
+		<Unit filename="src/Messages/Message_Proxy.h" />
 		<Unit filename="src/Server/Connection.cpp" />
 		<Unit filename="src/Server/Connection.h" />
 		<Unit filename="src/Server/Main_Server.cpp" />

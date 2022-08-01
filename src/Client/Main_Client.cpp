@@ -5,6 +5,7 @@
 #include "Minor_Functions.h"
 #include "../DHT/DHT_Lookup.h"
 #include "../Messages/Message_Ping.h"
+#include "../Messages/Message_Proxy.h"
 
 #include <iostream>
 
@@ -421,7 +422,7 @@ char *Main_Client::Get_Metadata_File(_160bitnumber fileid)
     int Eight_MiB = 8000000;
 
     char *recvbuf;
-    recvbuf = (char *) malloc(Eight_MiB);
+    recvbuf = (char *) malloc(Eight_MiB + 4);
 
     int recvbuf_Count=4; //Leaves room for the length in the buffer
     //Get the data
@@ -842,6 +843,160 @@ int Main_Client::Ping()
 
     Shutdown_Connection_Gracefully();
     return 0;
+
+}
+
+
+
+Message Main_Client::Proxy(char nextCommandByte, char *message, int msgLen)
+{
+    Message failure;
+    if(!set_Up_Properly)
+        return failure;
+
+    char *sendbuf = Message_Proxy::Create_Base_Responce(nextCommandByte, message, msgLen);
+    int iResult = send( server_Socket, sendbuf, 23+msgLen, 0 );
+    delete[] sendbuf;
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return failure;
+    }
+
+
+    char pingrecvbuf[DEFAULT_BUFLEN];
+
+    //Get the ping back
+    iResult = recv(server_Socket, pingrecvbuf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return failure;
+    }
+
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(pingrecvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
+
+
+    //Receive Data and return it TODO
+    int Eight_MiB = 8000000 + 100;  // +100 for some padding room
+
+    char *recvbuf;
+    recvbuf = (char *) malloc(Eight_MiB);
+
+    int recvbuf_Count=0;
+    iResult = 1;
+    while(iResult > 0)
+    {
+        iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        if (iResult == SOCKET_ERROR)
+        {
+            if(recvbuf_Count == Eight_MiB)
+            {
+                std::cout << "totReceived = EightMiB - Continuing...\n";
+                iResult = 0;
+                continue;
+
+            }
+            printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
+            closesocket(server_Socket);
+            WSACleanup();
+            return failure;
+        }
+        recvbuf_Count += iResult;
+
+    }
+
+    Shutdown_Connection_Gracefully();
+
+    Message msg;
+    msg.message = recvbuf;
+    msg.msgLength = recvbuf_Count;
+    return msg;
+}
+
+
+
+
+
+Message Main_Client::Proxy_Get_Chunk(ChunkResponce info)
+{
+    Message failure;
+    if(!set_Up_Properly)
+        return failure;
+
+
+
+
+    char *sendbuf = Message_Proxy::Create_Get_Chunk_Msg(info);
+    int iResult = send( server_Socket, sendbuf, 54, 0 );
+    delete[] sendbuf;
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return failure;
+    }
+
+
+    char pingrecvbuf[DEFAULT_BUFLEN];
+
+    //Get the ping back
+    iResult = recv(server_Socket, pingrecvbuf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return failure;
+    }
+
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(pingrecvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
+
+
+    //Receive Data and return it TODO
+    int Eight_MiB = 8000000;
+
+    char *recvbuf;
+    recvbuf = (char *) malloc(Eight_MiB + 100);  // +100 for extra padding
+
+    int recvbuf_Count=0;
+    iResult = 1;
+    while(iResult > 0)
+    {
+        iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        if (iResult == SOCKET_ERROR)
+        {
+            if(recvbuf_Count == Eight_MiB)
+            {
+                std::cout << "totReceived = EightMiB - Continuing...\n";
+                iResult = 0;
+                continue;
+
+            }
+            printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
+            closesocket(server_Socket);
+            WSACleanup();
+            return failure;
+        }
+        recvbuf_Count += iResult;
+
+    }
+
+    Shutdown_Connection_Gracefully();
+
+    Message msg;
+    msg.message = recvbuf;
+    msg.msgLength = recvbuf_Count;
+    return msg;
 
 }
 

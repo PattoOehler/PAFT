@@ -22,7 +22,7 @@ namespace paft
         static void Ping(char input[], int length);
         static int* Arguement_Positions(char input[], int length);
         static _160bitnumber Char_To_160bit(char *input);
-
+        static void Download_File_Onion(char input[], int length);
     };
 
 }

@@ -3,6 +3,15 @@
 #define __PAFT_MAIN_CLIENT_H
 #include <winsock2.h>
 #include "../DHT/DHT.h"
+#include "../Messages/Message_Proxy.h"
+
+typedef struct
+{
+    char *message;
+    int msgLength = 0;
+
+} Message;
+
 
 namespace paft
 {
@@ -34,9 +43,12 @@ namespace paft
         three_DHT Return_Received_Nodes(char recvbuf[], int length);
         DHT_Single_Entry Add_Received_Entry_To_DHT_And_Return_Entry(char recvbuf[], int length);
         int Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier);
-
-
         static in_addr NULL_Addr();
+
+
+        Message Proxy(char nextCommandByte, char *message, int msgLen);
+        Message Proxy_Get_Chunk(ChunkResponce info);
+
     };
 
 }

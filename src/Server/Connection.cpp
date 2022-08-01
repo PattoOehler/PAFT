@@ -13,6 +13,8 @@
 #include "../DHT/DHT_Search.h"
 #include "../FileIO/Meta_Files.h"
 #include "../Messages/Message_Ping.h"
+#include "../Messages/Message_Proxy.h"
+#include "../Client/Main_Client.h"
 
 #include <ws2tcpip.h>
 
@@ -252,6 +254,15 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
 
 
         }
+        else if(buf[0] == 0x08)
+        {
+            //Forward a message
+            std::cout << "Client is asking for me to be a proxy\n";
+
+            Be_Proxy((LPVOID)long_client.client, buf, len);
+
+
+        }
         else
         {
             printf("\nConnection::Run_Proper_Command Improper command %x\n", buf[0]);
@@ -263,6 +274,151 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
         shutdown(long_client.client, SD_SEND);
 
 }
+
+void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
+{
+
+    if(len < 29 )
+    {
+        std::cout << "Connection::Be_Proxy len = " << len << "\nExiting\n";
+        return;
+
+    }
+    SOCKET current_client = (SOCKET)lpParam;
+    Ping(lpParam); //To give them my DHT entry
+
+    BaseResponce baseResp = Message_Proxy::Read_Base(buf, len);
+    if(!baseResp.isSet)
+    {
+        std::cout << "\n\n BIG TIME ERROR IN Connection::Be_Proxy\n\n";
+        return;
+    }
+
+    if(baseResp.forwardCommandByte == 8)
+    {
+        Proxy_Responce msg = Message_Proxy::Read_Proxy_8(buf, len);
+
+        Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);
+        Message responce = client.Proxy(baseResp.forwardCommandByte, buf+30, len-30); //TODO make 30 not static
+
+        send(current_client,responce.message,responce.msgLength,0);
+        free(responce.message);
+    }
+    else if(baseResp.forwardCommandByte == 6)
+    {
+        //Get Chunk Message
+        ChunkResponce msg = Message_Proxy::Read_Chunk_6(buf, len);
+        Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);
+        char *chunk = client.Get_File_Chunk(msg.fileID, msg.chunkID);
+        int chunkLen;
+        memcpy((char *)&chunkLen, chunk, 4);
+        chunk+=4;
+
+        send(current_client, chunk, chunkLen, 0);
+        free(chunk);
+
+
+    }
+    else
+    {
+        std::cout << "Error in Connection:Be_Proxy() Unknown forwardCommandByte!!\n\n";
+
+    }
+
+
+
+
+
+    /*
+    int FileLocation = DHT_Access::Find_Stored_File(FileID);
+    if(FileLocation == -1)
+    {
+        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - " << DHT::ID_To_String(FileID) << "\n\n";
+        return; //We don't have the file stored so exit the connection
+    }
+
+
+
+    if(desiredChunk == -1)
+    {
+        std::cout << "Connection::Send_File_Chunk Desired Chunk == -1\n";
+        //The meta-data file is what needs to be returned
+        std::string metafilePath = Meta_Files::Get_Output_File_Name(FileID);
+        int Eight_MiB = 8000000;
+
+        char *buf;
+        buf = (char *) malloc(Eight_MiB);
+
+
+
+        //Send the bytes - already pinged
+        FILE *file = NULL;
+        size_t bytesRead = 0;
+
+        file = fopen(metafilePath.c_str(), "rb");
+
+        if (file != NULL)
+        {
+            std::cout << "Connection::Send_File_Chunk file not null\n";
+            while ((bytesRead = fread(buf, 1, Eight_MiB, file)) > 0)
+            {
+                // process bytesRead worth of data in buffer
+                std::cout << "Connection::Send_File_Chunk While loop\n";
+                send(current_client,buf,bytesRead,0);
+            }
+        }
+
+
+    }
+    else
+    {
+        //Return the chunk at position desiredChunk
+        std::cout << "The chunk desired is " << desiredChunk << " in Connection::Send_File_Chunk\n\n";
+
+
+
+        //The chunk is what needs to be returned
+        std::string filePath = DHT_Access::Get_Local_File_Location(FileLocation);;
+        int Eight_MiB = 8000000;
+
+        char *buf;
+        buf = (char *) malloc(Eight_MiB);
+
+
+
+        //Send the bytes - already pinged
+        FILE *file = NULL;
+        size_t bytesRead = 0;
+
+        file = fopen(filePath.c_str(), "rb");
+
+        fseek(file, desiredChunk*Eight_MiB, SEEK_SET);
+
+
+        if (file != NULL)
+        {
+            std::cout << "Connection::Send_File_Chunk file not null\n";
+
+            bytesRead = fread(buf, 1, Eight_MiB, file);
+
+            // process bytesRead worth of data in buffer
+            std::cout << "Connection::Send_File_Chunk While loop\n";
+            send(current_client,buf,bytesRead,0);
+
+        }
+
+
+    }
+    */
+
+}
+
+
+
+
+
+
+
 
 void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 {
@@ -302,7 +458,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
         int Eight_MiB = 8000000;
 
         char *buf;
-        buf = (char *) malloc(Eight_MiB);
+        buf = (char *) malloc(Eight_MiB); //TODO check that this is free()
 
 
 

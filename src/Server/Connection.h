@@ -27,7 +27,7 @@ namespace paft{
         static void Lookup_File(LPVOID lpParam, char buf[], int len);
         static void Store_File(LPVOID lpParam, char buf[], int len, in_addr current_client_ip);
         static void Send_File_Chunk(LPVOID lpParam, char buf[], int len);
-
+        static void Be_Proxy(LPVOID lpParam, char buf[], int len);
 
     };
 }

@@ -288,8 +288,57 @@ int Major_Functions::Get_Metadata_File(_160bitnumber ID, std::string checksum_ex
         std::cout << "Major_Functions::getMetaDataFile length is <= 0! (=" << len-4 << ")\n";
 
     }
+    free(recvbuf);
     return 0;
 }
+
+
+
+
+int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_Single_Entry connectTo, ChunkResponce info)
+{
+    std::cout << "Major Functions -- client.Get_Metadata_File_Proxy\n";
+    sleep(2);
+    Main_Client client = Main_Client(connectTo.addr, connectTo.port);
+
+    Message msg = client.Proxy_Get_Chunk(info);
+    std::cout << "Major Functions -- client.Get_Metadata_File_Proxy done!\n";
+
+
+    std::string checksum_received = sha256(msg.message, msg.msgLength);
+    if(checksum_expected == checksum_received)
+    {
+        std::cout << "CHECKSUM CONFIRMED!!!! Writing the metadata to a file!\n";
+    }
+    else
+    {
+        std::cout << "CHECKSUM INCORRECT!!!! EXITING!\n";
+        return -1;
+    }
+
+
+    //Write to the file
+    if(msg.msgLength > 0)
+    {
+        std::ofstream wf(Meta_Files::Get_Output_File_Name(info.fileID), std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return -1;
+        }
+
+        wf.write(msg.message, msg.msgLength);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::Get_Metadata_File_Proxy length is <= 0! (=" << msg.msgLength << ")\n";
+
+    }
+    free(msg.message);
+    return 0;
+}
+
+
 
 
 

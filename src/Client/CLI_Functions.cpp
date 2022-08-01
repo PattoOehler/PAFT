@@ -44,7 +44,70 @@ void CLI_Functions::Testing_Help_Command()
     std::cout << "self_store_random_file                               -- sends store file RPC to self\n";
     std::cout << "test_dht                                             -- puts SELF in each bucket of the DHT\n";
     std::cout << "print_local_files                                    -- Prints all the local files\n";
+    std::cout << "download_file_onion [SHA-CHECKSUM] [FileID]          -- Downloads a chunk using another peer as a proxy\n";
     std::cout << "\n";
+}
+
+
+void CLI_Functions::Download_File_Onion(char input[], int length)
+{
+    int *positions;
+    positions = Arguement_Positions( input, length);
+    if(*(positions+0) == 0 || *(positions+1) == 0)
+    {
+        std::cout << "Error: not enough parameters\n";
+        return;
+    }
+    //(input + *(positions+0), input + *(positions+1) ) how to call the arguments
+
+    _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
+    three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
+
+
+    if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
+    {
+        //int error_Check = Major_Functions::Get_Metadata_File(fileID, input + *(positions+0), net_Closest.entry[0]);
+
+        ChunkResponce b;
+        b.chunkID = -1;
+        b.fileID = fileID;
+        b.sendToAddr = net_Closest.entry[1].addr; //Unknown if works NOT TESTED
+        b.sendToPort = net_Closest.entry[1].port; //Unknown if works NOT TESTED
+
+        int error_Check = Major_Functions::Get_Metadata_File_Proxy(input + *(positions+0), net_Closest.entry[0], b);
+        if(error_Check == 0)
+            std::cout << "Got the metadata file\n";
+        else
+        {
+            std::cout << "Metadata file had an unexpected error\n";
+            return;
+        }
+    }
+    else
+    {
+        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
+        return;
+    }
+
+    /*
+    std::string output_File_Name = Meta_Files::Get_Output_File_Name( fileID );
+    //Allocate the amount of space necessary for the file
+    File_Functions::Allocate_File( output_File_Name );
+
+
+    //Get the file by chunks
+    int fileChunks = Meta_Files::Get_Chunks( output_File_Name );
+    for(int i=0; i<fileChunks; i++ )
+    {
+        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
+
+        Major_Functions::Get_File_Chunk(fileID, metaCheckSum, net_Closest.entry[0], i );
+    }
+
+    std::cout << "Finished Downloading the file now uploading\n";
+    Major_Functions::Upload_To_Network("Test_Metafiles/Downloaded_File", fileID);
+    */
+
 }
 
 
