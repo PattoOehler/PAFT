@@ -321,7 +321,7 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
     }
     else
     {
-        std::cout << "Error in Connection:Be_Proxy() Unknown forwardCommandByte!!\n\n";
+        std::cout << "Error in Connection:Be_Proxy() Unknown forwardCommandByte=" << baseResp.forwardCommandByte << "!!\n\n";
 
     }
 
