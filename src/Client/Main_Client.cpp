@@ -469,7 +469,7 @@ char *Main_Client::Get_File_Chunk(_160bitnumber fileid, int chunk)
 {
     if(!set_Up_Properly)
         return nullptr;
-    if(chunk < 0)
+    if(chunk < -1)
         return nullptr;
 
     char sendbuf[47];

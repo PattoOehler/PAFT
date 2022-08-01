@@ -26,7 +26,7 @@ typedef struct
     _160bitnumber senderID;
     unsigned short int senderPort=0;
 
-    int forwardCommandByte;
+    char forwardCommandByte;
     bool isSet=false;
 
 } BaseResponce;

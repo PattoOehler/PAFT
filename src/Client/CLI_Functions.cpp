@@ -6,6 +6,7 @@
 #include "../DHT/DHT.h"
 #include "../FileIO/File_Functions.h"
 #include "../FileIO/Meta_Files.h"
+#include "../DHT/DHT_Search.h"
 
 #include <iostream>
 
@@ -71,10 +72,17 @@ void CLI_Functions::Download_File_Onion(char input[], int length)
         ChunkResponce b;
         b.chunkID = -1;
         b.fileID = fileID;
-        b.sendToAddr = net_Closest.entry[1].addr; //Unknown if works NOT TESTED
-        b.sendToPort = net_Closest.entry[1].port; //Unknown if works NOT TESTED
+        b.sendToAddr = net_Closest.entry[0].addr; //Should work TODO test
+        b.sendToPort = net_Closest.entry[0].port;
 
-        int error_Check = Major_Functions::Get_Metadata_File_Proxy(input + *(positions+0), net_Closest.entry[0], b);
+
+        three_DHT peers = DHT_Search::Lookup(fileID);
+        if( memcmp((char *)&peers.entry[0].addr, (char *)&b.sendToAddr, 4) == 0)
+        {
+            peers.entry[0] = peers.entry[1];
+        }
+
+        int error_Check = Major_Functions::Get_Metadata_File_Proxy(input + *(positions+0), peers.entry[0], b);
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else

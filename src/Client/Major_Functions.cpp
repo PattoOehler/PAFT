@@ -59,7 +59,6 @@ three_DHT Major_Functions::Find_File_On_Network(_160bitnumber id)
 
     DHT_Lookup::Write_To_Three_DHT_Is_Available(true, dht_Identifier);
 
-    //Todo - this returns the lookup-make it return the received entries
     return found_Values;
 }
 
@@ -303,7 +302,11 @@ int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_
 
     Message msg = client.Proxy_Get_Chunk(info);
     std::cout << "Major Functions -- client.Get_Metadata_File_Proxy done!\n";
-
+    if(msg.msgLength == 0)
+    {
+        std::cout << "msg.msgLength == 0 in Major_Functions::Get_Metadata_File_Proxy Returning\n";
+        return 0;
+    }
 
     std::string checksum_received = sha256(msg.message, msg.msgLength);
     if(checksum_expected == checksum_received)

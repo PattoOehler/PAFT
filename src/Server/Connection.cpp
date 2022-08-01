@@ -310,6 +310,11 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
         ChunkResponce msg = Message_Proxy::Read_Chunk_6(buf, len);
         Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);
         char *chunk = client.Get_File_Chunk(msg.fileID, msg.chunkID);
+        if(chunk == nullptr)
+        {
+            std::cout << "Get_File_Chunk is NULL in connection:Be_Proxy() Exiting\n";
+            return;
+        }
         int chunkLen;
         memcpy((char *)&chunkLen, chunk, 4);
         chunk+=4;
