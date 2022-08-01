@@ -308,14 +308,14 @@ int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_
         return 0;
     }
 
-    std::string checksum_received = sha256(msg.message, msg.msgLength);
+    std::string checksum_received = sha256(msg.message, msg.msgLength-4);
     if(checksum_expected == checksum_received)
     {
         std::cout << "CHECKSUM CONFIRMED!!!! Writing the metadata to a file!\n";
     }
     else
     {
-        std::cout << "CHECKSUM INCORRECT!!!! EXITING!\n";
+        std::cout << "CHECKSUM INCORRECT!!!! EXITING len=" << msg.msgLength << "!\n";
         return -1;
     }
 
