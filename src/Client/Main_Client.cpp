@@ -995,7 +995,7 @@ Message Main_Client::Proxy_Get_Chunk(ChunkResponce info)
 
     Message msg;
     msg.message = recvbuf;
-    msg.msgLength = recvbuf_Count;
+    msg.msgLength = recvbuf_Count - 4;
     return msg;
 
 }

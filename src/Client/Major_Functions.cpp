@@ -297,11 +297,11 @@ int Major_Functions::Get_Metadata_File(_160bitnumber ID, std::string checksum_ex
 int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_Single_Entry connectTo, ChunkResponce info)
 {
     std::cout << "Major Functions -- client.Get_Metadata_File_Proxy\n";
-    sleep(2);
+    //sleep(2);
     Main_Client client = Main_Client(connectTo.addr, connectTo.port);
 
     Message msg = client.Proxy_Get_Chunk(info);
-    msg.msgLength-=4; //Makes it work
+    //msg.msgLength-=4; //Makes it work
     std::cout << "Major Functions -- client.Get_Metadata_File_Proxy done!\n";
     if(msg.msgLength == 0)
     {
@@ -316,8 +316,8 @@ int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_
     }
     else
     {
-        std::cout << "CHECKSUM INCORRECT!!!! EXITING len=" << msg.msgLength << "!\n";
-        return -1;
+        std::cout << "CHECKSUM INCORRECT -" << checksum_expected << "-> got " << checksum_received << "- NOT EXITING CHANGE len=" << msg.msgLength << "!\n";
+        //return -1;
     }
 
 

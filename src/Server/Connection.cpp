@@ -320,7 +320,6 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
         chunk+=4;
 
         send(current_client, chunk, chunkLen, 0);
-        free(chunk);
 
 
     }

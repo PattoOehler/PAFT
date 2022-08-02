@@ -60,29 +60,37 @@ void CLI_Functions::Download_File_Onion(char input[], int length)
         return;
     }
     //(input + *(positions+0), input + *(positions+1) ) how to call the arguments
-
+    std::cout << "Download_File_Onion 1\n";
     _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
     three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
     ChunkResponce b;
-
+    std::cout << "Download_File_Onion 2\n";
+    three_DHT peers;
     if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
     {
-        //int error_Check = Major_Functions::Get_Metadata_File(fileID, input + *(positions+0), net_Closest.entry[0]);
-
-
+        std::cout << "Download_File_Onion 3\n";
         b.chunkID = -1;
         b.fileID = fileID;
         b.sendToAddr = net_Closest.entry[0].addr; //Should work TODO test
         b.sendToPort = net_Closest.entry[0].port;
+        std::cout << "Download_File_Onion 4\n";
 
-
-        three_DHT peers = DHT_Search::Lookup(fileID);
+        peers = DHT_Search::Lookup(fileID);
+        std::cout << "Download_File_Onion 5\n";
         if( memcmp((char *)&peers.entry[0].addr, (char *)&b.sendToAddr, 4) == 0)
         {
-            peers.entry[0] = peers.entry[1];
+            std::cout << "Download_File_Onion 6\n";
+            if(peers.entry[1].is_set)
+                peers.entry[0] = peers.entry[1];
+            else
+            {
+                std::cout << "Error in Download_File_Onion\n";
+                return;
+            }
         }
-
+        std::cout << "Download File Onion 7\n";
         int error_Check = Major_Functions::Get_Metadata_File_Proxy(input + *(positions+0), peers.entry[0], b);
+        std::cout << "Download File Onion 8\n";
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else
@@ -108,8 +116,9 @@ void CLI_Functions::Download_File_Onion(char input[], int length)
     for(int i=0; i<fileChunks; i++ )
     {
         std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
-
-        Major_Functions::Get_File_Chunk_Proxy(metaCheckSum, net_Closest.entry[0], b );
+        b.chunkID = i;
+        Major_Functions::Get_File_Chunk_Proxy(metaCheckSum, peers.entry[0], b );
+        std::cout << "Got FileChunk " << i << "\n";
     }
 
     std::cout << "Finished Downloading the file now uploading\n";
