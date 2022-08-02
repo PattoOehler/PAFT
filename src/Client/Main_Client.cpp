@@ -857,14 +857,14 @@ Message Main_Client::Proxy(char nextCommandByte, char *message, int msgLen)
     char *sendbuf;
     if(nextCommandByte == 6)
     {
-        std::cout << "Next Command is to Get the file!\n";
-        ChunkResponce a = Message_Proxy::Read_Chunk_6(message,msgLen);
-        sendbuf = Message_Proxy::Create_Get_Chunk_Msg(a);
+        std::cout << "Next Command is to Get the file SHOULD NOT GET HERE!\n";
+        return failure;
     }
     else if(nextCommandByte == 8)
     {
         std::cout << "Next Command is to Forward Not Implemented Yet!\n";
-        return failure;
+        ChunkResponce a = Message_Proxy::Read_Chunk_6(message,msgLen);
+        sendbuf = Message_Proxy::Create_Get_Chunk_Msg(a);
     }
     else
     {

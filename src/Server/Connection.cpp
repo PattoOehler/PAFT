@@ -296,6 +296,8 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
 
     if(baseResp.forwardCommandByte == 8)
     {
+
+
         Proxy_Responce msg = Message_Proxy::Read_Proxy_8(buf, len);
 
         Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);

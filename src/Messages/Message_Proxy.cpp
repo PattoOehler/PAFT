@@ -168,7 +168,7 @@ char *Message_Proxy::Create_Forward_Msg(char *msg, int len, DHT_Single_Entry nex
     char *returnmsg = new char[30+len];
     returnmsg[0] = 8;
     Base_Message::Add_Base(returnmsg, 23); // Adds Own ID and Own Port
-    returnmsg[23] = 6;
+    returnmsg[23] = 8;
 
     memcpy(returnmsg+24, (char *)&next.addr, 4);
     memcpy(returnmsg+28, (char *)&next.port, 2);
