@@ -151,8 +151,30 @@ char *Message_Proxy::Create_Get_Chunk_Msg(ChunkResponce info)
     return returnmsg;
 }
 
+/*  FORMAT 8 Forward
+OFFSET  LENGTH  DESCRIPTION
+0       1       Command Byte == 8
+1       20      Sender ID (for DHT)
+21      2       Sender Port (for DHT)
+23      1       Command byte to forward == 8
+24      4       Address to send to
+28      2       Port to send to
+30+     ?       Message
+*/
 
+char *Message_Proxy::Create_Forward_Msg(char *msg, int len, DHT_Single_Entry next)
+{
 
+    char *returnmsg = new char[30+len];
+    returnmsg[0] = 8;
+    Base_Message::Add_Base(returnmsg, 23); // Adds Own ID and Own Port
+    returnmsg[23] = 6;
 
+    memcpy(returnmsg+24, (char *)&next.addr, 4);
+    memcpy(returnmsg+28, (char *)&next.port, 2);
+    memcpy(returnmsg+30, msg, len);
+
+    return returnmsg;
+}
 
 

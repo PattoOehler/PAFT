@@ -854,7 +854,23 @@ Message Main_Client::Proxy(char nextCommandByte, char *message, int msgLen)
     if(!set_Up_Properly)
         return failure;
 
-    char *sendbuf = Message_Proxy::Create_Base_Responce(nextCommandByte, message, msgLen);
+    char *sendbuf;
+    if(nextCommandByte == 6)
+    {
+        std::cout << "Next Command is to Get the file!\n";
+        ChunkResponce a = Message_Proxy::Read_Chunk_6(message,msgLen);
+        sendbuf = Message_Proxy::Create_Get_Chunk_Msg(a);
+    }
+    else if(nextCommandByte == 8)
+    {
+        std::cout << "Next Command is to Forward Not Implemented Yet!\n";
+        return failure;
+    }
+    else
+    {
+        std::cout << "Next command should not exist ERROR Returning\n";
+        return failure;
+    }
     int iResult = send( server_Socket, sendbuf, 23+msgLen, 0 );
     delete[] sendbuf;
 
@@ -999,6 +1015,92 @@ Message Main_Client::Proxy_Get_Chunk(ChunkResponce info)
     return msg;
 
 }
+
+
+
+
+
+Message Main_Client::Proxy_Get_Chunk_2(ChunkResponce info, DHT_Single_Entry connectThru)
+{
+    Message failure;
+    if(!set_Up_Properly)
+        return failure;
+
+
+
+    char *chunkbuf = Message_Proxy::Create_Get_Chunk_Msg(info);
+    char *sendbuf = Message_Proxy::Create_Forward_Msg(chunkbuf, 54, connectThru);
+
+
+
+
+    int iResult = send( server_Socket, sendbuf, 54+30, 0 );
+    delete[] sendbuf;
+    delete[] chunkbuf;
+
+
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return failure;
+    }
+
+
+    char pingrecvbuf[DEFAULT_BUFLEN];
+    std::cout << "Proxy_Get_Chunk_2 4\n";
+    //Get the ping back
+    iResult = recv(server_Socket, pingrecvbuf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return failure;
+    }
+
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(pingrecvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
+    std::cout << "Proxy_Get_Chunk_2 5\n";
+
+    //Receive Data and return it TODO
+    int Eight_MiB = 8000000;
+
+    char *recvbuf;
+    recvbuf = (char *) malloc(Eight_MiB + 100);  // +100 for extra padding
+
+    int recvbuf_Count=0;
+    iResult = 1;
+    while(iResult > 0)
+    {
+        iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
+        if (iResult == SOCKET_ERROR)
+        {
+            if(recvbuf_Count == Eight_MiB)
+            {
+                std::cout << "totReceived = EightMiB - Continuing...\n";
+                iResult = 0;
+                continue;
+
+            }
+            printf("MainClient::GetFileChunk send failed with error: %d\n", WSAGetLastError());
+            closesocket(server_Socket);
+            WSACleanup();
+            return failure;
+        }
+        recvbuf_Count += iResult;
+
+    }
+
+    Shutdown_Connection_Gracefully();
+
+    Message msg;
+    msg.message = recvbuf;
+    msg.msgLength = recvbuf_Count - 4;
+    return msg;
+
+}
+
 
 
 

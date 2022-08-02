@@ -9,7 +9,6 @@ typedef struct
     in_addr sendToAddr;
     unsigned short int sendToPort=0;
 
-
 } Proxy_Responce;
 
 typedef struct
@@ -57,6 +56,7 @@ namespace paft
         static Proxy_Responce Read_Proxy_8(char *responce, int len);
         static ChunkResponce Read_Chunk_6(char *responce, int len);
         static char * Create_Get_Chunk_Msg(ChunkResponce info);
+        static char * Create_Forward_Msg(char *msg, int len, DHT_Single_Entry next);
     };
 
 }

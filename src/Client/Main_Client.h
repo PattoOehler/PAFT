@@ -48,7 +48,7 @@ namespace paft
 
         Message Proxy(char nextCommandByte, char *message, int msgLen);
         Message Proxy_Get_Chunk(ChunkResponce info);
-
+        Message Proxy_Get_Chunk_2(ChunkResponce info, DHT_Single_Entry connectThru);
     };
 
 }
