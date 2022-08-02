@@ -23,7 +23,7 @@ namespace paft
         static three_DHT Find_File_On_Network(_160bitnumber id);
         static void Upload_To_Network(const char *local_file_location, _160bitnumber fileID);
         static int Get_Metadata_File_Proxy(std::string checksum_expected, DHT_Single_Entry connectTo, ChunkResponce info);
-
+        static void Get_File_Chunk_Proxy(std::string checksum_expected, DHT_Single_Entry entry, ChunkResponce info);
     };
 
 }

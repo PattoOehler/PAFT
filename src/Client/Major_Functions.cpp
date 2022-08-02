@@ -301,6 +301,7 @@ int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_
     Main_Client client = Main_Client(connectTo.addr, connectTo.port);
 
     Message msg = client.Proxy_Get_Chunk(info);
+    msg.msgLength-=4; //Makes it work
     std::cout << "Major Functions -- client.Get_Metadata_File_Proxy done!\n";
     if(msg.msgLength == 0)
     {
@@ -308,7 +309,7 @@ int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_
         return 0;
     }
 
-    std::string checksum_received = sha256(msg.message, msg.msgLength-4);
+    std::string checksum_received = sha256(msg.message, msg.msgLength);
     if(checksum_expected == checksum_received)
     {
         std::cout << "CHECKSUM CONFIRMED!!!! Writing the metadata to a file!\n";
@@ -340,6 +341,54 @@ int Major_Functions::Get_Metadata_File_Proxy(std::string checksum_expected, DHT_
     free(msg.message);
     return 0;
 }
+
+
+
+void Major_Functions::Get_File_Chunk_Proxy(std::string checksum_expected, DHT_Single_Entry entry, ChunkResponce info)
+{
+    if(info.chunkID < 0)
+        return;
+
+    sleep(2);
+    Main_Client client = Main_Client(entry.addr, entry.port);
+    Message msg = client.Proxy_Get_Chunk(info);
+
+    std::string checksum_received = sha256(msg.message, msg.msgLength); // -4 on msgLength if doesn't work ++ also below
+
+    if( checksum_received == checksum_expected)
+        std::cout << "Major_Functions::getFileChunk CHECKSUM IS GOOD\n";
+    else
+    {
+        std::cout << "Major_Functions::getFileChunk CHECKSUM IS " << checksum_received << " while expecting " << checksum_expected << " len=" << msg.msgLength << "\n";
+    }
+
+
+
+    //Write to the file
+    if(msg.msgLength > 0)
+    {
+        std::ofstream wf("Test_Metafiles/Downloaded_File", std::ios::in | std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return;
+        }
+        wf.seekp( 8000000 * info.chunkID );
+        wf.write(msg.message, msg.msgLength);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::getFileChunk length is <= 0! (len=" << msg.msgLength << ")\n";
+
+    }
+
+
+
+}
+
+
+
+
 
 
 

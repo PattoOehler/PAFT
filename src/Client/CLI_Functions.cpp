@@ -63,13 +63,13 @@ void CLI_Functions::Download_File_Onion(char input[], int length)
 
     _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
     three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
-
+    ChunkResponce b;
 
     if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
     {
         //int error_Check = Major_Functions::Get_Metadata_File(fileID, input + *(positions+0), net_Closest.entry[0]);
 
-        ChunkResponce b;
+
         b.chunkID = -1;
         b.fileID = fileID;
         b.sendToAddr = net_Closest.entry[0].addr; //Should work TODO test
@@ -97,7 +97,7 @@ void CLI_Functions::Download_File_Onion(char input[], int length)
         return;
     }
 
-    /*
+
     std::string output_File_Name = Meta_Files::Get_Output_File_Name( fileID );
     //Allocate the amount of space necessary for the file
     File_Functions::Allocate_File( output_File_Name );
@@ -109,12 +109,12 @@ void CLI_Functions::Download_File_Onion(char input[], int length)
     {
         std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
 
-        Major_Functions::Get_File_Chunk(fileID, metaCheckSum, net_Closest.entry[0], i );
+        Major_Functions::Get_File_Chunk_Proxy(metaCheckSum, net_Closest.entry[0], b );
     }
 
     std::cout << "Finished Downloading the file now uploading\n";
     Major_Functions::Upload_To_Network("Test_Metafiles/Downloaded_File", fileID);
-    */
+
 
 }
 
