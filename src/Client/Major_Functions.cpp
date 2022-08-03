@@ -443,6 +443,103 @@ void Major_Functions::Get_File_Chunk_Proxy(std::string checksum_expected, DHT_Si
 
 
 
+void Major_Functions::Get_File_Chunk_Proxy_2(std::string checksum_expected, DHT_Single_Entry connectTo, DHT_Single_Entry forwardTo, ChunkResponce info)
+{
+    if(info.chunkID < 0)
+        return;
+
+
+
+
+    std::cout << "Major Functions -- Get_File_Chunk_Proxy_2\n";
+    //sleep(2);
+    Main_Client client = Main_Client(connectTo.addr, connectTo.port);
+
+    Message msg = client.Proxy_Get_Chunk_2(info, forwardTo);
+
+
+    std::cout << "Major Functions -- Get_File_Chunk_Proxy_2 done!\n";
+    if(msg.msgLength == 0)
+    {
+        std::cout << "msg.msgLength == 0 in Major_Functions::Get_File_Chunk_Proxy_2 Returning\n";
+        return;
+    }
+
+    std::string checksum_received = sha256(msg.message, msg.msgLength);
+    if(checksum_expected == checksum_received)
+    {
+        std::cout << "CHECKSUM CONFIRMED!!!! Writing the metadata to a file!\n";
+    }
+    else
+    {
+        std::cout << "CHECKSUM INCORRECT -" << checksum_expected << "-> got " << checksum_received << "- NOT EXITING CHANGE len=" << msg.msgLength << "!\n";
+        //return -1;
+    }
+
+
+    //Write to the file
+    if(msg.msgLength > 0)
+    {
+        std::ofstream wf("Test_Metafiles/Downloaded_File", std::ios::in | std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return;
+        }
+        wf.seekp( 8000000 * info.chunkID );
+        wf.write(msg.message, msg.msgLength);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::Get_File_Chunk_Proxy_2 length is <= 0! (=" << msg.msgLength << ")\n";
+
+    }
+    free(msg.message);
+    return;
+
+
+    /*
+    sleep(2);
+    Main_Client client = Main_Client(entry.addr, entry.port);
+    Message msg = client.Proxy_Get_Chunk_2(info);
+
+    std::string checksum_received = sha256(msg.message, msg.msgLength); // -4 on msgLength if doesn't work ++ also below
+
+    if( checksum_received == checksum_expected)
+        std::cout << "Major_Functions::getFileChunk CHECKSUM IS GOOD\n";
+    else
+    {
+        std::cout << "Major_Functions::getFileChunk CHECKSUM IS " << checksum_received << " while expecting " << checksum_expected << " len=" << msg.msgLength << "\n";
+    }
+
+
+
+    //Write to the file
+    if(msg.msgLength > 0)
+    {
+        std::ofstream wf("Test_Metafiles/Downloaded_File", std::ios::in | std::ios::out | std::ios::binary);
+        if(!wf) {
+          std::cout << "Cannot open file!\n" << std::endl;
+          return;
+        }
+        wf.seekp( 8000000 * info.chunkID );
+        wf.write(msg.message, msg.msgLength);
+        wf.close();
+    }
+    else
+    {
+        std::cout << "Major_Functions::getFileChunk length is <= 0! (len=" << msg.msgLength << ")\n";
+
+    }
+
+    */
+
+}
+
+
+
+
+
 
 
 

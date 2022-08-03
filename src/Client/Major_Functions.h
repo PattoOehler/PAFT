@@ -25,6 +25,7 @@ namespace paft
         static int Get_Metadata_File_Proxy(std::string checksum_expected, DHT_Single_Entry connectTo, ChunkResponce info);
         static int Get_Metadata_File_Proxy_2(std::string checksum_expected, DHT_Single_Entry connectTo, DHT_Single_Entry forwardTo, ChunkResponce info);
         static void Get_File_Chunk_Proxy(std::string checksum_expected, DHT_Single_Entry entry, ChunkResponce info);
+        static void Get_File_Chunk_Proxy_2(std::string checksum_expected, DHT_Single_Entry connectTo, DHT_Single_Entry forwardTo, ChunkResponce info);
     };
 
 }

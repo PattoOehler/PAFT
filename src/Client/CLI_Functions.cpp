@@ -191,7 +191,7 @@ void CLI_Functions::Download_File_Onion_2(char input[], int length)
         return;
     }
 
-    /*
+
     std::string output_File_Name = Meta_Files::Get_Output_File_Name( fileID );
     //Allocate the amount of space necessary for the file
     File_Functions::Allocate_File( output_File_Name );
@@ -203,13 +203,13 @@ void CLI_Functions::Download_File_Onion_2(char input[], int length)
     {
         std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
         b.chunkID = i;
-        Major_Functions::Get_File_Chunk_Proxy(metaCheckSum, peers.entry[0], b );
+        Major_Functions::Get_File_Chunk_Proxy_2(metaCheckSum, peers.entry[0],peers.entry[1], b );
         std::cout << "Got FileChunk " << i << "\n";
     }
 
     std::cout << "Finished Downloading the file now uploading\n";
-    Major_Functions::Upload_To_Network("Test_Metafiles/Downloaded_File", fileID);
-    */
+    //Major_Functions::Upload_To_Network("Test_Metafiles/Downloaded_File", fileID); Need a different upload when using proxy
+
 
 }
 

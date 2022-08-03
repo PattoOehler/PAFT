@@ -55,26 +55,6 @@ DHT_Single_Entry DHT_Search::Next_Closest_In_Bucket(int bucket, _160bitnumber id
 
 three_DHT DHT_Search::Lookup(_160bitnumber id)
 {
-    three_DHT closest;
-    int closestCounter=0;
-    for(int i=0;i<160*20;i++)
-    {
-        DHT_Single_Entry a = DHT_Access::Access_DHT(i);
-        if(a.is_set && closestCounter < 3)
-        {
-            closest.entry[closestCounter] = a;
-            closestCounter++;
-            if(closestCounter == 3)
-                return closest;
-        }
-    }
-    return closest;
-
-
-
-
-
-    /*
     int bucket = DHT::Distance(id, DHT_Access::Get_Self_ID());
     three_DHT closest = DHT_Search::Lookup_One_Bucket(id, bucket);
     int entryCounter = 0;
@@ -142,7 +122,7 @@ three_DHT DHT_Search::Lookup(_160bitnumber id)
     }
 
     return closest;
-    */
+
 }
 
 
@@ -229,18 +209,35 @@ three_DHT DHT_Search::Lookup_One_Bucket(_160bitnumber id, int bucket)
                     closest.entry[1] = tmp;
                     closest.entry[2] = tmp2;
                 }
-                else if(DHT::Compare(access.id,closest.entry[1].id, id))
+                else if(closest.entry[1].is_set)
                 {
-                    tmp = closest.entry[1];
+                    if(DHT::Compare(access.id,closest.entry[1].id, id))
+                    {
+                        tmp = closest.entry[1];
+                        closest.entry[1] = access;
+                        closest.entry[2] = tmp;
+
+                    }
+                    else if(access.id,closest.entry[2].is_set)
+                    {
+                        if(DHT::Compare(access.id,closest.entry[2].id, id))
+                        {
+                            closest.entry[2] = access;
+
+                        }
+                    }
+                    else
+                    {
+                        closest.entry[2] = access;
+                    }
+
+
+                }
+                else
+                {
                     closest.entry[1] = access;
-                    closest.entry[2] = tmp;
-
                 }
-                else if(DHT::Compare(access.id,closest.entry[2].id, id))
-                {
-                    closest.entry[2] = access;
 
-                }
 
             }
             else

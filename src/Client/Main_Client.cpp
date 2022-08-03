@@ -862,7 +862,7 @@ Message Main_Client::Proxy(char nextCommandByte, char *message, int msgLen)
     }
     else if(nextCommandByte == 8)
     {
-        std::cout << "Next Command is to Forward Not Implemented Yet!\n";
+        std::cout << "Next Command is to Forward!\n";
         ChunkResponce a = Message_Proxy::Read_Chunk_6(message,msgLen);
         sendbuf = Message_Proxy::Create_Get_Chunk_Msg(a);
     }
