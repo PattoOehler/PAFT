@@ -431,7 +431,7 @@ char *Main_Client::Get_Metadata_File(_160bitnumber fileid)
     while(iResult > 0)
     {
         iResult = recv(server_Socket, recvbuf+recvbuf_Count, DEFAULT_BUFLEN, 0);
-        std::cout << "MainClient::Get_MetaData_File received a message of length(for the file) " << iResult << "\n\n";
+        //std::cout << "MainClient::Get_MetaData_File received a message of length(for the file) " << iResult << "\n\n";
         if (iResult == SOCKET_ERROR)
         {
             printf("send failed with error: %d\n", WSAGetLastError());
@@ -684,7 +684,7 @@ int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier
     memcpy((char *)&a, (char *) &received_Nodes.entry[0].addr, 4);
     if(DHT::Is_Equal(fileID, received_Nodes.entry[0].id) && a == 0)
     {
-        std::cout << "They are saying that they have the file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
+        std::cout << "File found!!!\n";
         //Add in this entry to the top and end the search
 
         received_Nodes.entry[0].addr = server_IP;
@@ -694,8 +694,8 @@ int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier
     }
     else
     {
-        std::cout << "They DO NOT HAVE THE FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nID:" << DHT::ID_To_String(received_Nodes.entry[0].id)
-        << " with an addr of " << a << "\n\n";
+        //std::cout << "They do not have the file!\nID:" << DHT::ID_To_String(received_Nodes.entry[0].id)
+        //<< " with an addr of " << a << "\n\n";
 
     }
 
@@ -703,7 +703,7 @@ int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier
     Minor_Functions::Add_To_Lookup_DHT(lookup_Identifier, current_Connection, fileID);
 
 
-    //TEST TODO ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 
     //Check all received_Nodes if they are closer then currently stored - then do this lookup if so
     Minor_Functions::Do_Lookup_If_Closer(lookup_Identifier, received_Nodes, fileID);
@@ -1117,7 +1117,7 @@ Main_Client::Main_Client(in_addr addr_In, unsigned short int port_In)
     char port[10];
     sprintf(port, "%d", port_In);
 
-    printf("Mainclient(%s:%s) being created\n\n",addr,port);
+    //printf("Mainclient(%s:%s) being created\n\n",addr,port);
 
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;
@@ -1198,7 +1198,7 @@ Main_Client::Main_Client(in_addr addr_In, unsigned short int port_In)
 
 Main_Client::Main_Client(const char *addr, const char *port)
 {
-    printf("Mainclient(*addr, *port) being created\n\n");
+    //printf("Mainclient(*addr, *port) being created\n\n");
 
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;

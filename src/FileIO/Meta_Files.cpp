@@ -156,7 +156,7 @@ void Meta_Files::Write_File()
     metaFile.close();
 
     std::cout << "Download string 'download_file_on_network " << sha256(buf, bufCounter) << " " << DHT::ID_To_String(id) << "'\n";
-
+    std::cout << "Metadata file created\n";
     free(buf);
 
 }
@@ -195,7 +195,7 @@ void Meta_Files::Make_File(const char *input_File, const char *output_File, _160
 
 
 
-    std::cout << "Read a total of " << totalBytes << " bytes\n";
+    std::cout << "\nRead a total of " << totalBytes << " bytes\n";
 
     fclose(fp);
     free(buf);

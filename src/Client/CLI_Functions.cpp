@@ -290,8 +290,7 @@ void CLI_Functions::Upload_File_Network(char input[], int length)
 
     Major_Functions::Upload_File_To_Network(input + *(positions+0), input + *(positions+1) );
 
-
-
+   std::cout << "Successfully uploaded the file\n";
 }
 
 
@@ -324,7 +323,7 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     }
     else
     {
-        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
+        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << " RETURNING\n\n";
         return;
     }
 
@@ -450,6 +449,7 @@ void CLI_Functions::Ping(char input[], int length)
 
     Main_Client Client(input + *(positions+0), input + *(positions+1));
     Client.Ping();
+    std::cout << "Pinged successfully and added entry to the DHT\n";
 
 }
 

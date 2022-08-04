@@ -136,17 +136,17 @@ void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
     }
     if(closest_Three.entry[1].is_set)
     {
-        memcpy(sendbuf+46, (char*)&closest_Three.entry[0].id, 20);
-        memcpy(sendbuf+66, (char*)&closest_Three.entry[0].port, 2);
-        memcpy(sendbuf+68, (char*)&closest_Three.entry[0].addr, 4);
+        memcpy(sendbuf+46, (char*)&closest_Three.entry[1].id, 20);
+        memcpy(sendbuf+66, (char*)&closest_Three.entry[1].port, 2);
+        memcpy(sendbuf+68, (char*)&closest_Three.entry[1].addr, 4);
         counter=2;
 
     }
     if(closest_Three.entry[2].is_set)
     {
-        memcpy(sendbuf+72, (char*)&closest_Three.entry[0].id, 20);
-        memcpy(sendbuf+92, (char*)&closest_Three.entry[0].port, 2);
-        memcpy(sendbuf+94, (char*)&closest_Three.entry[0].addr, 4);
+        memcpy(sendbuf+72, (char*)&closest_Three.entry[2].id, 20);
+        memcpy(sendbuf+92, (char*)&closest_Three.entry[2].port, 2);
+        memcpy(sendbuf+94, (char*)&closest_Three.entry[2].addr, 4);
         counter=3;
 
     }
@@ -187,10 +187,10 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
     if( (*aa) == 0)
     {
         file_To_Add.addr = current_client_ip;
-        std::cout << "Connection::Store_File IP address is 0 so storing used IP\n";
+        //std::cout << "Connection::Store_File IP address is 0 so storing used IP\n";
     }
-    else
-        std::cout << "Connection::Store_File IP address is " << *aa << "\n";
+    //else
+        //std::cout << "Connection::Store_File IP address is " << *aa << "\n";
 
     DHT_Access::Store_File_ID(file_To_Add);
 
