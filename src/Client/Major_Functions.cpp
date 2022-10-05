@@ -203,11 +203,9 @@ void Major_Functions::Upload_To_Network(const char *local_file_location, _160bit
 //Returns 0 upon success anything else for an error
 int Major_Functions::Get_Metadata_File_Self(_160bitnumber ID, std::string checksum_expected, DHT_Single_Entry entry)
 {
-    std::cout << "Major Functions -- client.Get_MetaData_File\n";
-    sleep(2);
+    sleep(1);
     Main_Client client = Main_Client(entry.addr, entry.port);
     char *recvbuf = client.Get_Metadata_File(ID);
-    std::cout << "Major Functions -- client.Get_MetaData_File done!\n";
 
     int len;
     memcpy((char *)&len,recvbuf,4);
@@ -550,7 +548,7 @@ void Major_Functions::Get_File_Chunk(_160bitnumber ID, std::string checksum_expe
     if(chunkNum < 0)
         return;
 
-    sleep(2);
+    sleep(1);
     Main_Client client = Main_Client(entry.addr, entry.port);
     char *recvbuf = client.Get_File_Chunk(ID, chunkNum);
 
@@ -560,7 +558,7 @@ void Major_Functions::Get_File_Chunk(_160bitnumber ID, std::string checksum_expe
     std::string checksum_received = sha256(recvbuf+4, len-4);
     //TODO verify checksum
     if( checksum_received == checksum_expected)
-        std::cout << "Major_Functions::getFileChunk CHECKSUM IS GOOD\n";
+        std::cout << "CHECKSUM IS GOOD for filechunk " << chunkNum << "\n";
     else
     {
         std::cout << "Major_Functions::getFileChunk CHECKSUM IS " << checksum_received << " while expecting " << checksum_expected << "\n";

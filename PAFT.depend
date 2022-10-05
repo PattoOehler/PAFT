@@ -730,7 +730,7 @@
 	<mutex>
 	"DHT.h"
 
-1659471989 source:c:\users\patto\desktop\paft\github\paft\src\client\major_functions.cpp
+1659629558 source:c:\users\patto\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -812,7 +812,7 @@
 
 1639260009 source:c:\users\patto\desktop\paft\github\paft\src\fileio\linked_list.cpp
 
-1659628406 source:c:\users\patto\desktop\paft\github\paft\src\fileio\meta_files.cpp
+1659629446 source:c:\users\patto\desktop\paft\github\paft\src\fileio\meta_files.cpp
 	"Meta_Files.h"
 	"Linked_List.h"
 	"SHA_256.h"
@@ -903,4 +903,17 @@
 
 1659468097 c:\users\patto\desktop\paft\github\paft\src\messages\message_proxy.h
 	"../DHT/DHT.h"
+
+1665001011 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer.cpp
+	"Peer.h"
+	"../DHT/DHT.h"
+
+1665000343 c:\users\patto\desktop\paft\github\paft\src\peers\peer.h
+	"../DHT/DHT.h"
+
+1665000165 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.cpp
+	"Peer_Access.h"
+
+1665000530 c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.h
+	"Peer.h"
 

@@ -63,6 +63,10 @@
 		<Unit filename="src/Messages/Message_Ping.h" />
 		<Unit filename="src/Messages/Message_Proxy.cpp" />
 		<Unit filename="src/Messages/Message_Proxy.h" />
+		<Unit filename="src/Peers/Peer.cpp" />
+		<Unit filename="src/Peers/Peer.h" />
+		<Unit filename="src/Peers/Peer_Access.cpp" />
+		<Unit filename="src/Peers/Peer_Access.h" />
 		<Unit filename="src/Server/Connection.cpp" />
 		<Unit filename="src/Server/Connection.h" />
 		<Unit filename="src/Server/Main_Server.cpp" />

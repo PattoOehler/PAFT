@@ -232,10 +232,8 @@ std::string Meta_Files::Get_Check_Sum(int chunk, std::string metaFile)
 int Meta_Files::Get_Chunks(std::string metaFile)
 {
     long metafilelen = File_Functions::Get_File_Length(metaFile);
-    std::cout << "Length of the metadata file is " << metafilelen << " in FileFunctions::allocate_File\n";
 
     int fileChunks = (metafilelen - 112) / 64;
-    std::cout << "Chunks in the file is " << fileChunks << " \n";
 
     return fileChunks;
 
