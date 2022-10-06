@@ -59,6 +59,8 @@
 		<Unit filename="src/FileIO/SHA_256.h" />
 		<Unit filename="src/Messages/Base_Message.cpp" />
 		<Unit filename="src/Messages/Base_Message.h" />
+		<Unit filename="src/Messages/Message_Keyed_Proxy.cpp" />
+		<Unit filename="src/Messages/Message_Keyed_Proxy.h" />
 		<Unit filename="src/Messages/Message_Ping.cpp" />
 		<Unit filename="src/Messages/Message_Ping.h" />
 		<Unit filename="src/Messages/Message_Proxy.cpp" />
