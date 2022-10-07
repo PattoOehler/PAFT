@@ -11,6 +11,9 @@
 #include <ws2tcpip.h>
 #include <thread>
 
+#include <Wincrypt.h>
+#include <windows.h>
+//#pragma comment(lib, "advapi32.lib")
 
 using namespace paft;
 
@@ -24,6 +27,37 @@ std::mt19937_64 DHT::gen(time(nullptr));
 
 _160bitnumber DHT::Random_ID()
 {
+    _160bitnumber randomID;
+
+    HCRYPTPROV hProvider = 0;
+
+	if (!::CryptAcquireContextW(&hProvider, 0, 0, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT | CRYPT_SILENT))
+    {
+        std::cout << "MASSIVE ERROR IN DHT::RANDOM_ID\n\n\n";
+        return randomID;
+    }
+
+
+	if (!::CryptGenRandom(hProvider, 20, (BYTE *)&randomID))
+	{
+		::CryptReleaseContext(hProvider, 0);
+		std::cout << "MASSIVE ERROR IN DHT::RANDOM_ID\n\n\n";
+		return randomID;
+	}
+
+
+
+	if (!::CryptReleaseContext(hProvider, 0))
+    {
+        std::cout << "MASSIVE ERROR IN DHT::RANDOM_ID\n\n\n";
+        return randomID;
+    }
+
+
+    return randomID;
+
+    /* OLD -- DELETE LATER BUT WORKING FUNCTION
+
     _160bitnumber random_ID;
 
     //Produces pseudo-random Numbers based upon startup time.
@@ -33,6 +67,7 @@ _160bitnumber DHT::Random_ID()
     random_ID.bot = gen() >> 32;
 
     return random_ID;
+    */
 }
 
 bool DHT::Is_Equal(_160bitnumber id,_160bitnumber id2)

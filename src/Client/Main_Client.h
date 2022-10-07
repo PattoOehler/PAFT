@@ -49,6 +49,9 @@ namespace paft
         Message Proxy(char nextCommandByte, char *message, int msgLen);
         Message Proxy_Get_Chunk(ChunkResponce info);
         Message Proxy_Get_Chunk_2(ChunkResponce info, DHT_Single_Entry connectThru);
+
+        void Upload_File_Onion(_160bitnumber key, DHT_Single_Entry middlePeer, DHT_Single_Entry lastPeer, _160bitnumber fileID);
+        void Proxy_Onion(_160bitnumber key, char *msg, int len);
     };
 
 }

@@ -47,6 +47,7 @@ void CLI_Functions::Testing_Help_Command()
     std::cout << "print_local_files                                    -- Prints all the local files\n";
     std::cout << "download_file_onion_1 [SHA-CHECKSUM] [FileID]        -- Downloads a file using another peer as a proxy\n";
     std::cout << "download_file_onion_2 [SHA-CHECKSUM] [FileID]        -- Downloads a file using another 2 peers as a proxy\n";
+    std::cout << "upload_file_onion [C:\\File_Location] [Filename]     -- Downloads a file using another 2 peers as a proxy\n";
     std::cout << "\n";
 }
 
@@ -477,7 +478,31 @@ int* CLI_Functions::Arguement_Positions(char input[], int length)
 
 
 
+void CLI_Functions::upload_file_onion(char input[], int length)
+{
 
+    int *positions;
+    positions = Arguement_Positions( input, length);
+    if(*(positions+0) == 0 || *(positions+1) == 0)
+    {
+        std::cout << "Error: not enough parameters\n";
+        return;
+    }
+
+    Major_Functions::Upload_File_Onion(input + *(positions+0), input + *(positions+1) );
+
+
+
+
+
+
+
+    //char *Message_Keyed_Proxy::Create_Upload_Message(_160bitnumber key, DHT_Single_Entry middlePeer, DHT_Single_Entry lastPeer, _160bitnumber fileID)
+
+
+
+
+}
 
 
 

@@ -646,7 +646,7 @@
 1649104285 c:\users\patto\desktop\paft\github\paft\src\unittests\mainunittests.h
 	<iostream>
 
-1659627855 source:c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.cpp
+1665159733 source:c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.cpp
 	"CLI_Functions.h"
 	"Main_Client.h"
 	"../DHT/DHT_Access.h"
@@ -657,10 +657,10 @@
 	"../DHT/DHT_Search.h"
 	<iostream>
 
-1659455623 c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.h
+1665155016 c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.h
 	"../DHT/DHT.h"
 
-1659457328 c:\users\patto\desktop\paft\github\paft\src\client\main_client.h
+1665170754 c:\users\patto\desktop\paft\github\paft\src\client\main_client.h
 	<winsock2.h>
 	"../DHT/DHT.h"
 	"../Messages/Message_Proxy.h"
@@ -671,7 +671,7 @@
 	<winsock.h>
 	"DHT.h"
 
-1659470914 c:\users\patto\desktop\paft\github\paft\src\client\major_functions.h
+1665156593 c:\users\patto\desktop\paft\github\paft\src\client\major_functions.h
 	"../DHT/DHT.h"
 	"../Messages/Message_Proxy.h"
 	<iostream>
@@ -689,7 +689,7 @@
 
 1655672247 c:\users\patto\desktop\paft\github\paft\src\fileio\linked_list.h
 
-1659455653 source:c:\users\patto\desktop\paft\github\paft\src\client\main_cli.cpp
+1665154997 source:c:\users\patto\desktop\paft\github\paft\src\client\main_cli.cpp
 	"Main_CLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -706,7 +706,7 @@
 1656008856 c:\users\patto\desktop\paft\github\paft\src\dht\print_dht.h
 	"DHT.h"
 
-1659626335 source:c:\users\patto\desktop\paft\github\paft\src\client\main_client.cpp
+1665170748 source:c:\users\patto\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
@@ -714,6 +714,7 @@
 	"../DHT/DHT_Lookup.h"
 	"../Messages/Message_Ping.h"
 	"../Messages/Message_Proxy.h"
+	"../Messages/Message_Keyed_Proxy.h"
 	<iostream>
 	<winsock2.h>
 	<windows.h>
@@ -730,7 +731,7 @@
 	<mutex>
 	"DHT.h"
 
-1659629558 source:c:\users\patto\desktop\paft\github\paft\src\client\major_functions.cpp
+1665169302 source:c:\users\patto\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -740,6 +741,7 @@
 	"../FileIO/SHA_256.h"
 	"../FileIO/File_Functions.h"
 	"../DHT/DHT_Search.h"
+	"../Peers/Peer_Access.h"
 	<iostream>
 	<fstream>
 	<unistd.h>
@@ -757,7 +759,7 @@
 	"Main_Client.h"
 	<iostream>
 
-1656008941 source:c:\users\patto\desktop\paft\github\paft\src\dht\dht.cpp
+1665167526 source:c:\users\patto\desktop\paft\github\paft\src\dht\dht.cpp
 	"DHT.h"
 	"DHT_Access.h"
 	"DHT_Updater.h"
@@ -769,6 +771,8 @@
 	<mutex>
 	<ws2tcpip.h>
 	<thread>
+	<Wincrypt.h>
+	<windows.h>
 
 1640109263 c:\users\patto\desktop\paft\github\paft\src\dht\dht_updater.h
 	"DHT.h"
@@ -826,7 +830,7 @@
 	<fstream>
 	"SHA_256.h"
 
-1659628084 source:c:\users\patto\desktop\paft\github\paft\src\server\connection.cpp
+1665171297 source:c:\users\patto\desktop\paft\github\paft\src\server\connection.cpp
 	<winsock2.h>
 	<winsock.h>
 	<windows.h>
@@ -840,11 +844,13 @@
 	"../FileIO/Meta_Files.h"
 	"../Messages/Message_Ping.h"
 	"../Messages/Message_Proxy.h"
+	"../Messages/Message_Keyed_Proxy.h"
 	"../Client/Main_Client.h"
+	"../Peers/Peer_Access.h"
 	<ws2tcpip.h>
 	<iostream>
 
-1659212854 c:\users\patto\desktop\paft\github\paft\src\server\connection.h
+1665171086 c:\users\patto\desktop\paft\github\paft\src\server\connection.h
 	<winsock.h>
 	<windows.h>
 	<stdlib.h>
@@ -904,16 +910,23 @@
 1659468097 c:\users\patto\desktop\paft\github\paft\src\messages\message_proxy.h
 	"../DHT/DHT.h"
 
-1665001011 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer.cpp
+1665159647 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer.cpp
 	"Peer.h"
 	"../DHT/DHT.h"
 
-1665000343 c:\users\patto\desktop\paft\github\paft\src\peers\peer.h
+1665159667 c:\users\patto\desktop\paft\github\paft\src\peers\peer.h
 	"../DHT/DHT.h"
 
-1665001074 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.cpp
+1665159586 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.cpp
 	"Peer_Access.h"
 
-1665000530 c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.h
+1665171350 c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.h
 	"Peer.h"
+
+1665091373 source:c:\users\patto\desktop\paft\github\paft\src\messages\message_keyed_proxy.cpp
+	"Message_Keyed_Proxy.h"
+	"Base_Message.h"
+
+1665091367 c:\users\patto\desktop\paft\github\paft\src\messages\message_keyed_proxy.h
+	"../DHT/DHT.h"
 

@@ -109,6 +109,9 @@ int Main_CLI::Command_Parser(char Input[], int Input_len)
     else if(String_Compare(Input, "download_file_onion_2"))
         CLI_Functions::Download_File_Onion_2(Input, Input_len);
 
+    else if(String_Compare(Input, "upload_file_onion"))
+        CLI_Functions::Download_File_Onion_2(Input, Input_len);
+
     else if(String_Compare(Input, "exit"))
         exit(0);
 

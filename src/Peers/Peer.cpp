@@ -23,11 +23,26 @@ void Peer::Set_Data(DHT_Single_Entry peer1, _160bitnumber peerKey)
     this->isSet = true;
 
 }
+
+void Peer::Set_Data(DHT_Single_Entry peer1, _160bitnumber peerKey, const char *localFileLocation, int localFileLocationLength, _160bitnumber fileID)
+{
+    this->peerTo = peer1;
+    this->peerKey = peerKey;
+    this->isEndPoint = true;
+    this->isSet = true;
+
+    memcpy(this->localFileLocation, localFileLocation, localFileLocationLength);
+    this->fileID = fileID;
+    this->hasFile = true;
+
+}
+
+
 void Peer::Unset_Data()
 {
     this->isEndPoint = false;
     this->isSet = false;
-
+    this->hasFile = false;
 }
 
 

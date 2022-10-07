@@ -6,6 +6,7 @@
 #include "../DHT/DHT_Lookup.h"
 #include "../Messages/Message_Ping.h"
 #include "../Messages/Message_Proxy.h"
+#include "../Messages/Message_Keyed_Proxy.h"
 
 #include <iostream>
 
@@ -1104,6 +1105,92 @@ Message Main_Client::Proxy_Get_Chunk_2(ChunkResponce info, DHT_Single_Entry conn
 
 
 
+void Main_Client::Upload_File_Onion(_160bitnumber key, DHT_Single_Entry middlePeer, DHT_Single_Entry lastPeer, _160bitnumber fileID)
+{
+    if(!set_Up_Properly)
+        return;
+
+    char *sendbuf = Message_Keyed_Proxy::Create_Upload_Message(key, middlePeer, lastPeer, fileID);
+    int iResult = send( server_Socket, sendbuf, 75, 0 );
+    delete[] sendbuf;
+
+    if (iResult == SOCKET_ERROR) {
+        printf("Send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return;
+    }
+
+
+    char recvbuf[DEFAULT_BUFLEN];
+
+    //Get the ping back
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return;
+    }
+
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(recvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
+
+
+    Shutdown_Connection_Gracefully();
+
+
+    return;
+}
+
+
+void Main_Client::Proxy_Onion(_160bitnumber key, char *msg, int len)
+{
+    if(!set_Up_Properly)
+        return;
+
+
+
+    char *sendbuf = Message_Keyed_Proxy::Create_Upload_Message(msg, len, key);
+
+    int iResult = SOCKET_ERROR;
+    if(len == 75)
+        int iResult = send( server_Socket, sendbuf, 69, 0 );
+    else if(len == 69)
+        int iResult = send( server_Socket, sendbuf, 63, 0 );
+
+    delete[] sendbuf;
+
+    if (iResult == SOCKET_ERROR) {
+        printf("Send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return;
+    }
+
+
+    char recvbuf[DEFAULT_BUFLEN];
+
+    //Get the ping back
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return;
+    }
+
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(recvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
+
+
+    Shutdown_Connection_Gracefully();
+
+
+    return;
+}
 
 
 

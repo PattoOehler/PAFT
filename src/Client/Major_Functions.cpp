@@ -8,6 +8,7 @@
 #include "../FileIO/SHA_256.h"
 #include "../FileIO/File_Functions.h"
 #include "../DHT/DHT_Search.h"
+#include "../Peers/Peer_Access.h"
 
 #include <iostream>
 #include <fstream>
@@ -136,6 +137,27 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 }
 
+
+void Major_Functions::Upload_File_Onion(const char *local_file_location, const char *public_File_Name)
+{
+
+    _160bitnumber created_File_ID = DHT::Random_ID();
+    _160bitnumber peerKey = DHT::Random_ID();
+    Meta_Files::Make_File(local_file_location, public_File_Name, created_File_ID);
+
+
+    //Store the local file location with the key
+    three_DHT closest_In_Network = Three_Closest_Peers_In_Network(created_File_ID);
+    Peer_Access::Add_Peer(closest_In_Network.entry[0], peerKey, local_file_location, strlen(local_file_location), created_File_ID);
+
+
+    //Create a Main_Client function to send the message.
+    Main_Client client(closest_In_Network.entry[0].addr, closest_In_Network.entry[0].port);
+    client.Upload_File_Onion(peerKey, closest_In_Network.entry[1], closest_In_Network.entry[2], created_File_ID);
+
+    std::cout << "Sent the upload message waiting for a response\n";
+
+}
 
 
 

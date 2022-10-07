@@ -24,6 +24,7 @@ namespace paft
         static _160bitnumber Char_To_160bit(char *input);
         static void Download_File_Onion_1(char input[], int length);
         static void Download_File_Onion_2(char input[], int length);
+        static void upload_file_onion(char input[], int length);
     };
 
 }

@@ -13,7 +13,12 @@ namespace paft
         bool isEndPoint = false;
         bool isSet = false;
 
+        char localFileLocation[100];
+        _160bitnumber fileID;
+        bool hasFile = false;
+
     public:
+        void Set_Data(DHT_Single_Entry peer1, _160bitnumber peerKey, const char *localFileLocation, int localFileLocationLength, _160bitnumber fileID);
         void Set_Data(DHT_Single_Entry peer1, DHT_Single_Entry peer2, _160bitnumber peerKey);
         void Set_Data(DHT_Single_Entry peer1, _160bitnumber peerKey);
         void Unset_Data();

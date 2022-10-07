@@ -8,6 +8,25 @@ Peer* Peer_Access::all_Peers = new Peer[NUM_PEERS];
 
 
 
+
+
+void Peer_Access::Add_Peer(DHT_Single_Entry peer1, _160bitnumber peerKey, const char *localFileLocation, int localFileLocationLength, _160bitnumber fileID)
+{
+    for(int i=0; i<NUM_PEERS; i++)
+    {
+        if(!all_Peers[i].Is_Set())
+        {
+                all_Peers[i].Set_Data(peer1, peerKey, localFileLocation, localFileLocationLength, fileID);
+                return;
+        }
+    }
+
+}
+
+
+
+
+
 void Peer_Access::Add_Peer(DHT_Single_Entry peer1, DHT_Single_Entry peer2, _160bitnumber peerKey)
 {
     for(int i=0; i<NUM_PEERS; i++)
@@ -49,4 +68,8 @@ DHT_Single_Entry Peer_Access::Find_Peer(DHT_Single_Entry peerFrom, _160bitnumber
             }
         }
     }
+
+    DHT_Single_Entry a;
+    return a;
+
 }

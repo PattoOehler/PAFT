@@ -11,6 +11,7 @@ namespace paft
         static Peer* all_Peers;
 
     public:
+        static void Add_Peer(DHT_Single_Entry peer1, _160bitnumber peerKey, const char *localFileLocation, int localFileLocationLength, _160bitnumber fileID);
         static void Add_Peer(DHT_Single_Entry peer1, DHT_Single_Entry peer2, _160bitnumber peerKey);
         static void Add_Peer(DHT_Single_Entry peer1, _160bitnumber peerKey);
 
