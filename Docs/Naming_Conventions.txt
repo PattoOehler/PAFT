@@ -1,4 +1,4 @@
-Functions/Methods/Classes Capitalize Word Starts And_Use_Underscores
+Functions/Methods/Classes/FileNames Capitalize Word Starts And_Use_Underscores
 Instance variables use camel_Case_With_Underscores
 Local variables use camelCaseWithoutUnderscores
 Acronyms are capitalized

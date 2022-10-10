@@ -7,6 +7,7 @@
 #include "../FileIO/File_Functions.h"
 #include "../FileIO/Meta_Files.h"
 #include "../DHT/DHT_Search.h"
+#include "../Peers/Peer_Access.h"
 
 #include <iostream>
 
@@ -20,6 +21,7 @@ void CLI_Functions::Help_Command()
     std::cout << "ping [ip] [port]                                    -- Ping\n";
     std::cout << "print_dht                                           -- Print the dht\n";
     std::cout << "print_files                                         -- prints the stored files\n";
+    std::cout << "print_peers                                         -- prints the stored peer connections\n";
     std::cout << "store_file_on_network [C:\\File_Location] [Filename] -- stores a file on the network\n";
     std::cout << "download_file_on_network [SHA-CHECKSUM] [FileID]    -- downloads a file from the network\n";
     std::cout << "save_state                                          -- Saves the DHT\n";
@@ -63,15 +65,15 @@ void CLI_Functions::Download_File_Onion_1(char input[], int length)
     }
     //(input + *(positions+0), input + *(positions+1) ) how to call the arguments
     _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
-    three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
+    three_DHT netClosest = Major_Functions::Find_File_On_Network(fileID);
     ChunkResponce b;
     three_DHT peers;
-    if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
+    if( DHT::Is_Equal( netClosest.entry[0].id , fileID) )
     {
         b.chunkID = -1;
         b.fileID = fileID;
-        b.sendToAddr = net_Closest.entry[0].addr; //Should work TODO test
-        b.sendToPort = net_Closest.entry[0].port;
+        b.sendToAddr = netClosest.entry[0].addr; //Should work TODO test
+        b.sendToPort = netClosest.entry[0].port;
 
         peers = DHT_Search::Lookup(fileID);
         if( memcmp((char *)&peers.entry[0].addr, (char *)&b.sendToAddr, 4) == 0)
@@ -95,21 +97,21 @@ void CLI_Functions::Download_File_Onion_1(char input[], int length)
     }
     else
     {
-        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
+        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(netClosest.entry[0].id) << "RETURNING\n\n";
         return;
     }
 
 
-    std::string output_File_Name = Meta_Files::Get_Output_File_Name( fileID );
+    std::string outputFileName = Meta_Files::Get_Output_File_Name( fileID );
     //Allocate the amount of space necessary for the file
-    File_Functions::Allocate_File( output_File_Name );
+    File_Functions::Allocate_File( outputFileName );
 
 
     //Get the file by chunks
-    int fileChunks = Meta_Files::Get_Chunks( output_File_Name );
+    int fileChunks = Meta_Files::Get_Chunks( outputFileName );
     for(int i=0; i<fileChunks; i++ )
     {
-        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
+        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, outputFileName);
         b.chunkID = i;
         Major_Functions::Get_File_Chunk_Proxy(metaCheckSum, peers.entry[0], b );
         std::cout << "Got FileChunk " << i << "\n";
@@ -135,26 +137,20 @@ void CLI_Functions::Download_File_Onion_2(char input[], int length)
         return;
     }
     //(input + *(positions+0), input + *(positions+1) ) how to call the arguments
-    std::cout << "Download_File_Onion 1\n";
     _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
     three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
     ChunkResponce b;
-    std::cout << "Download_File_Onion 2\n";
     three_DHT peers;
     if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
     {
-        std::cout << "Download_File_Onion 3\n";
         b.chunkID = -1;
         b.fileID = fileID;
         b.sendToAddr = net_Closest.entry[0].addr; //Should work TODO test
         b.sendToPort = net_Closest.entry[0].port;
-        std::cout << "Download_File_Onion 4\n";
 
         peers = DHT_Search::Lookup(fileID);
-        std::cout << "Download_File_Onion 5\n";
         if( memcmp((char *)&peers.entry[0].addr, (char *)&b.sendToAddr, 4) == 0)
         {
-            std::cout << "Download_File_Onion 6-1\n";
             if(peers.entry[1].is_set)
                 peers.entry[0] = peers.entry[1];
             else
@@ -165,7 +161,6 @@ void CLI_Functions::Download_File_Onion_2(char input[], int length)
         }
         if( memcmp((char *)&peers.entry[1].addr, (char *)&b.sendToAddr, 4) == 0)
         {
-            std::cout << "Download_File_Onion 6-2\n";
             if(peers.entry[2].is_set)
                 peers.entry[1] = peers.entry[2];
             else
@@ -174,10 +169,8 @@ void CLI_Functions::Download_File_Onion_2(char input[], int length)
                 return;
             }
         }
-        std::cout << "Download File Onion 7\n";
 
         int error_Check = Major_Functions::Get_Metadata_File_Proxy_2(input + *(positions+0), peers.entry[0],peers.entry[1], b);
-        std::cout << "Download File Onion 8\n";
         if(error_Check == 0)
             std::cout << "Got the metadata file\n";
         else
@@ -217,13 +210,6 @@ void CLI_Functions::Download_File_Onion_2(char input[], int length)
 
 
 
-
-
-
-
-
-
-
 void CLI_Functions::Self_Ping_Command()
 {
     Main_Client client("127.0.0.1", "1234");
@@ -259,7 +245,6 @@ void CLI_Functions::Store_File_Net_And_Get_Chunk_Back_Command()
 
     _160bitnumber ID = DHT::Random_ID();
     Major_Functions::Upload_File_To_Network("F:\\Ubuntu\\ISOs\\MAC\\snowlepard.dmg", "ISO.paft", ID);
-
 
 
     Major_Functions::Get_File_Chunk(ID, "ExpectedChecksum", a,1);
@@ -308,13 +293,13 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     //(input + *(positions+0), input + *(positions+1) ) how to call the arguments
 
     _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
-    three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
+    three_DHT netClosest = Major_Functions::Find_File_On_Network(fileID);
 
 
-    if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
+    if( DHT::Is_Equal( netClosest.entry[0].id , fileID) )
     {
-        int error_Check = Major_Functions::Get_Metadata_File(fileID, input + *(positions+0), net_Closest.entry[0]);
-        if(error_Check == 0)
+        int errorCheck = Major_Functions::Get_Metadata_File(fileID, input + *(positions+0), netClosest.entry[0]);
+        if(errorCheck == 0)
             std::cout << "Got the metadata file\n";
         else
         {
@@ -324,23 +309,23 @@ void CLI_Functions::Downlaod_File_Network(char input[], int length)
     }
     else
     {
-        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << " RETURNING\n\n";
+        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(netClosest.entry[0].id) << " RETURNING\n\n";
         return;
     }
 
 
-    std::string output_File_Name = Meta_Files::Get_Output_File_Name( fileID );
+    std::string outputFileName = Meta_Files::Get_Output_File_Name( fileID );
     //Allocate the amount of space necessary for the file
-    File_Functions::Allocate_File( output_File_Name );
+    File_Functions::Allocate_File( outputFileName );
 
 
     //Get the file by chunks
-    int fileChunks = Meta_Files::Get_Chunks( output_File_Name );
+    int fileChunks = Meta_Files::Get_Chunks( outputFileName );
     for(int i=0; i<fileChunks; i++ )
     {
-        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, output_File_Name);
+        std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, outputFileName );
 
-        Major_Functions::Get_File_Chunk(fileID, metaCheckSum, net_Closest.entry[0], i );
+        Major_Functions::Get_File_Chunk(fileID, metaCheckSum, netClosest.entry[0], i );
     }
 
     std::cout << "Finished Downloading the file now uploading\n";
@@ -362,14 +347,14 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
     }
     //(input + *(positions+0), input + *(positions+1) ) how to call the arguemnts
 
-    _160bitnumber file_ID = Char_To_160bit(input + *(positions+1));
-    three_DHT net_Closest = Major_Functions::Find_File_On_Network(file_ID);
+    _160bitnumber fileID = Char_To_160bit(input + *(positions+1));
+    three_DHT net_Closest = Major_Functions::Find_File_On_Network(fileID);
 
 
-    if( DHT::Is_Equal( net_Closest.entry[0].id , file_ID) )
+    if( DHT::Is_Equal( net_Closest.entry[0].id , fileID) )
     {
-        int error_Check = Major_Functions::Get_Metadata_File_Self(file_ID, input + *(positions+0), net_Closest.entry[0]);
-        if(error_Check == 0)
+        int errorCheck = Major_Functions::Get_Metadata_File_Self(fileID, input + *(positions+0), net_Closest.entry[0]);
+        if(errorCheck == 0)
             std::cout << "Got the metadata file\n";
         else
         {
@@ -379,7 +364,7 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
     }
     else
     {
-        std::cout << "Expected " << DHT::ID_To_String(file_ID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
+        std::cout << "Expected " << DHT::ID_To_String(fileID) << " got -> " << DHT::ID_To_String(net_Closest.entry[0].id) << "RETURNING\n\n";
         return;
     }
 
@@ -395,7 +380,7 @@ void CLI_Functions::Self_Downlaod_File_Network(char input[], int length)
     {
         std::string metaCheckSum = Meta_Files::Get_Check_Sum(i, "Test_Metafiles\\meta.paft");
 
-        Major_Functions::Get_File_Chunk(file_ID, metaCheckSum, net_Closest.entry[0], i );
+        Major_Functions::Get_File_Chunk(fileID, metaCheckSum, net_Closest.entry[0], i );
     }
 
     std::cout << "Finished Downloading the file\n";
@@ -412,18 +397,18 @@ _160bitnumber CLI_Functions::Char_To_160bit(char *input)
     _160bitnumber returning;
     for(int i=0; i<40; i+= 2)
     {
-        unsigned char bytenum=0;
+        unsigned char byteNum=0;
         if(input[i] <= '9' && input[i] >= '0')
-            bytenum += (input[i] - '0') * 16;
+            byteNum += (input[i] - '0') * 16;
         else
-            bytenum += ((input[i] - 'A')+10) * 16;
+            byteNum += ((input[i] - 'A')+10) * 16;
 
         if(input[i+1] <= '9' && input[i+1] >= '0')
-            bytenum += (input[i+1] - '0');
+            byteNum += (input[i+1] - '0');
         else
-            bytenum += (input[i+1] - 'A') + 10;
+            byteNum += (input[i+1] - 'A') + 10;
 
-        memcpy((char*)&returning+(i/2),(char*)&bytenum,1);
+        memcpy((char*)&returning+(i/2),(char*)&byteNum,1);
 
 
 
@@ -478,7 +463,7 @@ int* CLI_Functions::Arguement_Positions(char input[], int length)
 
 
 
-void CLI_Functions::upload_file_onion(char input[], int length)
+void CLI_Functions::Upload_File_Onion(char input[], int length)
 {
 
     int *positions;
@@ -497,13 +482,16 @@ void CLI_Functions::upload_file_onion(char input[], int length)
 
 
 
-    //char *Message_Keyed_Proxy::Create_Upload_Message(_160bitnumber key, DHT_Single_Entry middlePeer, DHT_Single_Entry lastPeer, _160bitnumber fileID)
-
-
-
 
 }
 
+
+void CLI_Functions::Print_Peers()
+{
+    Peer_Access::Print_Peers();
+
+
+}
 
 
 

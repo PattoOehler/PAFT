@@ -5,11 +5,14 @@
 #include "src/DHT/DHT.h"
 #include "src/UnitTests/MainUnitTests.h"
 
-int main()
+int main(int argc, char *argv[])
 {
     paft::MainUnitTests::Run_All_Auto_Tests();
 
     paft::DHT::Init();
+
+    if(argc > 1)
+        paft::MainServer::Set_Port_Num(  atoi(argv [1]) );
 
     std::thread thread(paft::MainServer::Start_Server);
 

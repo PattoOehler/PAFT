@@ -19,10 +19,14 @@
 
 using namespace paft;
 
+unsigned short int MainServer::portNum = 1234;
+
+
 
 int MainServer::Start_Server()
 {
-    printf("Starting up the server on port 1234?\n");
+
+    std::cout << "Server starting on port " << Get_Port_Num() << "\n";
 
     // our masterSocket(socket that listens for connections)
     SOCKET sock;
@@ -44,10 +48,9 @@ int MainServer::Start_Server()
     server.sin_family=AF_INET;
     server.sin_addr.s_addr=INADDR_ANY;
 
-    unsigned short int b = 1234;
-    DHT_Access::Set_Self_Port(b);
+    DHT_Access::Set_Self_Port(Get_Port_Num());
     DHT_Access::Set_Self_Address("127.0.0.1");
-    server.sin_port=htons(b); // listen on port
+    server.sin_port=htons(Get_Port_Num()); // listen on port
 
     // create our socket
     sock=socket(AF_INET,SOCK_STREAM,0);
@@ -57,7 +60,7 @@ int MainServer::Start_Server()
         return 0;
     }
 
-    // bind our socket to a port(port 1234)
+    // bind our socket to a port
     if( bind(sock,(sockaddr*)&server,sizeof(server)) !=0 )
     {
         return 0;
@@ -94,4 +97,22 @@ int MainServer::Start_Server()
 
      // exit
      return 0;
+}
+
+
+
+
+
+
+void MainServer::Set_Port_Num(unsigned short int portNum)
+{
+    MainServer::portNum = portNum;
+
+}
+
+
+unsigned short int MainServer::Get_Port_Num()
+{
+
+    return portNum;
 }

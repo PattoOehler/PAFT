@@ -17,6 +17,8 @@ namespace paft
 
         static DHT_Single_Entry Find_Peer(DHT_Single_Entry peerFrom, _160bitnumber peerKey);
 
+        static void Print_Peers();
+
     };
 
 }

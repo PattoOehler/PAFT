@@ -28,6 +28,8 @@ namespace paft
 
         DHT_Single_Entry Other_Peer(DHT_Single_Entry peer1, _160bitnumber peerKey);
 
+        _160bitnumber Get_Peer_Key();
+
     };
 
 }

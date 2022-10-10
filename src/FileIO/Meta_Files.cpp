@@ -47,6 +47,8 @@ std::string Meta_Files::Get_Output_File_Name(_160bitnumber file_id)
 {
     std::string filepath;
 
+    filepath.push_back('.');
+    filepath.push_back('/');
     filepath.push_back('M');
     filepath.push_back('e');
     filepath.push_back('t');
@@ -122,7 +124,7 @@ void Meta_Files::Write_File()
 
     if(!metaFile)
     {
-        std::cout << "Error opening the output file!\n";
+        std::cout << "Error opening the output file named \"" << output_File_Name << "\"!\n";
         return;
     }
 

@@ -110,7 +110,10 @@ int Main_CLI::Command_Parser(char Input[], int Input_len)
         CLI_Functions::Download_File_Onion_2(Input, Input_len);
 
     else if(String_Compare(Input, "upload_file_onion"))
-        CLI_Functions::Download_File_Onion_2(Input, Input_len);
+        CLI_Functions::Upload_File_Onion(Input, Input_len);
+
+    else if(String_Compare(Input, "print_peers"))
+        CLI_Functions::Print_Peers();
 
     else if(String_Compare(Input, "exit"))
         exit(0);
@@ -159,13 +162,11 @@ bool Main_CLI::String_Compare(char* string1, const char* string2)
 
 void Main_CLI::Self_Find_Random_Node()
 {
-    _160bitnumber Testing = DHT::Random_ID();
+    _160bitnumber testing = DHT::Random_ID();
 
 
-
-
-    Main_Client Client("127.0.0.1", "1234");
-    Client.Find_Node(Testing);
+    Main_Client client("127.0.0.1", "1234");
+    client.Find_Node(testing);
 
 
 
@@ -174,10 +175,10 @@ void Main_CLI::Self_Find_Random_Node()
 
 void Main_CLI::Self_Find_Random_Node_Network()
 {
-    _160bitnumber Testing = DHT::Random_ID();
+    _160bitnumber testing = DHT::Random_ID();
 
 
-    Major_Functions::Three_Closest_Peers_In_Network(Testing);
+    Major_Functions::Three_Closest_Peers_In_Network(testing);
 
 
 
@@ -186,12 +187,12 @@ void Main_CLI::Self_Find_Random_Node_Network()
 void Main_CLI::Self_Find_Random_File()
 {
 
-    _160bitnumber Testing = DHT::Random_ID();
+    _160bitnumber testing = DHT::Random_ID();
 
 
-    Main_Client Client("127.0.0.1", "1234");
+    Main_Client client("127.0.0.1", "1234");
 
-    Client.Find_File(Testing);
+    client.Find_File(testing);
 
 
 
@@ -200,17 +201,17 @@ void Main_CLI::Self_Find_Random_File()
 void Main_CLI::Self_Store_Random_File()
 {
 
-    _160bitnumber Testing = DHT::Random_ID();
+    _160bitnumber testing = DHT::Random_ID();
 
     DHT_Single_Entry file;
 
     file = DHT_Access::Access_DHT(159*20);
-    file.id = Testing;
+    file.id = testing;
 
 
-    Main_Client Client("127.0.0.1", "1234");
+    Main_Client client("127.0.0.1", "1234");
 
-    Client.Store_File(file);
+    client.Store_File(file);
 
 
 

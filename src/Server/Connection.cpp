@@ -17,6 +17,7 @@
 #include "../Messages/Message_Keyed_Proxy.h"
 #include "../Client/Main_Client.h"
 #include "../Peers/Peer_Access.h"
+#include "../Client/Major_Functions.h"
 
 #include <ws2tcpip.h>
 
@@ -42,11 +43,11 @@ Connection::~Connection()
 
 void Connection::Ping(LPVOID lpParam)
 {
-    SOCKET current_client = (SOCKET)lpParam;
+    SOCKET currentClient = (SOCKET)lpParam;
 
-    char *sendbuf = Message_Ping::Create_Ping_Responce();
-    send(current_client,sendbuf,20,0);
-    delete[] sendbuf;
+    char *sendBuf = Message_Ping::Create_Ping_Responce();
+    send(currentClient,sendBuf,20,0);
+    delete[] sendBuf;
 
 }
 
@@ -54,121 +55,120 @@ void Connection::Ping(LPVOID lpParam)
 
 void Connection::Lookup_Peer(LPVOID lpParam, char buf[], int len)
 {
-
-    SOCKET current_client = (SOCKET)lpParam;
-
-
-    char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_Self_ID();
-    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
-
-
-
-
     if(len < 43)
-    {
         return;
-    }
+
+
+
+    SOCKET currentClient = (SOCKET)lpParam;
+
+
+    char sendBuf[512];
+    _160bitnumber self = DHT_Access::Get_Self_ID();
+    memcpy(sendBuf, (char*)&self, 20); // 160/8=20
+
+
+
+
+
 
     _160bitnumber a;
     memcpy((char*)&a, buf+23, 20);
-    three_DHT closest_Three = DHT_Search::Lookup(a);
+    three_DHT closestThree = DHT_Search::Lookup(a);
 
     int counter=0;
-    if(closest_Three.entry[0].is_set)
+    if(closestThree.entry[0].is_set)
     {
-        memcpy(sendbuf+20, (char*)&closest_Three.entry[0].id, 20);
-        memcpy(sendbuf+40, (char*)&closest_Three.entry[0].port, 2);
-        memcpy(sendbuf+42, (char*)&closest_Three.entry[0].addr, 4);
+        memcpy(sendBuf+20, (char*)&closestThree.entry[0].id, 20);
+        memcpy(sendBuf+40, (char*)&closestThree.entry[0].port, 2);
+        memcpy(sendBuf+42, (char*)&closestThree.entry[0].addr, 4);
         counter=1;
 
     }
-    if(closest_Three.entry[1].is_set)
+    if(closestThree.entry[1].is_set)
     {
-        memcpy(sendbuf+46, (char*)&closest_Three.entry[0].id, 20);
-        memcpy(sendbuf+66, (char*)&closest_Three.entry[0].port, 2);
-        memcpy(sendbuf+68, (char*)&closest_Three.entry[0].addr, 4);
+        memcpy(sendBuf+46, (char*)&closestThree.entry[0].id, 20);
+        memcpy(sendBuf+66, (char*)&closestThree.entry[0].port, 2);
+        memcpy(sendBuf+68, (char*)&closestThree.entry[0].addr, 4);
         counter=2;
 
     }
-    if(closest_Three.entry[2].is_set)
+    if(closestThree.entry[2].is_set)
     {
-        memcpy(sendbuf+72, (char*)&closest_Three.entry[0].id, 20);
-        memcpy(sendbuf+92, (char*)&closest_Three.entry[0].port, 2);
-        memcpy(sendbuf+94, (char*)&closest_Three.entry[0].addr, 4);
+        memcpy(sendBuf+72, (char*)&closestThree.entry[0].id, 20);
+        memcpy(sendBuf+92, (char*)&closestThree.entry[0].port, 2);
+        memcpy(sendBuf+94, (char*)&closestThree.entry[0].addr, 4);
         counter=3;
 
     }
-    send(current_client,sendbuf,20+26*counter,0);
+    send(currentClient,sendBuf,20+26*counter,0);
 }
 
 
 void Connection::Lookup_File(LPVOID lpParam, char buf[], int len)
 {
-
-    SOCKET current_client = (SOCKET)lpParam;
-
-
-    char sendbuf[512];
-    _160bitnumber self = DHT_Access::Get_Self_ID();
-    memcpy(sendbuf, (char*)&self, 20);
-
-
-
-
     if(len < 43)
         return;
+
+
+    SOCKET currentClient = (SOCKET)lpParam;
+
+
+    char sendBuf[512];
+    _160bitnumber self = DHT_Access::Get_Self_ID();
+    memcpy(sendBuf, (char*)&self, 20);
+
 
 
     _160bitnumber a;
     memcpy((char*)&a, buf+23, 20);
 
 
-    three_DHT closest_Three = DHT_Search::Find_Value(a);
+    three_DHT closestThree = DHT_Search::Find_Value(a);
 
     int counter=0;
-    if(closest_Three.entry[0].is_set)
+    if(closestThree.entry[0].is_set)
     {
-        memcpy(sendbuf+20, (char*)&closest_Three.entry[0].id, 20);
-        memcpy(sendbuf+40, (char*)&closest_Three.entry[0].port, 2);
-        memcpy(sendbuf+42, (char*)&closest_Three.entry[0].addr, 4);
+        memcpy(sendBuf+20, (char*)&closestThree.entry[0].id, 20);
+        memcpy(sendBuf+40, (char*)&closestThree.entry[0].port, 2);
+        memcpy(sendBuf+42, (char*)&closestThree.entry[0].addr, 4);
         counter=1;
 
 
     }
-    if(closest_Three.entry[1].is_set)
+    if(closestThree.entry[1].is_set)
     {
-        memcpy(sendbuf+46, (char*)&closest_Three.entry[1].id, 20);
-        memcpy(sendbuf+66, (char*)&closest_Three.entry[1].port, 2);
-        memcpy(sendbuf+68, (char*)&closest_Three.entry[1].addr, 4);
+        memcpy(sendBuf+46, (char*)&closestThree.entry[1].id, 20);
+        memcpy(sendBuf+66, (char*)&closestThree.entry[1].port, 2);
+        memcpy(sendBuf+68, (char*)&closestThree.entry[1].addr, 4);
         counter=2;
 
     }
-    if(closest_Three.entry[2].is_set)
+    if(closestThree.entry[2].is_set)
     {
-        memcpy(sendbuf+72, (char*)&closest_Three.entry[2].id, 20);
-        memcpy(sendbuf+92, (char*)&closest_Three.entry[2].port, 2);
-        memcpy(sendbuf+94, (char*)&closest_Three.entry[2].addr, 4);
+        memcpy(sendBuf+72, (char*)&closestThree.entry[2].id, 20);
+        memcpy(sendBuf+92, (char*)&closestThree.entry[2].port, 2);
+        memcpy(sendBuf+94, (char*)&closestThree.entry[2].addr, 4);
         counter=3;
 
     }
 
 
 
-    send(current_client,sendbuf,20+26*counter,0);
+    send(currentClient,sendBuf,20+26*counter,0);
 
 }
 
 
 
-void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current_client_ip)
+void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr currentClientIP)
 {
-    SOCKET current_client = (SOCKET)lpParam;
+    SOCKET currentClient = (SOCKET)lpParam;
 
 
-    char sendbuf[512];
+    char sendBuf[512];
     _160bitnumber self = DHT_Access::Get_Self_ID();
-    memcpy(sendbuf, (char*)&self, 20); // 160/8=20
+    memcpy(sendBuf, (char*)&self, 20); // 160/8=20
 
     if(len < 49)
     {
@@ -177,55 +177,47 @@ void Connection::Store_File(LPVOID lpParam, char buf[], int len, in_addr current
     }
 
 
-    DHT_Single_Entry file_To_Add;
+    DHT_Single_Entry fileToAdd;
 
-    memcpy((char*)&file_To_Add.id,buf+23,20);
-    memcpy((char*)&file_To_Add.port, buf+43,2);
-    memcpy((char*)&file_To_Add.addr, buf+45, 4);
+    memcpy((char*)&fileToAdd.id,buf+23,20);
+    memcpy((char*)&fileToAdd.port, buf+43,2);
+    memcpy((char*)&fileToAdd.addr, buf+45, 4);
 
-    int *aa = (int *)&file_To_Add.addr;
+    int *aa = (int *)&fileToAdd.addr;
 
     //Uses 0.0.0.0 to check if the person storing the file has the file.
     if( (*aa) == 0)
-    {
-        file_To_Add.addr = current_client_ip;
-        //std::cout << "Connection::Store_File IP address is 0 so storing used IP\n";
-    }
-    //else
-        //std::cout << "Connection::Store_File IP address is " << *aa << "\n";
+        fileToAdd.addr = currentClientIP;
 
-    DHT_Access::Store_File_ID(file_To_Add);
 
-    send(current_client,sendbuf,20,0);
+    DHT_Access::Store_File_ID(fileToAdd);
+
+    send(currentClient,sendBuf,20,0);
 
 }
 
 
 
 
-void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
+void Connection::Run_Proper_Command(char *buf, longsocket longClient, int len)
 {
     char sendData[100];
 
     if(buf[0] == 0x01)
         {
             //Ping Command
-            Connection::Ping((LPVOID)long_client.client);
+            Connection::Ping((LPVOID)longClient.client);
 
         }
         else if(buf[0] == 0x02)
         {
-
-
-
-
 
         }
         else if(buf[0] == 0x03)
         {
             //Lookup Peer
             std::cout << "Client is asking to lookup a peer \n";
-            Lookup_Peer((LPVOID)long_client.client, buf, len);
+            Lookup_Peer((LPVOID)longClient.client, buf, len);
 
 
         }
@@ -234,7 +226,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Lookup File
             std::cout << "Client is asking to lookup a file \n";
 
-            Lookup_File((LPVOID)long_client.client, buf, len);
+            Lookup_File((LPVOID)longClient.client, buf, len);
 
 
         }
@@ -243,7 +235,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Lookup File
             std::cout << "Client is asking me to store a file ID\n";
 
-            Store_File((LPVOID)long_client.client, buf, len, long_client.from.sin_addr);
+            Store_File((LPVOID)longClient.client, buf, len, longClient.from.sin_addr);
 
 
         }
@@ -252,7 +244,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Send chunk of a file
             std::cout << "Client is asking to download a chunk of a file\n";
 
-            Send_File_Chunk((LPVOID)long_client.client, buf, len);
+            Send_File_Chunk((LPVOID)longClient.client, buf, len);
 
 
         }
@@ -261,7 +253,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Forward a message
             std::cout << "Client is asking for me to be a proxy\n";
 
-            Be_Proxy((LPVOID)long_client.client, buf, len);
+            Be_Proxy((LPVOID)longClient.client, buf, len);
 
 
         }
@@ -270,7 +262,7 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             //Forward a message
             std::cout << "Client is asking for me to be an onion proxy NEW VERSION\n";
 
-            Be_Onion_Proxy(long_client, buf, len);
+            Be_Onion_Proxy(longClient, buf, len);
 
 
         }
@@ -279,10 +271,10 @@ void Connection::Run_Proper_Command(char *buf, longsocket long_client, int len)
             printf("\nConnection::Run_Proper_Command Improper command %x\n", buf[0]);
             strcpy(sendData,"Invalid cmd\n");
             Sleep(10);
-            send(long_client.client,sendData,sizeof(sendData),0);
+            send(longClient.client,sendData,sizeof(sendData),0);
 
         }
-        shutdown(long_client.client, SD_SEND);
+        shutdown(longClient.client, SD_SEND);
 
 }
 
@@ -295,7 +287,7 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
         return;
 
     }
-    SOCKET current_client = (SOCKET)lpParam;
+    SOCKET currentClient = (SOCKET)lpParam;
     Ping(lpParam); //To give them my DHT entry
 
     BaseResponce baseResp = Message_Proxy::Read_Base(buf, len);
@@ -314,7 +306,7 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
         Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);
         Message responce = client.Proxy(baseResp.forwardCommandByte, buf+30, len-30); //TODO make 30 not static
 
-        send(current_client,responce.message,responce.msgLength,0);
+        send(currentClient,responce.message,responce.msgLength,0);
         free(responce.message);
     }
     else if(baseResp.forwardCommandByte == 6)
@@ -332,7 +324,7 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
         memcpy((char *)&chunkLen, chunk, 4);
         chunk+=4;
 
-        send(current_client, chunk, chunkLen, 0);
+        send(currentClient, chunk, chunkLen, 0);
 
 
     }
@@ -349,11 +341,11 @@ void Connection::Be_Proxy(LPVOID lpParam, char buf[], int len)
 
 
 
-void Connection::Be_Onion_Proxy(longsocket long_client, char buf[], int len)
+void Connection::Be_Onion_Proxy(longsocket longClient, char buf[], int len)
 {
 
-    SOCKET current_client = long_client.client;
-    Ping((LPVOID)long_client.client); //To give them my DHT entry
+    //SOCKET currentClient = longClient.client;
+    Ping((LPVOID)longClient.client); //To give them my DHT entry
 
 
 
@@ -366,8 +358,8 @@ void Connection::Be_Onion_Proxy(longsocket long_client, char buf[], int len)
     else if(resp.code == 0)
     {
         DHT_Single_Entry from, to;
-        from.addr = long_client.from.sin_addr;
-        from.port = long_client.from.sin_port;
+        from.addr = longClient.from.sin_addr;
+        from.port = longClient.from.sin_port;
         to.addr = resp.sendToAddr;
         to.port = resp.sendToPort;
 
@@ -380,57 +372,31 @@ void Connection::Be_Onion_Proxy(longsocket long_client, char buf[], int len)
     }
     else if(resp.code == 1)
     {
-        std::cout << "\n\nRESP.code == 1 NOT IMPLETMENTED YET\n\n";
+        std::cout << "\n\nStoring File On Network Onion Proxy\n\n";
 
-    }
-
-    /*
-    BaseResponce baseResp = Message_Proxy::Read_Base(buf, len);
-    if(!baseResp.isSet)
-    {
-        std::cout << "\n\n BIG TIME ERROR IN Connection::Be_Proxy\n\n";
-        return;
-    }
-
-    if(baseResp.forwardCommandByte == 8)
-    {
+        DHT_Single_Entry self;
+        self.is_set = true;
+        self.id = resp.fileID;
+        unsigned int z=0;
+        memcpy((char *)&self.addr,(char *) &z, 4);
+        self.port = DHT_Access::Get_Self_Port();
 
 
-        Proxy_Responce msg = Message_Proxy::Read_Proxy_8(buf, len);
+        DHT_Access::Store_File_ID(self);
 
-        Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);
-        Message responce = client.Proxy(baseResp.forwardCommandByte, buf+30, len-30); //TODO make 30 not static
 
-        send(current_client,responce.message,responce.msgLength,0);
-        free(responce.message);
-    }
-    else if(baseResp.forwardCommandByte == 6)
-    {
-        //Get Chunk Message
-        ChunkResponce msg = Message_Proxy::Read_Chunk_6(buf, len);
-        Main_Client client = Main_Client(msg.sendToAddr, msg.sendToPort);
-        char *chunk = client.Get_File_Chunk(msg.fileID, msg.chunkID);
-        if(chunk == nullptr)
+        three_DHT closestInNetwork = Major_Functions::Three_Closest_Peers_In_Network(resp.fileID);
+        for(int i=0;i<3;i++)
         {
-            std::cout << "Get_File_Chunk is NULL in connection:Be_Proxy() Exiting\n";
-            return;
+            if(closestInNetwork.entry[i].is_set)
+            {
+                Main_Client client = Main_Client(closestInNetwork.entry[i].addr, closestInNetwork.entry[i].port);
+                client.Store_File(self);
+            }
         }
-        int chunkLen;
-        memcpy((char *)&chunkLen, chunk, 4);
-        chunk+=4;
-
-        send(current_client, chunk, chunkLen, 0);
-
-
-    }
-    else
-    {
-        std::cout << "Error in Connection:Be_Proxy() Unknown forwardCommandByte=" << baseResp.forwardCommandByte << "!!\n\n";
 
     }
 
-
-    */
 
 }
 
@@ -450,20 +416,20 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     }
     std::cout << "Connection::Send_File_Chunk is getting called\n";
 
-    SOCKET current_client = (SOCKET)lpParam;
+    SOCKET currentClient = (SOCKET)lpParam;
 
 
-    _160bitnumber FileID;
+    _160bitnumber fileID;
     int desiredChunk;
     memcpy((char*)&desiredChunk,buf+23,4);
-    memcpy((char*)&FileID, buf+27,20);
+    memcpy((char*)&fileID, buf+27,20);
 
 
     Ping(lpParam);
-    int FileLocation = DHT_Access::Find_Stored_File(FileID);
+    int FileLocation = DHT_Access::Find_Stored_File(fileID);
     if(FileLocation == -1)
     {
-        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - " << DHT::ID_To_String(FileID) << "\n\n";
+        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - " << DHT::ID_To_String(fileID) << "\n\n";
         return; //We don't have the file stored so exit the connection
     }
 
@@ -473,7 +439,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     {
         std::cout << "Connection::Send_File_Chunk Desired Chunk == -1\n";
         //The meta-data file is what needs to be returned
-        std::string metafilePath = Meta_Files::Get_Output_File_Name(FileID);
+        std::string metafilePath = Meta_Files::Get_Output_File_Name(fileID);
         int Eight_MiB = 8000000;
 
         char *buf;
@@ -494,7 +460,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
             {
                 // process bytesRead worth of data in buffer
                 std::cout << "Connection::Send_File_Chunk While loop\n";
-                send(current_client,buf,bytesRead,0);
+                send(currentClient,buf,bytesRead,0);
             }
         }
 
@@ -533,7 +499,7 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 
             // process bytesRead worth of data in buffer
             std::cout << "Connection::Send_File_Chunk While loop\n";
-            send(current_client,buf,bytesRead,0);
+            send(currentClient,buf,bytesRead,0);
 
         }
 
@@ -552,15 +518,15 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
 void Connection::Update_DHT(longsocket client, Base_Return data)
 {
 
-    DHT_Single_Entry sender_DHT_Entry;
-    sender_DHT_Entry.addr = client.from.sin_addr;
-    sender_DHT_Entry.id = data.ID;
+    DHT_Single_Entry senderEntry;
+    senderEntry.addr = client.from.sin_addr;
+    senderEntry.id = data.ID;
 
-    sender_DHT_Entry.port = data.port; //TODO
+    senderEntry.port = data.port; //TODO
 
-    sender_DHT_Entry.is_set = true;
+    senderEntry.is_set = true;
 
-    DHT::Update_Time(sender_DHT_Entry);
+    DHT::Update_Time(senderEntry);
 
 }
 
@@ -570,9 +536,9 @@ void Connection::Handle_Client(LPVOID lpParam)
     //This method should always update the DHT
 
     //casting to longsocket
-    longsocket long_client = *(longsocket *)(lpParam);
+    longsocket longClient = *(longsocket *)(lpParam);
 
-    if((long_client.client == INVALID_SOCKET))
+    if((longClient.client == INVALID_SOCKET))
     {
         std::cout << "INVALID SOCKET IN Connection::Handle_Client";
         return ;
@@ -580,19 +546,19 @@ void Connection::Handle_Client(LPVOID lpParam)
 
 
     char receivedData[512];
-    int res = recv(long_client.client,receivedData,sizeof(receivedData) ,0); // recv cmds
+    int res = recv(longClient.client,receivedData,sizeof(receivedData) ,0); // recv cmds
 
     if(res <= 22)
     {
         std::cout << "Message length in Connection::Handle_Client = " << res << ". Exiting...\n";
-        closesocket(long_client.client);
+        closesocket(longClient.client);
         ExitThread(0);
     }
 
     Base_Return data = Base_Message::Read_Base(receivedData, res);
 
-    Update_DHT(long_client, data);
-    Run_Proper_Command( receivedData, long_client, res);
+    Update_DHT(longClient, data);
+    Run_Proper_Command( receivedData, longClient, res);
 
 
 }

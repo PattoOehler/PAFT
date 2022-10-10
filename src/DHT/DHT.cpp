@@ -139,6 +139,8 @@ int DHT::Distance(_160bitnumber id, _160bitnumber id2)
 
 void DHT::Update_Time(DHT_Single_Entry Update)
 {
+    if( Is_Equal(Update.id, DHT_Access::Get_Self_ID() ) )
+       return;
 
     int distance = Distance(Update.id, DHT_Access::Get_Self_ID());
 

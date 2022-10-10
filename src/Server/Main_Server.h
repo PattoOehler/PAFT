@@ -21,10 +21,16 @@ namespace paft
 {
     class MainServer
     {
+    private:
+
     public:
+        static unsigned short int portNum;
+
         static int Start_Server();
 
 
+        static void Set_Port_Num(unsigned short int portNum);
+        static unsigned short int Get_Port_Num();
     };
 
 }

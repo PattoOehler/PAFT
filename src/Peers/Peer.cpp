@@ -81,7 +81,11 @@ DHT_Single_Entry Peer::Other_Peer(DHT_Single_Entry peer1, _160bitnumber peerKey)
 }
 
 
+_160bitnumber Peer::Get_Peer_Key()
+{
+    return peerKey;
 
+}
 
 
 

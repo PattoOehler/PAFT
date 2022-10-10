@@ -51,7 +51,7 @@ void Main_Client::Shutdown_Connection_Gracefully()
     if(!set_Up_Properly)
         return;
 
-    char recvbuf[DEFAULT_BUFLEN];
+    char recvBuf[DEFAULT_BUFLEN];
     // shutdown the connection since no more data will be sent
     int iResult = shutdown(server_Socket, SD_SEND);
     if (iResult == SOCKET_ERROR) {
@@ -65,7 +65,7 @@ void Main_Client::Shutdown_Connection_Gracefully()
 
     // Receive until the peer closes the connection
     do {
-        iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
+        iResult = recv(server_Socket, recvBuf, DEFAULT_BUFLEN, 0);
         if ( iResult > 0 )
             printf("Bytes received: %d\n", iResult);
         else if ( iResult == 0 )
@@ -104,18 +104,18 @@ void Main_Client::Add_Received_Entry_To_DHT(char recvbuf[], int length)
     {
 
 
-        _160bitnumber sender_Id;
-        memcpy((void*)&sender_Id, recvbuf, 20);
+        _160bitnumber senderID;
+        memcpy((void*)&senderID, recvbuf, 20);
 
 
-        DHT_Single_Entry sender_DHT_Entry;
-        sender_DHT_Entry.addr = server_IP;
-        sender_DHT_Entry.id = sender_Id;
-        sender_DHT_Entry.port = server_Port;
-        sender_DHT_Entry.is_set = true;
+        DHT_Single_Entry senderEntry;
+        senderEntry.addr = server_IP;
+        senderEntry.id = senderID;
+        senderEntry.port = server_Port;
+        senderEntry.is_set = true;
 
 
-        DHT::Update_Time(sender_DHT_Entry);
+        DHT::Update_Time(senderEntry);
 
     }
     else
@@ -127,15 +127,15 @@ void Main_Client::Add_Received_Entry_To_DHT(char recvbuf[], int length)
 
 void Main_Client::Add_Received_Entry_To_DHT(_160bitnumber ID)
 {
-    DHT_Single_Entry sender_DHT_Entry;
+    DHT_Single_Entry senderEntry;
 
-    sender_DHT_Entry.addr = server_IP;
-    sender_DHT_Entry.id = ID;
-    sender_DHT_Entry.port = server_Port;
-    sender_DHT_Entry.is_set = true;
+    senderEntry.addr = server_IP;
+    senderEntry.id = ID;
+    senderEntry.port = server_Port;
+    senderEntry.is_set = true;
 
 
-    DHT::Update_Time(sender_DHT_Entry);
+    DHT::Update_Time(senderEntry);
 
 }
 
@@ -151,20 +151,20 @@ void Main_Client::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _1
         if(length >= 46+26*i)
         {
 
-            _160bitnumber sent_Id;
+            _160bitnumber sentID;
             short unsigned int port;
             in_addr addr;
-            memcpy((void*)&sent_Id, recvbuf+20+26*i, 20);
+            memcpy((void*)&sentID, recvbuf+20+26*i, 20);
             memcpy((void*)&port, recvbuf+40+26*i, 2);
             memcpy((void*)&addr, recvbuf+42+26*i, 4);
 
 
             //Create a new thread and ping
-            if(DHT::Is_Equal(file, sent_Id))
+            if(DHT::Is_Equal(file, sentID))
             {
                 //Store file
                 DHT_Single_Entry storing;
-                storing.id = sent_Id;
+                storing.id = sentID;
                 storing.addr = addr;
                 storing.port = port;
                 storing.is_set = true;
@@ -173,8 +173,8 @@ void Main_Client::Ping_Received_Nodes_If_Not_File(char recvbuf[], int length, _1
             else
             {
                 //Ping Node if its up
-                Main_Client received_Client(addr, port);
-                received_Client.Ping();
+                Main_Client receivedClient(addr, port);
+                receivedClient.Ping();
 
             }
 
@@ -198,19 +198,19 @@ void Main_Client::Ping_Received_Nodes(char recvbuf[], int length)
         if(length >= 46+26*i)
         {
 
-            _160bitnumber sender_Id;
+            _160bitnumber senderID;
             short unsigned int port;
             in_addr addr;
-            memcpy((void*)&sender_Id, recvbuf+20+26*i, 20);
+            memcpy((void*)&senderID, recvbuf+20+26*i, 20);
             memcpy((void*)&port, recvbuf+40+26*i, 2);
             memcpy((void*)&addr, recvbuf+42+26*i, 4);
 
 
             //Create a new thread and ping
 
-            Main_Client received_Client(addr, port);
+            Main_Client receivedClient(addr, port);
 
-            received_Client.Ping();
+            receivedClient.Ping();
         }
 
 
@@ -226,17 +226,17 @@ int Main_Client::Store_File(DHT_Single_Entry file)
 
     int bufLen = 49;
 
-    char sendbuf[bufLen];
-    sendbuf[0] = 0x05;
-    Add_Self(sendbuf);
+    char sendBuf[bufLen];
+    sendBuf[0] = 0x05;
+    Add_Self(sendBuf);
 
-    memcpy(sendbuf+23, (char*)&file.id, 20);
-    memcpy(sendbuf+43, (char*)&file.port, 2);
-    memcpy(sendbuf+45, (char*)&file.addr, 4);
+    memcpy(sendBuf+23, (char*)&file.id, 20);
+    memcpy(sendBuf+43, (char*)&file.port, 2);
+    memcpy(sendBuf+45, (char*)&file.addr, 4);
 
 
 
-    int iResult = send( server_Socket, sendbuf, bufLen, 0 );
+    int iResult = send( server_Socket, sendBuf, bufLen, 0 );
 
 
     if (iResult == SOCKET_ERROR) {
@@ -275,7 +275,7 @@ int Main_Client::Find_File(_160bitnumber file)
 {
     if(!set_Up_Properly)
         return -1;
-
+    std::cout << "MainClient Find_File \n";
     char sendbuf[43];
     sendbuf[0] = 0x04;
     Add_Self(sendbuf);
@@ -631,7 +631,7 @@ int Main_Client::Find_File_Recursive(_160bitnumber fileID, int lookup_Identifier
     if(!set_Up_Properly)
         return -1;
 
-
+    std::cout << "MainClient Find_File_recursive \n";
     char sendbuf[43];
     sendbuf[0] = 0x04;
     Add_Self(sendbuf);
@@ -1127,7 +1127,7 @@ void Main_Client::Upload_File_Onion(_160bitnumber key, DHT_Single_Entry middlePe
     //Get the ping back
     iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
     if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
+        printf("Recv failed with error: %d in Main_Client::Upload_File_Onion\n", WSAGetLastError());
         closesocket(server_Socket);
         WSACleanup();
         return;
@@ -1156,9 +1156,9 @@ void Main_Client::Proxy_Onion(_160bitnumber key, char *msg, int len)
 
     int iResult = SOCKET_ERROR;
     if(len == 75)
-        int iResult = send( server_Socket, sendbuf, 69, 0 );
+        iResult = send( server_Socket, sendbuf, 69, 0 );
     else if(len == 69)
-        int iResult = send( server_Socket, sendbuf, 63, 0 );
+        iResult = send( server_Socket, sendbuf, 63, 0 );
 
     delete[] sendbuf;
 
@@ -1175,7 +1175,7 @@ void Main_Client::Proxy_Onion(_160bitnumber key, char *msg, int len)
     //Get the ping back
     iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
     if (iResult == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
+        printf("Recv failed with error: %d in Main_Client::Proxy_Onion\n", WSAGetLastError());
         closesocket(server_Socket);
         WSACleanup();
         return;

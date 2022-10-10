@@ -140,7 +140,7 @@ void Major_Functions::Upload_File_To_Network(const char *local_file_location, co
 
 void Major_Functions::Upload_File_Onion(const char *local_file_location, const char *public_File_Name)
 {
-
+    std::cout << "Upload_File_Onion Running\n";
     _160bitnumber created_File_ID = DHT::Random_ID();
     _160bitnumber peerKey = DHT::Random_ID();
     Meta_Files::Make_File(local_file_location, public_File_Name, created_File_ID);

@@ -620,7 +620,7 @@
 	"DHT_Access.h"
 	<iostream>
 
-1655922374 source:c:\users\patto\desktop\paft\github\paft\main.cpp
+1665410762 source:c:\users\patto\desktop\paft\github\paft\main.cpp
 	<iostream>
 	<thread>
 	"src/Server/Main_Server.h"
@@ -628,7 +628,7 @@
 	"src/DHT/DHT.h"
 	"src/UnitTests/MainUnitTests.h"
 
-1637527172 c:\users\patto\desktop\paft\github\paft\src\server\main_server.h
+1665409999 c:\users\patto\desktop\paft\github\paft\src\server\main_server.h
 	<winsock.h>
 	<windows.h>
 	<stdlib.h>
@@ -646,7 +646,7 @@
 1649104285 c:\users\patto\desktop\paft\github\paft\src\unittests\mainunittests.h
 	<iostream>
 
-1665159733 source:c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.cpp
+1665435175 source:c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.cpp
 	"CLI_Functions.h"
 	"Main_Client.h"
 	"../DHT/DHT_Access.h"
@@ -655,9 +655,10 @@
 	"../FileIO/File_Functions.h"
 	"../FileIO/Meta_Files.h"
 	"../DHT/DHT_Search.h"
+	"../Peers/Peer_Access.h"
 	<iostream>
 
-1665155016 c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.h
+1665435194 c:\users\patto\desktop\paft\github\paft\src\client\cli_functions.h
 	"../DHT/DHT.h"
 
 1665170754 c:\users\patto\desktop\paft\github\paft\src\client\main_client.h
@@ -689,7 +690,7 @@
 
 1655672247 c:\users\patto\desktop\paft\github\paft\src\fileio\linked_list.h
 
-1665154997 source:c:\users\patto\desktop\paft\github\paft\src\client\main_cli.cpp
+1665435366 source:c:\users\patto\desktop\paft\github\paft\src\client\main_cli.cpp
 	"Main_CLI.h"
 	"Main_Client.h"
 	"../DHT/DHT.h"
@@ -706,7 +707,7 @@
 1656008856 c:\users\patto\desktop\paft\github\paft\src\dht\print_dht.h
 	"DHT.h"
 
-1665170748 source:c:\users\patto\desktop\paft\github\paft\src\client\main_client.cpp
+1665435892 source:c:\users\patto\desktop\paft\github\paft\src\client\main_client.cpp
 	"Main_Client.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Access.h"
@@ -731,7 +732,7 @@
 	<mutex>
 	"DHT.h"
 
-1665169302 source:c:\users\patto\desktop\paft\github\paft\src\client\major_functions.cpp
+1665255745 source:c:\users\patto\desktop\paft\github\paft\src\client\major_functions.cpp
 	"Major_Functions.h"
 	"../DHT/DHT.h"
 	"../DHT/DHT_Lookup.h"
@@ -759,7 +760,7 @@
 	"Main_Client.h"
 	<iostream>
 
-1665167526 source:c:\users\patto\desktop\paft\github\paft\src\dht\dht.cpp
+1665256762 source:c:\users\patto\desktop\paft\github\paft\src\dht\dht.cpp
 	"DHT.h"
 	"DHT_Access.h"
 	"DHT_Updater.h"
@@ -816,7 +817,7 @@
 
 1639260009 source:c:\users\patto\desktop\paft\github\paft\src\fileio\linked_list.cpp
 
-1659629446 source:c:\users\patto\desktop\paft\github\paft\src\fileio\meta_files.cpp
+1665414763 source:c:\users\patto\desktop\paft\github\paft\src\fileio\meta_files.cpp
 	"Meta_Files.h"
 	"Linked_List.h"
 	"SHA_256.h"
@@ -830,7 +831,7 @@
 	<fstream>
 	"SHA_256.h"
 
-1665171297 source:c:\users\patto\desktop\paft\github\paft\src\server\connection.cpp
+1665434708 source:c:\users\patto\desktop\paft\github\paft\src\server\connection.cpp
 	<winsock2.h>
 	<winsock.h>
 	<windows.h>
@@ -847,6 +848,7 @@
 	"../Messages/Message_Keyed_Proxy.h"
 	"../Client/Main_Client.h"
 	"../Peers/Peer_Access.h"
+	"../Client/Major_Functions.h"
 	<ws2tcpip.h>
 	<iostream>
 
@@ -858,7 +860,7 @@
 	"Main_Server.h"
 	"../Messages/Base_Message.h"
 
-1655922702 source:c:\users\patto\desktop\paft\github\paft\src\server\main_server.cpp
+1665410107 source:c:\users\patto\desktop\paft\github\paft\src\server\main_server.cpp
 	"Main_Server.h"
 	"Connection.h"
 	"../DHT/DHT.h"
@@ -910,17 +912,18 @@
 1659468097 c:\users\patto\desktop\paft\github\paft\src\messages\message_proxy.h
 	"../DHT/DHT.h"
 
-1665159647 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer.cpp
+1665416818 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer.cpp
 	"Peer.h"
 	"../DHT/DHT.h"
 
-1665159667 c:\users\patto\desktop\paft\github\paft\src\peers\peer.h
+1665416778 c:\users\patto\desktop\paft\github\paft\src\peers\peer.h
 	"../DHT/DHT.h"
 
-1665159586 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.cpp
+1665417153 source:c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.cpp
 	"Peer_Access.h"
+	<iostream>
 
-1665171350 c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.h
+1665416460 c:\users\patto\desktop\paft\github\paft\src\peers\peer_access.h
 	"Peer.h"
 
 1665091373 source:c:\users\patto\desktop\paft\github\paft\src\messages\message_keyed_proxy.cpp

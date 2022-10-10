@@ -1,5 +1,8 @@
 #include "Peer_Access.h"
 
+#include <iostream>
+
+
 using namespace paft;
 #define NUM_PEERS 200
 
@@ -71,5 +74,23 @@ DHT_Single_Entry Peer_Access::Find_Peer(DHT_Single_Entry peerFrom, _160bitnumber
 
     DHT_Single_Entry a;
     return a;
+
+}
+
+
+
+
+
+
+void Peer_Access::Print_Peers()
+{
+    for(int i=0; i<NUM_PEERS; i++)
+    {
+        if(all_Peers[i].Is_Set())
+        {
+            std::cout << "Peer Key = " << DHT::ID_To_String(all_Peers[i].Get_Peer_Key()) << "\n";
+        }
+    }
+
 
 }
