@@ -45,7 +45,7 @@ OFFSET  LENGTH  DESCRIPTION
 1       20      Own ID (for servers DHT)
 21      2       Own Port (for servers DHT)
 23      20      Key
-43      26      Remaining info(hidden)
+43      26-32   Remaining info(hidden)
 */
 char *Message_Keyed_Proxy::Create_Upload_Message(char *message, int messageLen, _160bitnumber key)
 {
@@ -87,7 +87,6 @@ char *Message_Keyed_Proxy::Create_Upload_Message(char *message, int messageLen, 
 
 
 
-
 Keyed_Proxy_Responce Message_Keyed_Proxy::Read_Upload_Message(char *message, int length)
 {
     Keyed_Proxy_Responce info;
@@ -112,6 +111,56 @@ Keyed_Proxy_Responce Message_Keyed_Proxy::Read_Upload_Message(char *message, int
 }
 
 
+
+
+
+
+
+
+/*  FORMAT
+OFFSET  LENGTH  DESCRIPTION
+0       1       Command Byte 0x09
+1       20      Own ID (for servers DHT)
+21      2       Own Port (for servers DHT)
+23      20      Key
+43      20      The file ID to be uploaded
+63      4       The chunk requested
+*/
+char *Message_Keyed_Proxy::Create_Download_Message(_160bitnumber key, _160bitnumber fileID, int chunk)
+{
+    char *returnmsg = new char[67];
+    returnmsg[0] = 0x0a; //Ping Command
+
+    Base_Message::Add_Base(returnmsg, 23); // Adds Own ID and Own Port
+
+    memcpy(returnmsg+23, (char *)&key, 20);
+    memcpy(returnmsg+43, (char *)&fileID, 20);
+    memcpy(returnmsg+63, (char *)&chunk, 4);
+
+    return returnmsg;
+}
+
+
+
+
+
+
+Keyed_Download_Responce Message_Keyed_Proxy::Read_Download_Message(char *message, int length)
+{
+    Keyed_Download_Responce info;
+    info.code = -1;
+
+    if(length == 67)
+    {
+        memcpy((char *)&info.key,    message+23, 20);
+        memcpy((char *)&info.fileID, message+43, 20);
+        memcpy((char *)&info.chunk,  message+63,  4);
+        info.code = 0;
+    }
+
+
+    return info;
+}
 
 
 

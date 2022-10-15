@@ -3,6 +3,8 @@
 #include "DHT.h"
 #include "DHT_Access.h"
 
+#include <iostream>
+
 using namespace paft;
 
 
@@ -49,6 +51,77 @@ DHT_Single_Entry DHT_Search::Next_Closest_In_Bucket(int bucket, _160bitnumber id
 }
 
 
+three_DHT DHT_Search::Combine_Three_DHT(three_DHT dht1, three_DHT dht2, _160bitnumber id)
+{
+    three_DHT closest;
+    int closestCounter=0;
+
+    int oneCounter=0, twoCounter=0;
+
+    if( dht1.entry[0].is_set && dht2.entry[0].is_set )
+    {
+        while(oneCounter <= 2 && twoCounter <= 2 && (!closest.entry[2].is_set))
+        {
+            if(dht1.entry[oneCounter].is_set && dht2.entry[twoCounter].is_set)
+            {
+                if(DHT::Compare(dht1.entry[oneCounter].id, dht2.entry[twoCounter].id, id))
+                {
+                    closest.entry[closestCounter] = dht1.entry[oneCounter];
+                    closestCounter++;
+                    oneCounter++;
+                }
+                else
+                {
+                    closest.entry[closestCounter] = dht2.entry[twoCounter];
+                    closestCounter++;
+                    twoCounter++;
+                }
+
+            }
+            else
+            {
+                break;
+            }
+
+        }
+        //closest should be full or out of stuff in dht1 or dht2
+        for(int i=0;i<2;i++)
+        {
+            if(closest.entry[2].is_set )
+                return closest;
+
+
+            if(dht1.entry[oneCounter].is_set)
+            {
+                closest.entry[closestCounter] = dht1.entry[oneCounter];
+                closestCounter++;
+                oneCounter++;
+            }
+            else if(dht2.entry[twoCounter].is_set)
+            {
+                closest.entry[closestCounter] = dht2.entry[twoCounter];
+                closestCounter++;
+                twoCounter++;
+            }
+            else
+                return closest;
+
+        }
+
+    }
+    else
+    {
+        if(dht1.entry[0].is_set)
+            return dht1;
+        return dht2;
+    }
+
+
+
+
+    return closest;
+}
+
 
 
 
@@ -56,6 +129,31 @@ DHT_Single_Entry DHT_Search::Next_Closest_In_Bucket(int bucket, _160bitnumber id
 three_DHT DHT_Search::Lookup(_160bitnumber id)
 {
     int bucket = DHT::Distance(id, DHT_Access::Get_Self_ID());
+    three_DHT closest = DHT_Search::Lookup_One_Bucket(id, bucket);
+
+    int bucketCounter = 1;
+    while( (bucket + bucketCounter < 160) | (bucket-bucketCounter > 0) )
+    {
+
+        if(closest.entry[2].is_set)
+            return closest;
+
+        if(bucket + bucketCounter < 160)
+        {
+            three_DHT inBucketClosest = DHT_Search::Lookup_One_Bucket(id, bucket + bucketCounter);
+            closest = Combine_Three_DHT(closest, inBucketClosest, id);
+        }
+        if(bucket - bucketCounter >= 0)
+        {
+            three_DHT inBucketClosest = DHT_Search::Lookup_One_Bucket(id, bucket - bucketCounter);
+            closest = Combine_Three_DHT(closest, inBucketClosest, id);
+        }
+        bucketCounter++;
+    }
+
+    return closest;
+
+    /*int bucket = DHT::Distance(id, DHT_Access::Get_Self_ID());
     three_DHT closest = DHT_Search::Lookup_One_Bucket(id, bucket);
     int entryCounter = 0;
 
@@ -122,6 +220,7 @@ three_DHT DHT_Search::Lookup(_160bitnumber id)
     }
 
     return closest;
+    */
 
 }
 
@@ -189,6 +288,9 @@ three_DHT DHT_Search::Lookup_One_Bucket(_160bitnumber id, int bucket)
     for(int i=0;i<3;i++)
         closest.entry[i].is_set =false;
 
+    if( (bucket >= 160) | (bucket < 0) )
+        return closest;
+
 
     DHT_Single_Entry tmp, tmp2;
     DHT_Single_Entry access;
@@ -218,7 +320,7 @@ three_DHT DHT_Search::Lookup_One_Bucket(_160bitnumber id, int bucket)
                         closest.entry[2] = tmp;
 
                     }
-                    else if(access.id,closest.entry[2].is_set)
+                    else if( closest.entry[2].is_set )
                     {
                         if(DHT::Compare(access.id,closest.entry[2].id, id))
                         {

@@ -62,6 +62,7 @@ namespace paft
         static bool Compare(_160bitnumber id,_160bitnumber id2, _160bitnumber compare_To);
 
         static std::string ID_To_String(_160bitnumber id_to_print);
+        static std::string IP_To_String(in_addr addr_In);
 
         static int Distance(_160bitnumber id, _160bitnumber id2);
         static int Add_Entry(DHT_Single_Entry Entry);

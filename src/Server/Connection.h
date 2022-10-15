@@ -29,6 +29,7 @@ namespace paft{
         static void Send_File_Chunk(LPVOID lpParam, char buf[], int len);
         static void Be_Proxy(LPVOID lpParam, char buf[], int len);
         static void Be_Onion_Proxy(longsocket long_client, char buf[], int len);
+        static void Get_File_Chunk_Onion(longsocket longClient, char buf[], int len);
     };
 }
 

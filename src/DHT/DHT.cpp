@@ -10,6 +10,7 @@
 #include <mutex>
 #include <ws2tcpip.h>
 #include <thread>
+#include <string>
 
 #include <Wincrypt.h>
 #include <windows.h>
@@ -251,6 +252,33 @@ std::string DHT::ID_To_String(_160bitnumber id)
     return returningID;
 
 }
+
+
+std::string DHT::IP_To_String(in_addr addr_In)
+{
+    std::string returningID;
+
+    unsigned char *pointer =  (unsigned char *) &addr_In;
+    for(int i=0; i<4; i++)
+    {
+        int counter =0;
+        while(pointer[i] != 0)
+        {
+            pointer[i] --;
+            counter++;
+        }
+
+        returningID += std::to_string(counter);
+
+        if(i!=3)
+            returningID.push_back('.');
+
+    }
+    return returningID;
+
+}
+
+
 
 
 

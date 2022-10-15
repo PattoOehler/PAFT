@@ -266,6 +266,15 @@ void Connection::Run_Proper_Command(char *buf, longsocket longClient, int len)
 
 
         }
+        else if(buf[0] == 0x0a)
+        {
+            //Forward a message
+            std::cout << "Client is asking for me to be an onion proxy for GETTING A FILE CHUNK\n";
+
+            Get_File_Chunk_Onion(longClient, buf, len);
+
+
+        }
         else
         {
             printf("\nConnection::Run_Proper_Command Improper command %x\n", buf[0]);
@@ -359,15 +368,22 @@ void Connection::Be_Onion_Proxy(longsocket longClient, char buf[], int len)
     {
         DHT_Single_Entry from, to;
         from.addr = longClient.from.sin_addr;
-        from.port = longClient.from.sin_port;
+
+        Base_Return data = Base_Message::Read_Base(buf, len);
+        from.port = data.port;
+
+
         to.addr = resp.sendToAddr;
         to.port = resp.sendToPort;
+
+
 
         Peer_Access::Add_Peer(from, to, resp.key);
 
         Main_Client client(resp.sendToAddr, resp.sendToPort);
         client.Proxy_Onion(resp.key, buf, len);
 
+        std::cout << "Port = " << resp.sendToPort << "\n";;
 
     }
     else if(resp.code == 1)
@@ -383,6 +399,15 @@ void Connection::Be_Onion_Proxy(longsocket longClient, char buf[], int len)
 
 
         DHT_Access::Store_File_ID(self);
+
+        DHT_Single_Entry from;
+        from.addr = longClient.from.sin_addr;
+
+        Base_Return data = Base_Message::Read_Base(buf, len);
+        from.port = data.port;
+
+        Peer_Access::Add_Peer(from, resp.key, resp.fileID );
+
 
 
         three_DHT closestInNetwork = Major_Functions::Three_Closest_Peers_In_Network(resp.fileID);
@@ -401,7 +426,59 @@ void Connection::Be_Onion_Proxy(longsocket longClient, char buf[], int len)
 }
 
 
+void Connection::Get_File_Chunk_Onion(longsocket longClient, char buf[], int len)
+{
 
+    //SOCKET currentClient = longClient.client;
+    Ping((LPVOID)longClient.client); //To give them my DHT entry
+
+
+    Keyed_Download_Responce resp = Message_Keyed_Proxy::Read_Download_Message(buf, len);
+
+    if(resp.code == -1)
+    {
+        std::cout << "\n\nERROR IN Connection::Get_File_Chunk_Onion\n\n";
+
+    }
+    else
+    {
+        DHT_Single_Entry currentConnection;
+        currentConnection.addr = longClient.from.sin_addr;
+
+        Base_Return data = Base_Message::Read_Base(buf, len);
+        currentConnection.port = data.port;
+
+        DHT_Single_Entry nextPeer = Peer_Access::Find_Peer(currentConnection, resp.key);
+        if(!nextPeer.is_set)
+        {
+            std::cout << "nextPeer is not set ERROR in Connection::Get_File_Chunk_Onion\n";
+            return;
+        }
+
+        Peer onionPeer = Peer_Access::Find_Peer_With_Key(resp.key);
+        if(nextPeer.is_set)
+        {
+            if(onionPeer.Is_End_Point())
+            {
+                std::cout << "Need to send back the file chunk -- NOT IMPLEMENTED YET\n";
+
+            }
+            else
+            {
+                std::cout << "Sending the request onward\n";
+                Main_Client client(nextPeer.addr, nextPeer.port);
+                client.Get_Chunk_Onion(resp.key, resp.fileID, resp.chunk);
+            }
+
+
+        }
+
+
+    }
+
+
+
+}
 
 
 
@@ -429,8 +506,27 @@ void Connection::Send_File_Chunk(LPVOID lpParam, char buf[], int len)
     int FileLocation = DHT_Access::Find_Stored_File(fileID);
     if(FileLocation == -1)
     {
-        std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - " << DHT::ID_To_String(fileID) << "\n\n";
-        return; //We don't have the file stored so exit the connection
+        //Check the Peer_Access for the file
+        Peer getFileFromPeer = Peer_Access::Find_Peer(fileID);
+        if(getFileFromPeer.Is_Set())
+        {
+            std::cout << "The file location is found in the peer list\n";
+            DHT_Single_Entry entryPeer = getFileFromPeer.Get_Peer_From();
+            if(!entryPeer.is_set)
+            {
+                std::cout << "entryPeer.is_set = false in Connection::Send_File_Chunk\n";
+            }
+
+            Main_Client client(entryPeer.addr, entryPeer.port);
+            client.Get_Chunk_Onion(getFileFromPeer.Get_Peer_Key(), fileID, desiredChunk);
+
+        }
+        else
+        {
+            std::cout << "\n\nThe FileLocation is not found in Connection::Send_File_Chunk! - " << DHT::ID_To_String(fileID) << "\n\n";
+            return; //We don't have the file stored so exit the connection
+        }
+
     }
 
 
@@ -522,7 +618,7 @@ void Connection::Update_DHT(longsocket client, Base_Return data)
     senderEntry.addr = client.from.sin_addr;
     senderEntry.id = data.ID;
 
-    senderEntry.port = data.port; //TODO
+    senderEntry.port = data.port;
 
     senderEntry.is_set = true;
 

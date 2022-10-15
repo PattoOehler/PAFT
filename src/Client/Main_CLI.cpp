@@ -9,6 +9,7 @@
 #include "CLI_Functions.h"
 #include "../FILEIO/File_Functions.h"
 #include "../DHT/Print_DHT.h"
+#include "../DHT/DHT_Search.h"
 
 #include <iostream>
 #include <random>
@@ -164,12 +165,29 @@ void Main_CLI::Self_Find_Random_Node()
 {
     _160bitnumber testing = DHT::Random_ID();
 
+    three_DHT in_DHT = DHT_Search::Lookup(testing);
+    std::cout << "\n";
+    for(int i=0;i<3;i++)
+    {
+        if(in_DHT.entry[i].is_set)
+            std::cout << "Peer " << i << " " << DHT::ID_To_String(in_DHT.entry[i].id) << " " << DHT::IP_To_String(in_DHT.entry[i].addr) << " " << in_DHT.entry[i].port << "\n";
 
-    Main_Client client("127.0.0.1", "1234");
-    client.Find_Node(testing);
+    }
+    std::cout << "\n";
 
 
+    /*for(int i=0; i<160; i++)
+    {
+        three_DHT a = DHT_Search::Lookup_One_Bucket(testing, i);
+        std::cout << i << "\n";
+        for(int j=0;j<3;j++)
+        {
+            if(a.entry[j].is_set)
+                std::cout << "Peer " << i << " " << DHT::ID_To_String(a.entry[j].id) << DHT::IP_To_String(a.entry[j].addr) << " " << a.entry[j].port << "\n";
 
+        }
+    }
+    */
 
 }
 
@@ -178,9 +196,16 @@ void Main_CLI::Self_Find_Random_Node_Network()
     _160bitnumber testing = DHT::Random_ID();
 
 
-    Major_Functions::Three_Closest_Peers_In_Network(testing);
+    three_DHT closest = Major_Functions::Three_Closest_Peers_In_Network(testing);
 
+    std::cout << "\n";
+    for(int i=0;i<3;i++)
+    {
+        if(closest.entry[i].is_set)
+            std::cout << "Peer " << i << " " << DHT::IP_To_String(closest.entry[i].addr) << " " << closest.entry[i].port << "\n";
 
+    }
+    std::cout << "\n";
 
 }
 

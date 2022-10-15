@@ -15,6 +15,7 @@ namespace paft
         static three_DHT Lookup(_160bitnumber id);
         static three_DHT Find_Value(_160bitnumber id);
         static three_DHT Lookup_One_Bucket(_160bitnumber id, int bucket);
+        static three_DHT Combine_Three_DHT(three_DHT dht1, three_DHT dht2, _160bitnumber id);
     };
 
 

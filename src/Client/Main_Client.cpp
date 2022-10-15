@@ -1194,6 +1194,53 @@ void Main_Client::Proxy_Onion(_160bitnumber key, char *msg, int len)
 
 
 
+void Main_Client::Get_Chunk_Onion(_160bitnumber key, _160bitnumber fileID, int chunk)
+{
+    if(!set_Up_Properly)
+        return;
+
+
+    char *sendbuf = Message_Keyed_Proxy::Create_Download_Message(key, fileID, chunk);
+
+
+    int iResult = send( server_Socket, sendbuf, 67, 0 );
+
+    delete[] sendbuf;
+
+    if (iResult == SOCKET_ERROR) {
+        printf("Send failed with error: %d\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return;
+    }
+
+
+    char recvbuf[DEFAULT_BUFLEN];
+
+    //Get the ping back
+    iResult = recv(server_Socket, recvbuf, DEFAULT_BUFLEN, 0);
+    if (iResult == SOCKET_ERROR) {
+        printf("Recv failed with error: %d in Main_Client::Proxy_Onion\n", WSAGetLastError());
+        closesocket(server_Socket);
+        WSACleanup();
+        return;
+    }
+
+
+    _160bitnumber ID = Message_Ping::Read_Ping_Responce(recvbuf, iResult);
+    Add_Received_Entry_To_DHT(ID);
+
+
+    Shutdown_Connection_Gracefully();
+
+
+    return;
+}
+
+
+
+
+
 
 
 
@@ -1205,6 +1252,8 @@ Main_Client::Main_Client(in_addr addr_In, unsigned short int port_In)
     sprintf(port, "%d", port_In);
 
     //printf("Mainclient(%s:%s) being created\n\n",addr,port);
+    std::cout << "Making a client with IP=" << DHT::IP_To_String(addr_In) << " and port=" << port_In << "\n";
+
 
     WSADATA wsaData;
     SOCKET ConnectSocket = INVALID_SOCKET;

@@ -23,6 +23,16 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
     int dht_Identifier = DHT_Lookup::Get_Available_Three_DHT();
 
     three_DHT in_DHT = DHT_Search::Lookup(id);
+    std::cout << "\n These are after the DHT_Search::Lookup\n";
+    for(int i=0;i<3;i++)
+    {
+        if(in_DHT.entry[i].is_set)
+            std::cout << "Peer " << i << " " << DHT::ID_To_String(in_DHT.entry[i].id) << DHT::IP_To_String(in_DHT.entry[i].addr) << " " << in_DHT.entry[i].port << "\n";
+
+    }
+    std::cout << "\n";
+
+
     DHT_Lookup::Write_To_Three_DHT(in_DHT, dht_Identifier);
     for(int i=0;i<3;i++)
     {
@@ -65,40 +75,7 @@ three_DHT Major_Functions::Find_File_On_Network(_160bitnumber id)
 
 
 
-/*void Major_Functions::Upload_File_To_Network(const char *local_file_location, const char *public_File_Name)
-{
-    _160bitnumber created_File_ID = DHT::Random_ID();
 
-    Meta_Files::Make_File(local_file_location, public_File_Name, created_File_ID);
-
-    DHT_Single_Entry self = DHT_Access::Access_DHT(159*20);
-    if(!self.is_set)
-    {
-        std::cout << "ERROR in Upload_File_To_Network -- DHT[159*20] isn't set to SELF!!!\n";
-        return;
-    }
-
-    self.id = created_File_ID;
-    self.
-    int fileIDpos = DHT_Access::Store_FileId(self);
-
-    DHT_Access::Set_Local_File_Location(local_file_location, fileIDpos);
-
-
-    three_DHT closest_In_Network = Three_Closest_Peers_In_Network(created_File_ID);
-    for(int i=0;i<3;i++)
-    {
-        if(closest_In_Network.entry[i].is_set)
-        {
-            MainClient client = MainClient(closest_In_Network.entry[i].addr, closest_In_Network.entry[i].port);
-            client.Store_File(self);
-        }
-    }
-
-
-
-
-} */
 
 
 
@@ -148,6 +125,12 @@ void Major_Functions::Upload_File_Onion(const char *local_file_location, const c
 
     //Store the local file location with the key
     three_DHT closest_In_Network = Three_Closest_Peers_In_Network(created_File_ID);
+    for(int i=0;i<3;i++)
+    {
+        std::cout << "Peer " << i << " " << DHT::IP_To_String(closest_In_Network.entry[i].addr) << " " << closest_In_Network.entry[i].port << "\n";
+    }
+
+
     Peer_Access::Add_Peer(closest_In_Network.entry[0], peerKey, local_file_location, strlen(local_file_location), created_File_ID);
 
 
@@ -518,41 +501,7 @@ void Major_Functions::Get_File_Chunk_Proxy_2(std::string checksum_expected, DHT_
     return;
 
 
-    /*
-    sleep(2);
-    Main_Client client = Main_Client(entry.addr, entry.port);
-    Message msg = client.Proxy_Get_Chunk_2(info);
 
-    std::string checksum_received = sha256(msg.message, msg.msgLength); // -4 on msgLength if doesn't work ++ also below
-
-    if( checksum_received == checksum_expected)
-        std::cout << "Major_Functions::getFileChunk CHECKSUM IS GOOD\n";
-    else
-    {
-        std::cout << "Major_Functions::getFileChunk CHECKSUM IS " << checksum_received << " while expecting " << checksum_expected << " len=" << msg.msgLength << "\n";
-    }
-
-
-
-    //Write to the file
-    if(msg.msgLength > 0)
-    {
-        std::ofstream wf("Test_Metafiles/Downloaded_File", std::ios::in | std::ios::out | std::ios::binary);
-        if(!wf) {
-          std::cout << "Cannot open file!\n" << std::endl;
-          return;
-        }
-        wf.seekp( 8000000 * info.chunkID );
-        wf.write(msg.message, msg.msgLength);
-        wf.close();
-    }
-    else
-    {
-        std::cout << "Major_Functions::getFileChunk length is <= 0! (len=" << msg.msgLength << ")\n";
-
-    }
-
-    */
 
 }
 

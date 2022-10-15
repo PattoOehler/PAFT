@@ -52,6 +52,8 @@ namespace paft
 
         void Upload_File_Onion(_160bitnumber key, DHT_Single_Entry middlePeer, DHT_Single_Entry lastPeer, _160bitnumber fileID);
         void Proxy_Onion(_160bitnumber key, char *msg, int len);
+
+        void Get_Chunk_Onion(_160bitnumber key, _160bitnumber fileID, int chunk);
     };
 
 }
