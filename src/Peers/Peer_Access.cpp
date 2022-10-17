@@ -88,7 +88,7 @@ DHT_Single_Entry Peer_Access::Find_Peer(DHT_Single_Entry peerFrom, _160bitnumber
             }
         }
     }
-
+    std::cout << "Could NOT find the peer in Peer_Access::Find_Peer(DHT_Single_Entry, _160bitnumber)\n";
     DHT_Single_Entry a;
     return a;
 

@@ -23,14 +23,6 @@ three_DHT Major_Functions::Three_Closest_Peers_In_Network(_160bitnumber id)
     int dht_Identifier = DHT_Lookup::Get_Available_Three_DHT();
 
     three_DHT in_DHT = DHT_Search::Lookup(id);
-    std::cout << "\n These are after the DHT_Search::Lookup\n";
-    for(int i=0;i<3;i++)
-    {
-        if(in_DHT.entry[i].is_set)
-            std::cout << "Peer " << i << " " << DHT::ID_To_String(in_DHT.entry[i].id) << DHT::IP_To_String(in_DHT.entry[i].addr) << " " << in_DHT.entry[i].port << "\n";
-
-    }
-    std::cout << "\n";
 
 
     DHT_Lookup::Write_To_Three_DHT(in_DHT, dht_Identifier);

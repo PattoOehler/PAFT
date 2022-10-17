@@ -448,6 +448,38 @@ void Connection::Get_File_Chunk_Onion(longsocket longClient, char buf[], int len
         Base_Return data = Base_Message::Read_Base(buf, len);
         currentConnection.port = data.port;
 
+
+
+        Peer onionPeer = Peer_Access::Find_Peer_With_Key(resp.key);
+        if(!onionPeer.Is_Set())
+        {
+            std::cout << "onionPeer IS NOT SET ERRROR in Connection::Get_File_Chunk_Onion\n";
+            return;
+        }
+
+        if(onionPeer.Is_End_Point())
+        {
+            std::cout << "Need to send back the file chunk -- NOT IMPLEMENTED YET\n";
+            return;
+        }
+        else
+        {
+            std::cout << "Sending the request onward\n";
+
+            DHT_Single_Entry nextPeer = Peer_Access::Find_Peer(currentConnection, resp.key);
+            if(nextPeer.is_set)
+            {
+                Main_Client client(nextPeer.addr, nextPeer.port);
+                client.Get_Chunk_Onion(resp.key, resp.fileID, resp.chunk);
+            }
+            else
+            {
+                std::cout << "nextPeer IS NOT SET ERRROR in Connection::Get_File_Chunk_Onion\n";
+                return;
+            }
+        }
+
+        /*
         DHT_Single_Entry nextPeer = Peer_Access::Find_Peer(currentConnection, resp.key);
         if(!nextPeer.is_set)
         {
@@ -472,7 +504,7 @@ void Connection::Get_File_Chunk_Onion(longsocket longClient, char buf[], int len
 
 
         }
-
+        */
 
     }
 

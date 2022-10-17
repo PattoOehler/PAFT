@@ -1252,7 +1252,7 @@ Main_Client::Main_Client(in_addr addr_In, unsigned short int port_In)
     sprintf(port, "%d", port_In);
 
     //printf("Mainclient(%s:%s) being created\n\n",addr,port);
-    std::cout << "Making a client with IP=" << DHT::IP_To_String(addr_In) << " and port=" << port_In << "\n";
+    //std::cout << "Making a client with IP=" << DHT::IP_To_String(addr_In) << " and port=" << port_In << "\n";
 
 
     WSADATA wsaData;

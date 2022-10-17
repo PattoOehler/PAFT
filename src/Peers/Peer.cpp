@@ -1,6 +1,8 @@
 #include "Peer.h"
 #include "../DHT/DHT.h"
 
+#include <iostream>
+
 using namespace paft;
 
 
@@ -106,11 +108,18 @@ DHT_Single_Entry Peer::Other_Peer(DHT_Single_Entry peer1, _160bitnumber peerKey)
 
     if( Is_Equal_Key(peerKey) && (!this->isEndPoint))
     {
-        if( memcmp( (char *)&this->peerTo.addr, (char *)&peer1.addr, 4 ) && this->peerTo.port == peer1.port )
+
+        if( (memcmp( (char *)&this->peerTo.addr, (char *)&peer1.addr, 4 )==0) && this->peerTo.port == peer1.port )
+        {
             return this->peerFrom;
-        else if( memcmp((char *)&this->peerFrom.addr, (char *)&peer1.addr, 4 ) && this->peerFrom.port == peer1.port)
+        }
+
+        else if( (memcmp((char *)&this->peerFrom.addr, (char *)&peer1.addr, 4 )==0) && this->peerFrom.port == peer1.port)
+        {
             return this->peerTo;
+        }
     }
+
 
     DHT_Single_Entry a;
     return a;
